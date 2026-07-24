@@ -434,6 +434,15 @@
             transform: none;
         }
 
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
         /* ── Confirmation Modal ── */
         .modal-overlay {
             position: fixed;
@@ -551,12 +560,20 @@
             padding: 1.5rem 2.5rem 2rem;
         }
 
+        .staff-panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
         .staff-panel h4 {
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: #475569;
-            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.6rem;
@@ -568,6 +585,39 @@
             font-size: 0.7rem;
             padding: 2px 8px;
             border-radius: 20px;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-actions .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.75rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .panel-actions .btn-clear {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .panel-actions .btn-clear:hover {
+            background: #fecaca;
+        }
+
+        .panel-actions .btn-refresh {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .panel-actions .btn-refresh:hover {
+            background: #cbd5e1;
         }
 
         .leads-table {
@@ -627,6 +677,10 @@
             }
             .staff-panel {
                 overflow-x: auto;
+            }
+            .staff-panel .panel-header {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
@@ -775,7 +829,13 @@
 
         <!-- ── Staff Panel ── -->
         <div class="staff-panel" id="staffPanel">
-            <h4><i class="fas fa-bolt" style="color:#1b4a5e;"></i> Ops Staff Live Feed <span class="badge" id="leadCount">0</span></h4>
+            <div class="panel-header">
+                <h4><i class="fas fa-bolt" style="color:#1b4a5e;"></i> Ops Staff Live Feed <span class="badge" id="leadCount">0</span></h4>
+                <div class="panel-actions">
+                    <button class="btn-sm btn-refresh" id="refreshLeadsBtn"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    <button class="btn-sm btn-clear" id="clearLeadsBtn"><i class="fas fa-trash"></i> Clear All</button>
+                </div>
+            </div>
             <div style="overflow-x: auto;">
                 <table class="leads-table" id="leadsTable">
                     <thead>
@@ -836,6 +896,8 @@
             const stepsUI = document.querySelectorAll('.step');
             const leadsBody = document.getElementById('leadsBody');
             const leadCount = document.getElementById('leadCount');
+            const clearLeadsBtn = document.getElementById('clearLeadsBtn');
+            const refreshLeadsBtn = document.getElementById('refreshLeadsBtn');
 
             // ─── State ─────────────────────────────────────────────
             let currentStep = 1;
@@ -859,10 +921,10 @@
                         const isNew = index === 0 ? 'new-lead' : '';
                         html += `
                             <tr class="${isNew}">
-                                <td><strong>${lead.company}</strong></td>
-                                <td>${lead.contact}</td>
-                                <td>${lead.service}</td>
-                                <td>${lead.date} at ${lead.time}</td>
+                                <td><strong>${escapeHtml(lead.company)}</strong></td>
+                                <td>${escapeHtml(lead.contact)}</td>
+                                <td>${escapeHtml(lead.service)}</td>
+                                <td>${escapeHtml(lead.date)} at ${escapeHtml(lead.time)}</td>
                                 <td><span style="font-size:0.7rem; background:#10b98120; color:#10b981; padding:2px 8px; border-radius:20px;">New</span></td>
                             </tr>
                         `;
@@ -870,6 +932,13 @@
                     tbody.innerHTML = html;
                 }
                 leadCount.textContent = leads.length;
+            }
+
+            // Simple escape to prevent XSS (just for safety)
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
             }
 
             function updateStepsUI() {
@@ -1095,14 +1164,65 @@
 
             closeModalBtn.addEventListener('click', () => {
                 confirmationModal.style.display = 'none';
-                // Reset selected time for new booking
                 selectedTime = null;
                 nextToDetailsBtn.disabled = true;
-                // Optionally go back to step 1 for a fresh booking
-                // goToStep(1);
-                // Reset facility/service selections? We'll keep them for demo, but let's reset UI state.
-                // For a better demo experience, we'll just leave it as is.
             });
+
+            // ─── Clear All Leads ──────────────────────────────────
+
+            clearLeadsBtn.addEventListener('click', function() {
+                if (leads.length === 0) {
+                    alert('No leads to clear.');
+                    return;
+                }
+                if (confirm('⚠️ Are you sure you want to delete ALL leads? This cannot be undone.')) {
+                    leads = [];
+                    localStorage.setItem('alabasteria_leads', JSON.stringify(leads));
+                    renderLeadsTable();
+                    showToast('🗑️ All leads cleared successfully.');
+                }
+            });
+
+            // ─── Refresh Leads ────────────────────────────────────
+
+            refreshLeadsBtn.addEventListener('click', function() {
+                leads = JSON.parse(localStorage.getItem('alabasteria_leads') || '[]');
+                renderLeadsTable();
+                showToast('🔄 Leads refreshed.');
+            });
+
+            // ─── Toast notification ──────────────────────────────
+
+            function showToast(message) {
+                const existing = document.querySelector('.custom-toast');
+                if (existing) existing.remove();
+
+                const toast = document.createElement('div');
+                toast.className = 'custom-toast';
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: #1b4a5e;
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 12px;
+                    font-weight: 600;
+                    font-size: 0.9rem;
+                    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+                    z-index: 9999;
+                    animation: fadeIn 0.3s ease;
+                `;
+                toast.textContent = message;
+                document.body.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 2500);
+            }
 
             // ─── Init ─────────────────────────────────────────────
 
