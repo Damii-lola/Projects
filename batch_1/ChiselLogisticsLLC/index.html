@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chisel Logistics · Instant Spot Quote</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .quote-widget {
+            max-width: 700px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Header - Industrial Chisel branding */
+        .widget-header {
+            background: #1a202c;
+            color: white;
+            padding: 1.8rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 4px solid #f97316; /* orange chisel edge */
+        }
+
+        .logo-icon {
+            font-size: 2.4rem;
+            color: #f97316;
+        }
+
+        .brand-text h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            margin: 0;
+            color: white;
+        }
+
+        .brand-text h2 span {
+            color: #f97316;
+        }
+
+        .brand-text p {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #a0aec0;
+            margin-top: 0.2rem;
+        }
+
+        .widget-body {
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: #f97316;
+        }
+
+        /* Lane intake form */
+        .lane-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            flex: 1 1 180px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #4a5568;
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #f9fafb;
+            transition: 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: #f97316;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(249,115,22,0.15);
+        }
+
+        .check-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .check-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #f97316;
+        }
+
+        .btn {
+            padding: 0.9rem 2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: 0.2px;
+        }
+
+        .btn-primary {
+            background: #f97316;
+            color: white;
+            box-shadow: 0 4px 12px rgba(249,115,22,0.4);
+        }
+
+        .btn-primary:hover {
+            background: #ea580c;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            background: #cbd5e0;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Quote result panel */
+        .quote-result {
+            display: none;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            animation: fadeUp 0.3s ease;
+        }
+
+        .quote-result.show {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .rate-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .rate-amount {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #1a202c;
+        }
+
+        .rate-range {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .rate-details {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #edf2f7;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .detail-label {
+            color: #4a5568;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .total-row {
+            border-top: 2px dashed #e2e8f0;
+            padding-top: 0.6rem;
+            margin-top: 0.4rem;
+            font-weight: 700;
+        }
+
+        .disclaimer {
+            font-size: 0.75rem;
+            color: #a0aec0;
+            margin-top: 0.8rem;
+        }
+
+        /* Booking section (hidden until quote) */
+        .booking-section {
+            display: none;
+            margin-top: 2rem;
+            animation: fadeUp 0.3s ease;
+        }
+
+        .booking-section.show {
+            display: block;
+        }
+
+        .contact-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .contact-grid .form-group {
+            flex: 1 1 200px;
+        }
+
+        .submit-message {
+            display: none;
+            background: #f0fff4;
+            border: 2px solid #38a169;
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: center;
+            animation: fadeUp 0.3s;
+        }
+
+        .submit-message i {
+            font-size: 2.5rem;
+            color: #38a169;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 500px) {
+            .widget-body {
+                padding: 1.5rem;
+            }
+            .lane-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quote-widget">
+        <!-- Header -->
+        <div class="widget-header">
+            <i class="fas fa-truck-moving logo-icon"></i>
+            <div class="brand-text">
+                <h2>Chisel<span>.</span> Logistics</h2>
+                <p>Instant Spot Quotes & Lane Rates</p>
+            </div>
+        </div>
+
+        <div class="widget-body">
+            <!-- Lane Specification Form -->
+            <div class="section-title">
+                <i class="fas fa-route"></i> Lane Details
+            </div>
+            <div class="lane-form">
+                <div class="form-group">
+                    <label>Origin ZIP *</label>
+                    <input type="text" id="originZip" placeholder="e.g. 60601" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label>Destination ZIP *</label>
+                    <input type="text" id="destZip" placeholder="e.g. 90001" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label>Equipment *</label>
+                    <select id="equipment">
+                        <option value="dryvan">Dry Van</option>
+                        <option value="reefer">Reefer</option>
+                        <option value="flatbed">Flatbed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Weight (lbs) *</label>
+                    <input type="number" id="weight" placeholder="e.g. 42000" min="1" step="100">
+                </div>
+            </div>
+
+            <!-- Additional needs -->
+            <div class="check-row">
+                <label class="check-item">
+                    <input type="checkbox" id="tarp"> <span>Tarp Required</span>
+                </label>
+                <label class="check-item">
+                    <input type="checkbox" id="liftgate"> <span>Liftgate Needed</span>
+                </label>
+            </div>
+
+            <button class="btn btn-primary btn-block" id="calculateBtn" disabled>
+                <i class="fas fa-calculator"></i> Calculate Spot Rate
+            </button>
+
+            <!-- Dynamic Quote Result -->
+            <div class="quote-result" id="quoteResult">
+                <div class="rate-header">
+                    <div>
+                        <div class="rate-amount" id="totalRate">$0</div>
+                        <div class="rate-range" id="rateRange"></div>
+                    </div>
+                    <div style="color:#f97316; font-weight:700;">
+                        <i class="fas fa-clock"></i> Spot Market Estimate
+                    </div>
+                </div>
+                <div class="rate-details" id="rateBreakdown"></div>
+                <p class="disclaimer">*Estimate based on current lane benchmarks, fuel surcharge, and capacity. Final rate confirmed upon booking.</p>
+            </div>
+
+            <!-- Booking Section (Contact & Submit) -->
+            <div class="booking-section" id="bookingSection">
+                <div class="section-title">
+                    <i class="fas fa-file-signature"></i> Book This Load
+                </div>
+                <div class="contact-grid">
+                    <div class="form-group">
+                        <label>Company Name *</label>
+                        <input type="text" id="companyName" placeholder="Acme Logistics">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Person *</label>
+                        <input type="text" id="contactPerson" placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" placeholder="john@acme.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="tel" id="phone" placeholder="(555) 000-0000">
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" id="submitBooking" disabled style="margin-top:1.5rem;">
+                    <i class="fas fa-paper-plane"></i> Submit & Book Load
+                </button>
+            </div>
+
+            <!-- Confirmation Message (hidden until submit) -->
+            <div class="submit-message" id="submitMessage">
+                <i class="fas fa-check-circle"></i>
+                <h3>Load Submitted Successfully!</h3>
+                <p>Your quote request has been sent to our brokerage team. You will receive a confirmation email and call back within 15 minutes.</p>
+                <button class="btn btn-primary" id="newQuoteBtn" style="margin-top:1rem;">
+                    <i class="fas fa-redo-alt"></i> Get Another Quote
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // DOM elements
+            const originZipInput = document.getElementById('originZip');
+            const destZipInput = document.getElementById('destZip');
+            const equipmentSelect = document.getElementById('equipment');
+            const weightInput = document.getElementById('weight');
+            const tarpCheck = document.getElementById('tarp');
+            const liftgateCheck = document.getElementById('liftgate');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const quoteResultDiv = document.getElementById('quoteResult');
+            const totalRateSpan = document.getElementById('totalRate');
+            const rateRangeSpan = document.getElementById('rateRange');
+            const rateBreakdownDiv = document.getElementById('rateBreakdown');
+            const bookingSection = document.getElementById('bookingSection');
+            const submitBtn = document.getElementById('submitBooking');
+            const submitMessage = document.getElementById('submitMessage');
+            const newQuoteBtn = document.getElementById('newQuoteBtn');
+
+            // Contact inputs
+            const companyInput = document.getElementById('companyName');
+            const personInput = document.getElementById('contactPerson');
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+
+            // State
+            let currentQuote = null;
+
+            // Validation: enable calculate button if origin, dest, weight filled
+            function validateLaneInputs() {
+                const origin = originZipInput.value.trim();
+                const dest = destZipInput.value.trim();
+                const weight = parseFloat(weightInput.value);
+                calculateBtn.disabled = !(origin && dest && weight > 0);
+            }
+
+            originZipInput.addEventListener('input', validateLaneInputs);
+            destZipInput.addEventListener('input', validateLaneInputs);
+            weightInput.addEventListener('input', validateLaneInputs);
+
+            // Mock distance calculation based on ZIP numeric difference (demo only)
+            function estimateMiles(originZip, destZip) {
+                const oNum = parseInt(originZip.replace(/\D/g,'')) || 0;
+                const dNum = parseInt(destZip.replace(/\D/g,'')) || 0;
+                let diff = Math.abs(oNum - dNum) / 100;
+                // Clamp between 50 and 2800 miles
+                let miles = Math.min(2800, Math.max(50, diff));
+                // Add some randomness based on last digits
+                const variation = (oNum % 100) + (dNum % 100);
+                miles = Math.round(miles + (variation / 5));
+                return miles;
+            }
+
+            // Rate calculation engine
+            function calculateSpotRate() {
+                const origin = originZipInput.value.trim();
+                const dest = destZipInput.value.trim();
+                const equipment = equipmentSelect.value;
+                const weight = parseFloat(weightInput.value) || 0;
+                const tarp = tarpCheck.checked;
+                const liftgate = liftgateCheck.checked;
+
+                const miles = estimateMiles(origin, dest);
+
+                // Base rate per mile by equipment type
+                const baseRates = {
+                    dryvan: 1.85,
+                    reefer: 2.25,
+                    flatbed: 2.10
+                };
+                let basePerMile = baseRates[equipment] || 1.85;
+
+                // Linehaul base
+                let linehaul = miles * basePerMile;
+
+                // Weight adjustment (heavy loads increase cost)
+                let weightFactor = 1.0;
+                if (weight > 40000) weightFactor = 1.15;
+                else if (weight > 25000) weightFactor = 1.08;
+                else if (weight > 10000) weightFactor = 1.03;
+
+                // Accessorials
+                let accessorial = 0;
+                if (tarp) accessorial += 150;
+                if (liftgate) accessorial += 200;
+
+                // Fuel surcharge (approx 15% of linehaul)
+                const fuelSurcharge = linehaul * 0.15;
+
+                // Seasonal demand factor (mock based on month)
+                const month = new Date().getMonth(); // 0-11
+                let demandFactor = 1.0;
+                if (month >= 5 && month <= 8) demandFactor = 1.12; // summer peak
+                if (month === 10 || month === 11) demandFactor = 1.08; // pre-holiday
+
+                // Apply demand factor to linehaul
+                linehaul *= demandFactor;
+
+                // Subtotal before accessorials
+                let subtotal = (linehaul * weightFactor) + accessorial + fuelSurcharge;
+                const total = Math.round(subtotal);
+                const low = Math.round(total * 0.92);
+                const high = Math.round(total * 1.12);
+
+                return {
+                    miles,
+                    linehaul: Math.round(linehaul),
+                    weightFactor,
+                    accessorial,
+                    fuelSurcharge: Math.round(fuelSurcharge),
+                    total,
+                    low,
+                    high,
+                    equipment,
+                    origin,
+                    dest,
+                    weight,
+                    tarp,
+                    liftgate
+                };
+            }
+
+            // Display quote
+            function displayQuote(quote) {
+                totalRateSpan.textContent = '$' + quote.total.toLocaleString();
+                rateRangeSpan.textContent = `Typical range: $${quote.low.toLocaleString()} – $${quote.high.toLocaleString()}`;
+                rateBreakdownDiv.innerHTML = `
+                    <div class="detail-row">
+                        <span class="detail-label">Estimated Miles</span>
+                        <span class="detail-value">${quote.miles} mi</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Base Linehaul (${quote.equipment.replace('dryvan','Dry Van').replace('reefer','Reefer').replace('flatbed','Flatbed')})</span>
+                        <span class="detail-value">$${quote.linehaul.toLocaleString()}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Weight Adjustment (${Math.round((quote.weightFactor-1)*100)}%)</span>
+                        <span class="detail-value">${quote.weightFactor > 1 ? '+' + Math.round((quote.weightFactor-1)*100) + '%' : 'None'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Fuel Surcharge</span>
+                        <span class="detail-value">$${quote.fuelSurcharge.toLocaleString()}</span>
+                    </div>
+                    ${quote.accessorial > 0 ? `
+                    <div class="detail-row">
+                        <span class="detail-label">Accessorials (Tarp/Liftgate)</span>
+                        <span class="detail-value">$${quote.accessorial.toLocaleString()}</span>
+                    </div>` : ''}
+                    <div class="detail-row total-row">
+                        <span class="detail-label">Total Spot Rate</span>
+                        <span class="detail-value" style="color:#f97316; font-size:1.1rem;">$${quote.total.toLocaleString()}</span>
+                    </div>
+                `;
+                quoteResultDiv.classList.add('show');
+                bookingSection.classList.add('show');
+            }
+
+            // Calculate button click
+            calculateBtn.addEventListener('click', () => {
+                if (calculateBtn.disabled) return;
+                currentQuote = calculateSpotRate();
+                displayQuote(currentQuote);
+                // Reset booking form and message if any
+                submitMessage.style.display = 'none';
+                companyInput.value = '';
+                personInput.value = '';
+                emailInput.value = '';
+                phoneInput.value = '';
+                validateContactForm();
+            });
+
+            // Contact validation
+            function validateContactForm() {
+                const valid = companyInput.value.trim() && personInput.value.trim() && emailInput.value.trim() && phoneInput.value.trim();
+                submitBtn.disabled = !valid;
+            }
+            companyInput.addEventListener('input', validateContactForm);
+            personInput.addEventListener('input', validateContactForm);
+            emailInput.addEventListener('input', validateContactForm);
+            phoneInput.addEventListener('input', validateContactForm);
+
+            // Submit booking
+            submitBtn.addEventListener('click', () => {
+                if (!currentQuote || submitBtn.disabled) return;
+
+                const loadOrder = {
+                    quote: currentQuote,
+                    company: companyInput.value.trim(),
+                    contact: personInput.value.trim(),
+                    email: emailInput.value.trim(),
+                    phone: phoneInput.value.trim(),
+                    timestamp: new Date().toISOString()
+                };
+
+                // Store lead (simulate dispatch order)
+                let orders = JSON.parse(localStorage.getItem('chisel_loads') || '[]');
+                orders.push(loadOrder);
+                localStorage.setItem('chisel_loads', JSON.stringify(orders));
+                console.log('📦 Load booked:', loadOrder);
+
+                // Hide forms, show confirmation
+                quoteResultDiv.classList.remove('show');
+                bookingSection.classList.remove('show');
+                submitMessage.style.display = 'block';
+            });
+
+            // New quote reset
+            newQuoteBtn.addEventListener('click', () => {
+                submitMessage.style.display = 'none';
+                quoteResultDiv.classList.remove('show');
+                bookingSection.classList.remove('show');
+                originZipInput.value = '';
+                destZipInput.value = '';
+                weightInput.value = '';
+                equipmentSelect.value = 'dryvan';
+                tarpCheck.checked = false;
+                liftgateCheck.checked = false;
+                calculateBtn.disabled = true;
+                currentQuote = null;
+                validateContactForm();
+            });
+
+            // Initial validation
+            validateLaneInputs();
+        })();
+    </script>
+</body>
+</html>
