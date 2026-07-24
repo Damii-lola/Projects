@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allied Home Services · 24/7 Emergency</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .emergency-widget {
+            max-width: 640px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* Urgent top bar */
+        .alert-bar {
+            background: #c53030;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+        }
+
+        .alert-bar i {
+            font-size: 1.2rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .alert-bar span {
+            flex: 1;
+        }
+
+        .badge {
+            background: white;
+            color: #c53030;
+            border-radius: 30px;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        /* Header */
+        .widget-header {
+            padding: 1.8rem 2rem 1rem;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .brand-icon {
+            font-size: 2rem;
+            color: #2b6cb0; /* Allied blue */
+        }
+
+        .brand-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1a202c;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-name span {
+            color: #2b6cb0;
+        }
+
+        .subhead {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin-top: 0.3rem;
+        }
+
+        /* Triage area */
+        .triage-container {
+            padding: 2rem 2rem 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .emergency-card {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.2rem 0.8rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .emergency-card i {
+            font-size: 1.8rem;
+            color: #4a5568;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .emergency-card span {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #2d3748;
+        }
+
+        .emergency-card:hover {
+            border-color: #c53030;
+            background: #fff5f5;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(197,48,48,0.1);
+        }
+
+        .emergency-card.selected {
+            border-color: #c53030;
+            background: #fff5f5;
+            box-shadow: 0 0 0 3px rgba(197,48,48,0.25);
+        }
+
+        .emergency-card .severity-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .severity-high {
+            background: #c53030;
+            box-shadow: 0 0 8px #c53030;
+        }
+
+        .severity-medium {
+            background: #dd6b20;
+        }
+
+        /* Form details */
+        .contact-form {
+            display: none;
+            animation: fadeSlide 0.3s ease;
+        }
+
+        .contact-form.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            flex: 1 1 200px;
+        }
+
+        .form-group.full-width {
+            flex: 1 1 100%;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #4a5568;
+            margin-bottom: 0.4rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #f9fafb;
+            transition: 0.2s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #2b6cb0;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(43,108,176,0.15);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .btn {
+            padding: 0.9rem 2rem;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: #c53030;
+            color: white;
+            box-shadow: 0 4px 12px rgba(197,48,48,0.35);
+        }
+
+        .btn-primary:hover {
+            background: #9b2c2c;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            background: #a0aec0;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-outline:hover {
+            border-color: #2b6cb0;
+            color: #2b6cb0;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        /* Confirmation & safety panel */
+        .result-panel {
+            display: none;
+            background: #f0fff4;
+            border: 2px solid #38a169;
+            border-radius: 20px;
+            padding: 1.8rem;
+            margin-top: 1.5rem;
+            animation: fadeSlide 0.3s ease;
+        }
+
+        .result-panel.show {
+            display: block;
+        }
+
+        .result-icon {
+            font-size: 2.5rem;
+            color: #38a169;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 0.5rem;
+        }
+
+        .eta-box {
+            background: white;
+            border-radius: 14px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 5px solid #2b6cb0;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .safety-steps {
+            background: white;
+            border-radius: 14px;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .safety-steps h4 {
+            color: #c53030;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .safety-steps ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .safety-steps li {
+            padding: 0.4rem 0;
+            border-bottom: 1px dashed #e2e8f0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .safety-steps li i {
+            color: #c53030;
+            margin-top: 0.15rem;
+        }
+
+        .confirmation-message {
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .new-request-btn {
+            background: #2b6cb0;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 500px) {
+            .widget-header {
+                padding: 1.5rem 1.2rem 0.8rem;
+            }
+            .triage-container {
+                padding: 1.5rem 1.2rem;
+            }
+            .brand-name {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="emergency-widget" id="emergencyWidget">
+        <!-- Urgent alert bar -->
+        <div class="alert-bar">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>24/7 EMERGENCY RESPONSE</span>
+            <div class="badge">LIVE DISPATCH</div>
+        </div>
+
+        <!-- Branding -->
+        <div class="widget-header">
+            <div class="brand">
+                <i class="fas fa-shield-haltered brand-icon"></i>
+                <div class="brand-name">Allied<span>.</span> Home Services</div>
+            </div>
+            <div class="subhead">Emergency triage & instant dispatch</div>
+        </div>
+
+        <!-- Main intake area -->
+        <div class="triage-container" id="triageContainer">
+            <!-- Step 1: Select emergency type -->
+            <div id="emergencySelection">
+                <div class="section-title">
+                    <i class="fas fa-fire"></i> What's the emergency?
+                </div>
+                <div class="emergency-grid" id="emergencyGrid">
+                    <div class="emergency-card" data-emergency="pipe-burst" data-severity="high">
+                        <div class="severity-dot severity-high"></div>
+                        <i class="fas fa-water"></i>
+                        <span>Pipe Burst / Flood</span>
+                    </div>
+                    <div class="emergency-card" data-emergency="gas-leak" data-severity="high">
+                        <div class="severity-dot severity-high"></div>
+                        <i class="fas fa-wind"></i>
+                        <span>Gas Leak</span>
+                    </div>
+                    <div class="emergency-card" data-emergency="ac-outage" data-severity="high">
+                        <div class="severity-dot severity-high"></div>
+                        <i class="fas fa-temperature-high"></i>
+                        <span>AC Outage (Summer)</span>
+                    </div>
+                    <div class="emergency-card" data-emergency="heating-failure" data-severity="high">
+                        <div class="severity-dot severity-high"></div>
+                        <i class="fas fa-temperature-low"></i>
+                        <span>Heating Failure (Winter)</span>
+                    </div>
+                    <div class="emergency-card" data-emergency="electrical" data-severity="medium">
+                        <div class="severity-dot severity-medium"></div>
+                        <i class="fas fa-bolt"></i>
+                        <span>Electrical Hazard</span>
+                    </div>
+                    <div class="emergency-card" data-emergency="sewer-backup" data-severity="high">
+                        <div class="severity-dot severity-high"></div>
+                        <i class="fas fa-toilet"></i>
+                        <span>Sewer Backup</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Contact form (hidden initially) -->
+            <div class="contact-form" id="contactForm">
+                <div class="section-title">
+                    <i class="fas fa-user-check"></i> Your details & dispatch
+                </div>
+                <form id="emergencyDetailsForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="fullName" placeholder="John Smith" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone *</label>
+                            <input type="tel" id="phone" placeholder="(555) 123-4567" required>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="email" placeholder="john@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Address *</label>
+                            <input type="text" id="address" placeholder="123 Main St, City" required>
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Brief description of emergency</label>
+                        <textarea id="description" placeholder="E.g., Water pouring from ceiling in kitchen..."></textarea>
+                    </div>
+                </form>
+                <div class="button-row">
+                    <button class="btn btn-outline" id="backToSelection"><i class="fas fa-arrow-left"></i> Change emergency</button>
+                    <button class="btn btn-primary" id="sendEmergencyRequest" disabled>
+                        <i class="fas fa-paper-plane"></i> Dispatch Help Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Result / confirmation panel -->
+            <div class="result-panel" id="resultPanel">
+                <div class="result-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="result-title">Technician Alerted & On the Way</div>
+                <p style="color: #2d3748; font-weight: 500;">Your emergency has been prioritized and an immediate dispatch has been triggered.</p>
+                
+                <div class="eta-box" id="etaMessage">
+                    <i class="fas fa-clock"></i> Estimated call-back: within <strong>15 minutes</strong>
+                </div>
+
+                <div class="safety-steps" id="safetyInstructions">
+                    <!-- dynamically filled -->
+                </div>
+
+                <div class="confirmation-message">
+                    <i class="fas fa-comment-sms"></i> 
+                    <span>A confirmation SMS with safety tips and your technician's ETA has been sent to your phone.</span>
+                </div>
+
+                <button class="new-request-btn" id="newRequestBtn">
+                    <i class="fas fa-redo-alt"></i> Submit another request
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // State
+            let selectedEmergency = null;
+            let selectedSeverity = null;
+
+            // DOM elements
+            const emergencyCards = document.querySelectorAll('.emergency-card');
+            const emergencySelectionDiv = document.getElementById('emergencySelection');
+            const contactFormDiv = document.getElementById('contactForm');
+            const resultPanel = document.getElementById('resultPanel');
+            const sendBtn = document.getElementById('sendEmergencyRequest');
+            const backBtn = document.getElementById('backToSelection');
+            const newRequestBtn = document.getElementById('newRequestBtn');
+            const safetyInstructionsDiv = document.getElementById('safetyInstructions');
+            const etaMessageDiv = document.getElementById('etaMessage');
+
+            // Safety instructions based on emergency type
+            const safetyGuides = {
+                'pipe-burst': [
+                    'Locate your main water shutoff valve and turn it off immediately (usually near the water meter or where the main line enters the house).',
+                    'If water is near electrical outlets or appliances, do not touch them. Turn off electricity at the breaker if safe.',
+                    'Move valuables and furniture away from the affected area if possible.',
+                    'Place buckets or towels to catch dripping water, but do not risk injury.'
+                ],
+                'gas-leak': [
+                    'DO NOT light matches, candles, or operate electrical switches. Even a small spark can cause an explosion.',
+                    'Evacuate everyone from the building immediately. Leave doors open as you exit.',
+                    'Once outside, call your gas utility emergency number from a safe distance.',
+                    'Do not re-enter the property until cleared by emergency personnel.'
+                ],
+                'ac-outage': [
+                    'Close blinds/curtains to reduce heat from sunlight.',
+                    'Use fans and cool damp cloths to stay comfortable. Avoid using ovens or dryers.',
+                    'Keep hydrated and move to the lowest floor of the home if possible.',
+                    'If temperatures become dangerous, consider staying with a neighbor or at a cooling center.'
+                ],
+                'heating-failure': [
+                    'Close off unused rooms to conserve heat in occupied areas.',
+                    'Use safe space heaters (with automatic shutoff) and never use ovens for heating.',
+                    'Let faucets drip slightly to prevent pipes from freezing.',
+                    'Dress in layers and use blankets. Seek alternative shelter if indoor temperature drops below 55°F.'
+                ],
+                'electrical': [
+                    'If you see sparks, smoke, or smell burning, turn off power at the main breaker if safe.',
+                    'Do not touch anyone in contact with electricity. Use a non-conductive object to separate them if necessary.',
+                    'Keep a fire extinguisher rated for electrical fires nearby (Class C).',
+                    'Stay away from any downed power lines outside and call the utility company.'
+                ],
+                'sewer-backup': [
+                    'Stop using all water in the house – do not flush toilets or run sinks.',
+                    'Keep children and pets away from the affected area; sewage contains harmful bacteria.',
+                    'If possible, block the drain with a heavy object to slow the backup.',
+                    'Open windows for ventilation. Wear rubber gloves and boots if you must enter the area.'
+                ]
+            };
+
+            // Severity determines response time (mock)
+            const responseTime = {
+                'high': '15 minutes',
+                'medium': '30 minutes'
+            };
+
+            // Handle emergency selection
+            emergencyCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    emergencyCards.forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedEmergency = this.dataset.emergency;
+                    selectedSeverity = this.dataset.severity;
+                    // Show contact form with transition
+                    emergencySelectionDiv.style.display = 'none';
+                    contactFormDiv.classList.add('active');
+                    // Enable send button if form is valid (checked on input)
+                    validateForm();
+                });
+            });
+
+            // Back button
+            backBtn.addEventListener('click', function() {
+                contactFormDiv.classList.remove('active');
+                emergencySelectionDiv.style.display = 'block';
+                // reset selection highlight? No, keep it for context but could deselect? better to clear.
+                emergencyCards.forEach(c => c.classList.remove('selected'));
+                selectedEmergency = null;
+                selectedSeverity = null;
+                sendBtn.disabled = true;
+            });
+
+            // Form validation
+            const nameInput = document.getElementById('fullName');
+            const phoneInput = document.getElementById('phone');
+            const addressInput = document.getElementById('address');
+
+            function validateForm() {
+                const valid = nameInput.value.trim() && phoneInput.value.trim() && addressInput.value.trim();
+                sendBtn.disabled = !valid || !selectedEmergency;
+            }
+
+            [nameInput, phoneInput, addressInput].forEach(input => {
+                input.addEventListener('input', validateForm);
+            });
+
+            // Send emergency dispatch
+            sendBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!selectedEmergency || sendBtn.disabled) return;
+
+                // Collect lead data
+                const lead = {
+                    emergencyType: selectedEmergency,
+                    severity: selectedSeverity,
+                    name: nameInput.value.trim(),
+                    phone: phoneInput.value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    address: addressInput.value.trim(),
+                    description: document.getElementById('description').value.trim(),
+                    timestamp: new Date().toISOString()
+                };
+
+                // Simulate immediate dispatch notification (console + localStorage)
+                console.log('🚨 EMERGENCY DISPATCH:', lead);
+                // Store in localStorage for demo lead engine
+                let emergencies = JSON.parse(localStorage.getItem('allied_emergencies') || '[]');
+                emergencies.push(lead);
+                localStorage.setItem('allied_emergencies', JSON.stringify(emergencies));
+
+                // Hide form and show result panel
+                contactFormDiv.classList.remove('active');
+                resultPanel.classList.add('show');
+
+                // Populate safety steps
+                const steps = safetyGuides[selectedEmergency] || ['Stay calm. A technician is on the way.'];
+                let stepsHtml = '<h4><i class="fas fa-shield-alt"></i> Emergency Safety Steps</h4><ul>';
+                steps.forEach(step => {
+                    stepsHtml += `<li><i class="fas fa-check-circle"></i> ${step}</li>`;
+                });
+                stepsHtml += '</ul>';
+                safetyInstructionsDiv.innerHTML = stepsHtml;
+
+                // Update ETA based on severity
+                const eta = responseTime[selectedSeverity] || '15 minutes';
+                etaMessageDiv.innerHTML = `<i class="fas fa-clock"></i> Estimated call-back: within <strong>${eta}</strong>`;
+
+                // Simulate SMS confirmation (visual only)
+                // In a real app, this would trigger an API call.
+            });
+
+            // New request reset
+            newRequestBtn.addEventListener('click', function() {
+                resultPanel.classList.remove('show');
+                emergencySelectionDiv.style.display = 'block';
+                contactFormDiv.classList.remove('active');
+                emergencyCards.forEach(c => c.classList.remove('selected'));
+                selectedEmergency = null;
+                selectedSeverity = null;
+                // Clear form fields
+                document.getElementById('emergencyDetailsForm').reset();
+                sendBtn.disabled = true;
+            });
+
+            // Initial form validation state
+            validateForm();
+        })();
+    </script>
+</body>
+</html>
