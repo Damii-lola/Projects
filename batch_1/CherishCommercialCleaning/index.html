@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cherish · Instant Quote & Walkthrough</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7f9fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .cherish-widget {
+            max-width: 680px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 25px 60px rgba(0,20,30,0.08);
+            overflow: hidden;
+            border: 1px solid #eef2f6;
+        }
+
+        /* Header */
+        .widget-header {
+            background: linear-gradient(105deg, #f0f7f4 0%, #ffffff 100%);
+            padding: 2rem 2rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-icon {
+            font-size: 2.5rem;
+            color: #3b7a6e; /* soft teal-green – caring, clean */
+        }
+
+        .brand-text h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1a202c;
+            letter-spacing: -0.3px;
+            margin: 0;
+        }
+
+        .brand-text h2 span {
+            color: #3b7a6e;
+        }
+
+        .brand-text p {
+            font-size: 0.9rem;
+            color: #4a5568;
+            font-weight: 500;
+            margin-top: 0.2rem;
+        }
+
+        /* Steps */
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 2rem 0.8rem;
+            position: relative;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #718096;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+
+        .step.active .step-circle {
+            background: #3b7a6e;
+            color: white;
+            box-shadow: 0 4px 12px rgba(59,122,110,0.3);
+        }
+
+        .step.completed .step-circle {
+            background: #3b7a6e;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+            color: #a0aec0;
+            letter-spacing: 0.3px;
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #2d3748;
+        }
+
+        .progress-bar {
+            position: absolute;
+            top: 16px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #e2e8f0;
+            z-index: 1;
+            margin: 0 45px;
+            border-radius: 4px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3b7a6e;
+            transition: width 0.3s;
+            border-radius: 4px;
+        }
+
+        /* Body */
+        .widget-body {
+            padding: 2rem;
+        }
+
+        .step-panel {
+            display: none;
+            animation: fade 0.3s ease;
+        }
+
+        .step-panel.active {
+            display: block;
+        }
+
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Form elements */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            flex: 1 1 160px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #4a5568;
+            margin-bottom: 0.4rem;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #f9fafb;
+            appearance: none;
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%234A5568'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 12px;
+        }
+
+        input:focus, select:focus {
+            border-color: #3b7a6e;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59,122,110,0.12);
+        }
+
+        .quote-result {
+            background: #f0f9f6;
+            border: 2px solid #c6f6e8;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .quote-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1a202c;
+        }
+
+        .quote-range {
+            font-size: 1rem;
+            color: #4a5568;
+            margin-top: 0.2rem;
+        }
+
+        .quote-details {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #2d3748;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        /* Calendar */
+        .calendar-box {
+            margin-bottom: 1.5rem;
+        }
+
+        .time-slots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 0.8rem;
+        }
+
+        .time-slot {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.15s;
+            background: white;
+        }
+
+        .time-slot.booked {
+            background: #f7fafc;
+            color: #a0aec0;
+            text-decoration: line-through;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .time-slot:not(.booked):hover {
+            border-color: #3b7a6e;
+            background: #e6fffa;
+        }
+
+        .time-slot.selected {
+            background: #3b7a6e;
+            color: white;
+            border-color: #3b7a6e;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border-radius: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-outline:hover {
+            border-color: #3b7a6e;
+            color: #3b7a6e;
+        }
+
+        .btn-primary {
+            background: #3b7a6e;
+            color: white;
+            box-shadow: 0 4px 12px rgba(59,122,110,0.4);
+        }
+
+        .btn-primary:hover {
+            background: #2f6258;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            background: #cbd5e0;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Confirmation */
+        .confirmation-panel {
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .check-icon {
+            font-size: 3rem;
+            color: #38a169;
+            margin-bottom: 0.8rem;
+        }
+
+        .summary-box {
+            background: #f7fafc;
+            border-radius: 14px;
+            padding: 1.2rem;
+            text-align: left;
+            margin: 1.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="cherish-widget" id="widget">
+        <!-- Header -->
+        <div class="widget-header">
+            <i class="fas fa-hand-sparkles brand-icon"></i>
+            <div class="brand-text">
+                <h2>Cherish<span>.</span> Commercial Cleaning</h2>
+                <p>Instant Quote & Walkthrough Scheduler</p>
+            </div>
+        </div>
+
+        <!-- Steps -->
+        <div class="step-indicator" id="stepIndicator">
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%;"></div></div>
+            <div class="step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Facility</div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Quote</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Schedule</div>
+            </div>
+            <div class="step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Confirm</div>
+            </div>
+        </div>
+
+        <!-- Body panels -->
+        <div class="widget-body">
+            <!-- Step 1: Facility Parameters -->
+            <div class="step-panel active" data-panel="1">
+                <h3><i class="fas fa-building"></i> Tell us about your facility</h3>
+                <div class="form-row">
+                    <div class="form-group" style="flex:2;">
+                        <label>Facility Type</label>
+                        <select id="facilityType">
+                            <option value="office">Office</option>
+                            <option value="medical">Medical</option>
+                            <option value="industrial">Industrial / Warehouse</option>
+                            <option value="retail">Retail</option>
+                            <option value="education">Education</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Sq. Footage</label>
+                        <input type="number" id="sqft" placeholder="e.g., 5000" min="500" step="100">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Number of Floors</label>
+                        <input type="number" id="floors" placeholder="1" min="1" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Cleaning Frequency</label>
+                        <select id="frequency">
+                            <option value="daily">Daily (5x/week)</option>
+                            <option value="3x">3x per week</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="biweekly">Bi-weekly</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <div></div>
+                    <button class="btn btn-primary" id="toQuote" disabled>Calculate Estimate <i class="fas fa-calculator"></i></button>
+                </div>
+            </div>
+
+            <!-- Step 2: Instant Quote -->
+            <div class="step-panel" data-panel="2">
+                <h3><i class="fas fa-tag"></i> Your Estimated Rate</h3>
+                <div class="quote-result" id="quoteDisplay"></div>
+                <p style="font-size:0.85rem; color:#718096;">*Estimate based on industry standards. Final pricing after walkthrough.</p>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToParams"><i class="fas fa-arrow-left"></i> Modify</button>
+                    <button class="btn btn-primary" id="bookWalkthrough">Schedule Walkthrough <i class="fas fa-calendar-check"></i></button>
+                </div>
+            </div>
+
+            <!-- Step 3: Walkthrough Scheduling -->
+            <div class="step-panel" data-panel="3">
+                <h3><i class="fas fa-calendar-alt"></i> Pick an inspection date & time</h3>
+                <div class="calendar-box">
+                    <label>Date</label>
+                    <input type="date" id="walkDate" min="">
+                </div>
+                <label>Available time slots</label>
+                <div class="time-slots" id="timeSlots"></div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToQuote"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-primary" id="toContact" disabled>Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Step 4: Contact & Confirm -->
+            <div class="step-panel" data-panel="4">
+                <h3><i class="fas fa-user-tie"></i> Your contact details</h3>
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="fullName" placeholder="Jane Cooper" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Company *</label>
+                            <input type="text" id="company" placeholder="Acme Inc." required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="email" placeholder="jane@acme.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone *</label>
+                            <input type="tel" id="phone" placeholder="(555) 000-0000" required>
+                        </div>
+                    </div>
+                </form>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToSchedule"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-primary" id="confirmBooking" disabled>Confirm Walkthrough <i class="fas fa-check"></i></button>
+                </div>
+            </div>
+
+            <!-- Hidden confirmation panel (shown after submission) -->
+            <div class="step-panel confirmation-panel" data-panel="5" id="confirmationPanel">
+                <div class="check-icon"><i class="fas fa-check-circle"></i></div>
+                <h3>Walkthrough Confirmed!</h3>
+                <p style="color:#4a5568; margin-bottom:1rem;">A confirmation has been sent to your email and phone.</p>
+                <div class="summary-box" id="summaryBox"></div>
+                <button class="btn btn-primary" id="newRequest" style="margin-top:1rem;">New Quote <i class="fas fa-redo-alt"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // State
+            let currentStep = 1;
+            let facilityParams = {};
+            let estimatedRange = null;
+            let selectedDate = null;
+            let selectedTime = null;
+
+            // DOM
+            const panels = document.querySelectorAll('.step-panel');
+            const stepsUI = document.querySelectorAll('.step');
+            const progressFill = document.getElementById('progressFill');
+            const toQuoteBtn = document.getElementById('toQuote');
+            const backToParamsBtn = document.getElementById('backToParams');
+            const bookWalkthroughBtn = document.getElementById('bookWalkthrough');
+            const backToQuoteBtn = document.getElementById('backToQuote');
+            const toContactBtn = document.getElementById('toContact');
+            const backToScheduleBtn = document.getElementById('backToSchedule');
+            const confirmBtn = document.getElementById('confirmBooking');
+            const newRequestBtn = document.getElementById('newRequest');
+            const quoteDisplay = document.getElementById('quoteDisplay');
+            const walkDateInput = document.getElementById('walkDate');
+            const timeSlotsDiv = document.getElementById('timeSlots');
+            const contactForm = document.getElementById('contactForm');
+            const summaryBox = document.getElementById('summaryBox');
+
+            // Facility inputs
+            const sqftInput = document.getElementById('sqft');
+            const floorsInput = document.getElementById('floors');
+            const facilityTypeSelect = document.getElementById('facilityType');
+            const frequencySelect = document.getElementById('frequency');
+
+            // Validation for step 1
+            function validateStep1() {
+                const sqft = parseInt(sqftInput.value);
+                toQuoteBtn.disabled = !(sqft && sqft >= 500);
+            }
+            sqftInput.addEventListener('input', validateStep1);
+            floorsInput.addEventListener('input', validateStep1); // not critical
+
+            // Helper: show step
+            function showStep(step) {
+                currentStep = step;
+                panels.forEach(p => p.classList.remove('active'));
+                const targetPanel = document.querySelector(`.step-panel[data-panel="${step}"]`);
+                if (targetPanel) targetPanel.classList.add('active');
+
+                stepsUI.forEach(s => {
+                    const sNum = parseInt(s.dataset.step);
+                    s.classList.remove('active', 'completed');
+                    if (sNum === step) s.classList.add('active');
+                    else if (sNum < step) s.classList.add('completed');
+                });
+
+                const progressPercent = ((step - 1) / 3) * 100; // 4 main steps, max 100% after step 4
+                progressFill.style.width = Math.min(progressPercent, 100) + '%';
+
+                // Special triggers
+                if (step === 3) {
+                    // set min date to tomorrow
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    walkDateInput.min = tomorrow.toISOString().split('T')[0];
+                    if (!walkDateInput.value) walkDateInput.value = tomorrow.toISOString().split('T')[0];
+                    renderTimeSlots();
+                }
+                if (step === 4) {
+                    validateContactForm();
+                }
+            }
+
+            // Step 1 -> 2: calculate estimate
+            toQuoteBtn.addEventListener('click', () => {
+                const sqft = parseInt(sqftInput.value);
+                const floors = parseInt(floorsInput.value) || 1;
+                const facility = facilityTypeSelect.value;
+                const freq = frequencySelect.value;
+
+                facilityParams = { sqft, floors, facility, freq };
+
+                // Rate formula (simplified industry rates)
+                const baseRates = {
+                    office: 0.10,
+                    medical: 0.13,
+                    industrial: 0.09,
+                    retail: 0.11,
+                    education: 0.10
+                };
+                const freqMultiplier = {
+                    daily: 1.8,
+                    '3x': 1.3,
+                    weekly: 1.0,
+                    biweekly: 0.7
+                };
+                const floorFactor = 1 + (floors - 1) * 0.05; // slight increase per floor
+
+                let basePerSqft = baseRates[facility] || 0.10;
+                let monthlyRate = sqft * basePerSqft * freqMultiplier[freq] * floorFactor;
+                let low = Math.round(monthlyRate * 0.85);
+                let high = Math.round(monthlyRate * 1.15);
+                estimatedRange = { low, high, monthly: Math.round(monthlyRate) };
+
+                quoteDisplay.innerHTML = `
+                    <div class="quote-price">$${low.toLocaleString()} – $${high.toLocaleString()}<span style="font-size:1rem; font-weight:500;"> /month</span></div>
+                    <div class="quote-range">Estimated baseline: ~$${Math.round(monthlyRate).toLocaleString()}/mo</div>
+                    <div class="quote-details">
+                        <span><i class="fas fa-ruler-combined"></i> ${sqft.toLocaleString()} sq ft</span>
+                        <span><i class="fas fa-layer-group"></i> ${floors} floor(s)</span>
+                        <span><i class="fas fa-sync-alt"></i> ${freq.replace('3x','3x/week')}</span>
+                    </div>
+                `;
+                showStep(2);
+            });
+
+            backToParamsBtn.addEventListener('click', () => showStep(1));
+
+            // Step 2 -> 3
+            bookWalkthroughBtn.addEventListener('click', () => showStep(3));
+
+            // Step 3 time slots generation
+            function renderTimeSlots() {
+                const dateVal = walkDateInput.value;
+                if (!dateVal) return;
+                const slots = ['9:00 AM', '10:30 AM', '12:00 PM', '1:30 PM', '3:00 PM', '4:30 PM'];
+                // Simulate some booked slots based on date hash
+                const hash = dateVal.split('-').reduce((a,v) => a + parseInt(v||0), 0);
+                const bookedCount = hash % 3; // 0-2 slots booked
+                let bookedSlots = [];
+                for (let i=0; i<bookedCount; i++) {
+                    bookedSlots.push(slots[(hash + i*2) % slots.length]);
+                }
+
+                timeSlotsDiv.innerHTML = '';
+                slots.forEach(slot => {
+                    const div = document.createElement('div');
+                    div.className = 'time-slot';
+                    if (bookedSlots.includes(slot)) {
+                        div.classList.add('booked');
+                        div.textContent = slot + ' (unavailable)';
+                    } else {
+                        div.textContent = slot;
+                        div.addEventListener('click', function() {
+                            document.querySelectorAll('.time-slot:not(.booked)').forEach(s => s.classList.remove('selected'));
+                            this.classList.add('selected');
+                            selectedTime = slot;
+                            toContactBtn.disabled = false;
+                        });
+                    }
+                    timeSlotsDiv.appendChild(div);
+                });
+                selectedTime = null;
+                toContactBtn.disabled = true;
+            }
+
+            walkDateInput.addEventListener('change', () => {
+                selectedDate = walkDateInput.value;
+                renderTimeSlots();
+            });
+
+            backToQuoteBtn.addEventListener('click', () => showStep(2));
+
+            toContactBtn.addEventListener('click', () => {
+                if (!selectedTime) return;
+                showStep(4);
+            });
+
+            // Step 4 validation
+            function validateContactForm() {
+                const name = document.getElementById('fullName').value.trim();
+                const company = document.getElementById('company').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                confirmBtn.disabled = !(name && company && email && phone);
+            }
+
+            contactForm.addEventListener('input', validateContactForm);
+            backToScheduleBtn.addEventListener('click', () => showStep(3));
+
+            // Confirm booking
+            confirmBtn.addEventListener('click', () => {
+                const lead = {
+                    ...facilityParams,
+                    estimate: estimatedRange,
+                    walkDate: selectedDate,
+                    walkTime: selectedTime,
+                    name: document.getElementById('fullName').value.trim(),
+                    company: document.getElementById('company').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    phone: document.getElementById('phone').value.trim(),
+                    timestamp: new Date().toISOString()
+                };
+
+                // Store lead
+                let leads = JSON.parse(localStorage.getItem('cherish_leads') || '[]');
+                leads.push(lead);
+                localStorage.setItem('cherish_leads', JSON.stringify(leads));
+                console.log('📋 Walkthrough booked:', lead);
+
+                // Show confirmation
+                summaryBox.innerHTML = `
+                    <p><strong>Facility:</strong> ${lead.facility} – ${lead.sqft.toLocaleString()} sq ft</p>
+                    <p><strong>Estimate:</strong> $${lead.estimate.low.toLocaleString()} – $${lead.estimate.high.toLocaleString()}/mo</p>
+                    <p><strong>Walkthrough:</strong> ${lead.walkDate} at ${lead.walkTime}</p>
+                    <p><strong>Contact:</strong> ${lead.name} (${lead.company})</p>
+                `;
+                showStep(5);
+            });
+
+            newRequestBtn.addEventListener('click', () => {
+                // Reset
+                contactForm.reset();
+                sqftInput.value = '';
+                floorsInput.value = '1';
+                facilityTypeSelect.value = 'office';
+                frequencySelect.value = 'daily';
+                selectedDate = null;
+                selectedTime = null;
+                walkDateInput.value = '';
+                timeSlotsDiv.innerHTML = '';
+                validateStep1();
+                showStep(1);
+            });
+
+            // Initial
+            validateStep1();
+            showStep(1);
+        })();
+    </script>
+</body>
+</html>
