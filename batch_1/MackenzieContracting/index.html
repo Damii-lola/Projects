@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mackenzie Contracting · Project Estimator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .widget {
+            max-width: 820px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* ── Header ── */
+        .widget-header {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 1.8rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 4px solid #f59e0b;
+        }
+
+        .logo-icon {
+            font-size: 2.8rem;
+            color: #f59e0b;
+        }
+
+        .brand h2 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin: 0;
+            color: white;
+        }
+
+        .brand h2 span {
+            color: #f59e0b;
+        }
+
+        .brand p {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #d1d5db;
+            margin-top: 0.2rem;
+        }
+
+        .brand .badge {
+            background: #f59e0b;
+            color: #1f2937;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 0.5rem;
+            display: inline-block;
+        }
+
+        /* ── Progress ── */
+        .progress-wrap {
+            padding: 1.5rem 2rem 0.5rem;
+            position: relative;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .step.active .step-circle {
+            background: #1f2937;
+            color: white;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 4px rgba(31, 41, 55, 0.12);
+        }
+
+        .step.completed .step-circle {
+            background: #1f2937;
+            color: white;
+            border-color: #1f2937;
+        }
+
+        .step-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+            color: #9ca3af;
+            letter-spacing: 0.5px;
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #1f2937;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 17px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e5e7eb;
+            z-index: 1;
+            margin: 0 50px;
+            border-radius: 3px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #1f2937;
+            transition: width 0.4s ease;
+            border-radius: 3px;
+        }
+
+        /* ── Body ── */
+        .widget-body {
+            padding: 2rem 2rem 1.5rem;
+        }
+
+        .panel {
+            display: none;
+            animation: fadeSlide 0.35s ease;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        h3 i {
+            color: #f59e0b;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group {
+            flex: 1 1 170px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #4b5563;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        select,
+        input[type="number"],
+        input[type="date"],
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #f9fafb;
+            transition: 0.2s;
+            color: #111827;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: #f59e0b;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+        }
+
+        .trade-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.6rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .trade-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #f9fafb;
+            padding: 0.3rem 0.6rem 0.3rem 0.3rem;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            font-size: 0.85rem;
+            transition: 0.15s;
+            cursor: pointer;
+        }
+
+        .trade-item:hover {
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .trade-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #f59e0b;
+            cursor: pointer;
+        }
+
+        .trade-item .trade-skill {
+            margin-left: auto;
+            font-size: 0.7rem;
+            color: #6b7280;
+        }
+
+        .trade-item .trade-skill select {
+            padding: 0.1rem 0.3rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            background: white;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .radio-group input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #f59e0b;
+        }
+
+        .btn {
+            padding: 0.85rem 2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #e5e7eb;
+            color: #4b5563;
+        }
+
+        .btn-outline:hover {
+            border-color: #1f2937;
+            color: #1f2937;
+        }
+
+        .btn-primary {
+            background: #1f2937;
+            color: white;
+            box-shadow: 0 4px 12px rgba(31, 41, 55, 0.2);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #374151;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(31, 41, 55, 0.25);
+        }
+
+        .btn-primary:disabled {
+            background: #d1d5db;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+            color: #1f2937;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+        }
+
+        .btn-warning:hover:not(:disabled) {
+            background: #d97706;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-warning:disabled {
+            background: #d1d5db;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* ── Estimate Card ── */
+        .estimate-card {
+            background: #f3f4f6;
+            border: 2px solid #d1d5db;
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin: 1.2rem 0;
+        }
+
+        .total-range {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .total-range .currency {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .estimate-sub {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-top: 0.2rem;
+        }
+
+        .breakdown-table {
+            width: 100%;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            border-collapse: collapse;
+        }
+
+        .breakdown-table tr {
+            border-bottom: 1px dashed #d1d5db;
+        }
+
+        .breakdown-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-table td {
+            padding: 0.5rem 0.2rem;
+        }
+
+        .breakdown-label {
+            color: #6b7280;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .breakdown-total td {
+            border-top: 2px solid #1f2937;
+            padding-top: 0.8rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .breakdown-total .breakdown-value {
+            color: #f59e0b;
+            font-size: 1.2rem;
+        }
+
+        .estimate-note {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.8rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid #d1d5db;
+        }
+
+        /* ── Confirmation ── */
+        .confirmation-panel {
+            text-align: center;
+            padding: 1.5rem 0;
+        }
+
+        .confirmation-panel .check-icon {
+            font-size: 3.5rem;
+            color: #16a34a;
+            margin-bottom: 1rem;
+        }
+
+        .summary-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: left;
+            margin: 1.5rem 0;
+            border: 1px solid #e5e7eb;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed #e5e7eb;
+            padding-bottom: 0.4rem;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        /* ── Staff Panel ── */
+        .staff-panel {
+            border-top: 1px solid #e5e7eb;
+            padding: 1.5rem 2rem 2rem;
+            background: #f8fafc;
+        }
+
+        .staff-panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .staff-panel h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .staff-panel h4 .badge {
+            background: #f59e0b;
+            color: #1f2937;
+            font-size: 0.65rem;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-actions .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .panel-actions .btn-clear {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .panel-actions .btn-clear:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .panel-actions .btn-refresh {
+            background: #e5e7eb;
+            color: #4b5563;
+        }
+
+        .panel-actions .btn-refresh:hover {
+            background: #d1d5db;
+        }
+
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .leads-table th {
+            text-align: left;
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            color: #6b7280;
+            font-weight: 600;
+            border-bottom: 1px solid #e5e7eb;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+        }
+
+        .leads-table td {
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            border-bottom: 1px solid #edf2f7;
+            color: #1f2937;
+        }
+
+        .leads-table .new-row {
+            animation: flashRow 0.6s ease;
+        }
+
+        @keyframes flashRow {
+            0% {
+                background: rgba(245, 158, 11, 0.12);
+            }
+            100% {
+                background: transparent;
+            }
+        }
+
+        /* ── Toast ── */
+        .custom-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .widget-header {
+                padding: 1.2rem 1.2rem;
+                flex-wrap: wrap;
+            }
+            .widget-body {
+                padding: 1.2rem;
+            }
+            .staff-panel {
+                padding: 1rem;
+            }
+            .progress-wrap {
+                padding: 1.2rem 1rem 0.5rem;
+            }
+            .progress-line {
+                margin: 0 20px;
+            }
+            .step-label {
+                font-size: 0.55rem;
+            }
+            .trade-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+            }
+            .leads-table {
+                font-size: 0.7rem;
+            }
+            .total-range {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="widget">
+        <!-- ── Header ── -->
+        <div class="widget-header">
+            <i class="fas fa-hard-hat logo-icon"></i>
+            <div class="brand">
+                <h2>Mackenzie<span>.</span> Contracting</h2>
+                <p>Project Cost Estimator <span class="badge">Live Demo</span></p>
+            </div>
+        </div>
+
+        <!-- ── Progress ── -->
+        <div class="progress-wrap">
+            <div class="progress-line">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="steps" id="stepIndicator">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Scope</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Estimate</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Contact</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Proposal</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Body ── -->
+        <div class="widget-body">
+            <!-- Step 1: Scope -->
+            <div class="panel active" data-panel="1">
+                <h3><i class="fas fa-drafting-compass"></i> Project Scope</h3>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex:2;">
+                        <label>Project Type</label>
+                        <select id="projectType">
+                            <option value="renovation">Renovation / Remodel</option>
+                            <option value="new-build">New Construction</option>
+                            <option value="addition">Home Addition</option>
+                            <option value="commercial-fitout">Commercial Fit‑Out</option>
+                            <option value="outdoor">Outdoor / Hardscape</option>
+                            <option value="kitchen">Kitchen Remodel</option>
+                            <option value="bathroom">Bathroom Renovation</option>
+                            <option value="basement">Basement Finish</option>
+                            <option value="roofing">Roofing</option>
+                            <option value="demolition">Demolition</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Square Footage</label>
+                        <input type="number" id="sqft" placeholder="e.g., 1500" min="50" step="50" />
+                    </div>
+                    <div class="form-group">
+                        <label>Floors/Levels</label>
+                        <input type="number" id="floors" placeholder="1" min="1" value="1" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Modification Type</label>
+                        <select id="modType">
+                            <option value="cosmetic">Cosmetic Only</option>
+                            <option value="light-structural">Light Structural</option>
+                            <option value="moderate-structural">Moderate Structural</option>
+                            <option value="heavy-structural">Heavy Structural</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Quality Tier</label>
+                        <select id="qualityTier">
+                            <option value="economy">Economy</option>
+                            <option value="standard" selected>Standard</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Site Condition</label>
+                        <select id="siteCondition">
+                            <option value="suburban">Suburban</option>
+                            <option value="urban">Urban (Higher Logistics)</option>
+                            <option value="remote">Remote (Higher Logistics)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Permit Requirements</label>
+                        <select id="permitRequired">
+                            <option value="none">None Required</option>
+                            <option value="basic">Basic Permit</option>
+                            <option value="extensive">Extensive / City Review</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Target Completion</label>
+                        <input type="date" id="deadline" />
+                    </div>
+                </div>
+
+                <label style="font-weight:600; font-size:0.75rem; color:#4b5563; margin-bottom:0.4rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">Trades Required <span style="font-weight:400; text-transform:none; color:#6b7280;">(select all that apply)</span></label>
+                <div class="trade-grid" id="tradeGrid">
+                    <label class="trade-item"><input type="checkbox" value="carpentry" /> Carpentry/Framing <span class="trade-skill"><select class="skill-select"><option value="basic">Basic</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></span></label>
+                    <label class="trade-item"><input type="checkbox" value="electrical" /> Electrical <span class="trade-skill"><select class="skill-select"><option value="basic">Basic</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></span></label>
+                    <label class="trade-item"><input type="checkbox" value="plumbing" /> Plumbing <span class="trade-skill"><select class="skill-select"><option value="basic">Basic</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></span></label>
+                    <label class="trade-item"><input type="checkbox" value="hvac" /> HVAC <span class="trade-skill"><select class="skill-select"><option value="basic">Basic</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></span></label>
+                    <label class="trade-item"><input type="checkbox" value="painting" /> Painting/Drywall <span class="trade-skill"><select class="skill-select"><option value="basic">Basic</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></span></label>
+                    <label class="trade-item"><input type="checkbox" value="flooring" /> Flooring <span class="trade-skill"><select class="skill-select"><option value="basic">Basic</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></span></label>
+                    <label class="trade-item"><input type="checkbox" value="roofing" /> Roofing <span class="trade-skill"><select class="skill-select"><option value="basic">Basic</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></span></label>
+                    <label class="trade-item"><input type="checkbox" value="concrete" /> Concrete/Masonry <span class="trade-skill"><select class="skill-select"><option value="basic">Basic</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></span></label>
+                    <label class="trade-item"><input type="checkbox" value="insulation" /> Insulation <span class="trade-skill"><select class="skill-select"><option value="basic">Basic</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></span></label>
+                    <label class="trade-item"><input type="checkbox" value="cabinetry" /> Cabinetry <span class="trade-skill"><select class="skill-select"><option value="basic">Basic</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></span></label>
+                    <label class="trade-item"><input type="checkbox" value="landscaping" /> Landscaping <span class="trade-skill"><select class="skill-select"><option value="basic">Basic</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></span></label>
+                    <label class="trade-item"><input type="checkbox" value="demo" /> Demolition <span class="trade-skill"><select class="skill-select"><option value="basic">Basic</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></span></label>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end;">
+                    <button class="btn btn-warning" id="toEstimateBtn" disabled>
+                        Calculate Estimate <i class="fas fa-calculator"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Estimate -->
+            <div class="panel" data-panel="2">
+                <h3><i class="fas fa-file-invoice-dollar"></i> Preliminary Cost Estimate</h3>
+                <div class="estimate-card" id="estimateCard"></div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToScope"><i class="fas fa-arrow-left"></i> Modify Scope</button>
+                    <button class="btn btn-warning" id="toContactBtn">Next: Contact <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Step 3: Contact -->
+            <div class="panel" data-panel="3">
+                <h3><i class="fas fa-address-card"></i> Your Contact Information</h3>
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="fullName" placeholder="John Builder" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Company</label>
+                            <input type="text" id="company" placeholder="ABC Properties" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="email" placeholder="john@example.com" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Phone *</label>
+                            <input type="tel" id="phone" placeholder="(555) 000-0000" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Additional Notes</label>
+                        <input type="text" id="notes" placeholder="Any special requirements or access considerations..." />
+                    </div>
+                </form>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToEstimate"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-warning" id="generateProposalBtn" disabled>
+                        <i class="fas fa-file-pdf"></i> Generate Proposal
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Proposal Generated -->
+            <div class="panel confirmation-panel" data-panel="4">
+                <div class="check-icon"><i class="fas fa-check-circle"></i></div>
+                <h3>Proposal Generated &amp; Lead Captured</h3>
+                <p style="color:#4b5563;">Your project estimate has been saved. A detailed proposal PDF has been generated.</p>
+                <div class="summary-box" id="summaryBox"></div>
+                <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+                    <button class="btn btn-warning" id="downloadPdfBtn"><i class="fas fa-file-pdf"></i> Download PDF</button>
+                    <button class="btn btn-primary" id="newEstimateBtn"><i class="fas fa-redo-alt"></i> New Estimate</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Staff Panel ── -->
+        <div class="staff-panel" id="staffPanel">
+            <div class="panel-header">
+                <h4><i class="fas fa-bolt" style="color:#f59e0b;"></i> Estimate Requests <span class="badge" id="leadCount">0</span></h4>
+                <div class="panel-actions">
+                    <button class="btn-sm btn-refresh" id="refreshLeads"><i class="fas fa-sync-alt"></i></button>
+                    <button class="btn-sm btn-clear" id="clearLeads"><i class="fas fa-trash"></i> Clear</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="leads-table" id="leadsTable">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Contact</th>
+                            <th>Project</th>
+                            <th>Size</th>
+                            <th>Estimate</th>
+                            <th>Time</th>
+                            <th style="width:30px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsBody">
+                        <tr><td colspan="7" style="text-align:center; color:#94a3b8; padding:1rem 0;">No estimates submitted yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── State ─────────────────────────────────────────────
+            let currentStep = 1;
+            let scopeData = {};
+            let estimateData = null;
+            let contactData = {};
+            let leads = JSON.parse(localStorage.getItem('mackenzie_leads') || '[]');
+
+            // ─── DOM refs ──────────────────────────────────────────
+            const projectType = document.getElementById('projectType');
+            const sqftInput = document.getElementById('sqft');
+            const floorsInput = document.getElementById('floors');
+            const modType = document.getElementById('modType');
+            const qualityTier = document.getElementById('qualityTier');
+            const siteCondition = document.getElementById('siteCondition');
+            const permitRequired = document.getElementById('permitRequired');
+            const deadlineInput = document.getElementById('deadline');
+            const tradeCheckboxes = document.querySelectorAll('#tradeGrid input[type="checkbox"]');
+
+            const toEstimateBtn = document.getElementById('toEstimateBtn');
+            const backToScopeBtn = document.getElementById('backToScope');
+            const toContactBtn = document.getElementById('toContactBtn');
+            const backToEstimateBtn = document.getElementById('backToEstimate');
+            const generateProposalBtn = document.getElementById('generateProposalBtn');
+            const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+            const newEstimateBtn = document.getElementById('newEstimateBtn');
+
+            const estimateCard = document.getElementById('estimateCard');
+            const summaryBox = document.getElementById('summaryBox');
+
+            const fullName = document.getElementById('fullName');
+            const company = document.getElementById('company');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+            const notes = document.getElementById('notes');
+
+            const leadsBody = document.getElementById('leadsBody');
+            const leadCount = document.getElementById('leadCount');
+            const clearLeadsBtn = document.getElementById('clearLeads');
+            const refreshLeadsBtn = document.getElementById('refreshLeads');
+
+            // ─── Helpers ────────────────────────────────────────────
+
+            function showStep(step) {
+                currentStep = step;
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                const target = document.querySelector(`.panel[data-panel="${step}"]`);
+                if (target) target.classList.add('active');
+
+                document.querySelectorAll('.step').forEach(s => {
+                    const num = parseInt(s.dataset.step);
+                    s.classList.remove('active', 'completed');
+                    if (num === step) s.classList.add('active');
+                    else if (num < step) s.classList.add('completed');
+                });
+                const percent = Math.min(((step - 1) / 3) * 100, 100);
+                document.getElementById('progressFill').style.width = percent + '%';
+            }
+
+            function renderLeadsTable() {
+                const tbody = leadsBody;
+                if (leads.length === 0) {
+                    tbody.innerHTML =
+                        '<tr><td colspan="7" style="text-align:center; color:#94a3b8; padding:1rem 0;">No estimates submitted yet</td></tr>';
+                } else {
+                    let html = '';
+                    const reversed = [...leads].reverse();
+                    reversed.forEach((lead, idx) => {
+                        const isNew = idx === 0 ? 'new-row' : '';
+                        const estimate = lead.estimate ? `$${lead.estimate.low.toLocaleString()} – $${lead.estimate.high.toLocaleString()}` :
+                            '—';
+                        const size = lead.scope?.sqft ? lead.scope.sqft + ' sq ft' : '—';
+                        const project = lead.scope?.pType ? lead.scope.pType.replace(/-/g, ' ') : '—';
+                        const time = lead.timestamp ? new Date(lead.timestamp).toLocaleTimeString([], { hour: '2-digit',
+                                minute: '2-digit' }) :
+                            '—';
+                        html += `
+                            <tr class="${isNew}">
+                                <td><strong>${lead.contact?.company || lead.contact?.name || '—'}</strong></td>
+                                <td>${lead.contact?.name || '—'}</td>
+                                <td>${project}</td>
+                                <td>${size}</td>
+                                <td>${estimate}</td>
+                                <td style="font-size:0.7rem;">${time}</td>
+                                <td><span style="font-size:0.6rem; background:#10b98120; color:#10b981; padding:0.1rem 0.5rem; border-radius:20px;">NEW</span></td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                }
+                leadCount.textContent = leads.length;
+            }
+
+            function showToast(message) {
+                const existing = document.querySelector('.custom-toast');
+                if (existing) existing.remove();
+                const toast = document.createElement('div');
+                toast.className = 'custom-toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+
+            // ─── Step 1 validation ─────────────────────────────────
+
+            function validateScope() {
+                const sqft = parseFloat(sqftInput.value);
+                toEstimateBtn.disabled = !(sqft && sqft >= 50);
+            }
+
+            sqftInput.addEventListener('input', validateScope);
+            validateScope();
+
+            // ─── Set default deadline ──────────────────────────────
+
+            const today = new Date();
+            const twoWeeks = new Date(today);
+            twoWeeks.setDate(today.getDate() + 14);
+            deadlineInput.min = twoWeeks.toISOString().split('T')[0];
+
+            // ─── Pricing Engine ─────────────────────────────────────
+
+            function calculateEstimate() {
+                const sqft = parseFloat(sqftInput.value) || 0;
+                const floors = parseInt(floorsInput.value) || 1;
+                const pType = projectType.value;
+                const mod = modType.value;
+                const quality = qualityTier.value;
+                const site = siteCondition.value;
+                const permit = permitRequired.value;
+                const deadlineVal = deadlineInput.value;
+
+                // Selected trades with skill levels
+                const trades = [];
+                document.querySelectorAll('#tradeGrid .trade-item').forEach(item => {
+                    const cb = item.querySelector('input[type="checkbox"]');
+                    if (cb.checked) {
+                        const skillSelect = item.querySelector('.skill-select');
+                        trades.push({
+                            name: cb.value,
+                            skill: skillSelect ? skillSelect.value : 'intermediate'
+                        });
+                    }
+                });
+
+                // ── Base rates per sq ft (low/high) by project type ──
+                const baseRates = {
+                    'renovation': { low: 55, high: 115 },
+                    'new-build': { low: 95, high: 190 },
+                    'addition': { low: 75, high: 150 },
+                    'commercial-fitout': { low: 45, high: 105 },
+                    'outdoor': { low: 30, high: 75 },
+                    'kitchen': { low: 80, high: 160 },
+                    'bathroom': { low: 90, high: 170 },
+                    'basement': { low: 50, high: 100 },
+                    'roofing': { low: 25, high: 65 },
+                    'demolition': { low: 20, high: 50 }
+                };
+                const base = baseRates[pType] || { low: 50, high: 100 };
+
+                // ── Quality tier multiplier ─────────────────────────
+                const qualityMultiplier = { economy: 0.85, standard: 1.0, premium: 1.35 };
+                const qMul = qualityMultiplier[quality] || 1.0;
+
+                // ── Structural modification multiplier ─────────────
+                const structMul = {
+                    'cosmetic': 1.0,
+                    'light-structural': 1.12,
+                    'moderate-structural': 1.28,
+                    'heavy-structural': 1.5
+                };
+                const sMul = structMul[mod] || 1.0;
+
+                // ── Site condition multiplier ──────────────────────
+                const siteMul = {
+                    'suburban': 1.0,
+                    'urban': 1.08,
+                    'remote': 1.12
+                };
+                const siMul = siteMul[site] || 1.0;
+
+                // ── Floor factor ────────────────────────────────────
+                const floorFactor = 1 + (floors - 1) * 0.04;
+
+                // ── Base calculation ────────────────────────────────
+                let lowBase = sqft * base.low * qMul * sMul * siMul * floorFactor;
+                let highBase = sqft * base.high * qMul * sMul * siMul * floorFactor;
+
+                // ── Trade costs ──────────────────────────────────────
+                // Each trade adds $2-8 per sq ft based on skill level
+                const tradeRates = { basic: 2, intermediate: 4.5, advanced: 7 };
+                let tradeLow = 0;
+                let tradeHigh = 0;
+                trades.forEach(t => {
+                    const rate = tradeRates[t.skill] || 4.5;
+                    tradeLow += rate * sqft * 0.8;
+                    tradeHigh += rate * sqft * 1.1;
+                });
+
+                // ── Permit costs ────────────────────────────────────
+                const permitCosts = { none: 0, basic: 0.02, extensive: 0.05 };
+                const permitPct = permitCosts[permit] || 0;
+
+                // ── Deadline urgency premium ────────────────────────
+                let urgencyPremiumLow = 0;
+                let urgencyPremiumHigh = 0;
+                if (deadlineVal) {
+                    const deadlineDate = new Date(deadlineVal);
+                    const daysUntil = Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
+                    if (daysUntil <= 60 && daysUntil >= 0) {
+                        const urgencyPct = Math.max(0.05, 0.25 - (daysUntil / 60) * 0.2);
+                        urgencyPremiumLow = urgencyPct;
+                        urgencyPremiumHigh = urgencyPct + 0.05;
+                    }
+                }
+
+                // ── Calculate totals ─────────────────────────────────
+                let subtotalLow = lowBase + tradeLow;
+                let subtotalHigh = highBase + tradeHigh;
+
+                // Permit
+                const permitLow = subtotalLow * permitPct;
+                const permitHigh = subtotalHigh * permitPct;
+
+                // Urgency
+                const urgencyLow = (subtotalLow + permitLow) * urgencyPremiumLow;
+                const urgencyHigh = (subtotalHigh + permitHigh) * urgencyPremiumHigh;
+
+                const totalLow = Math.round(subtotalLow + permitLow + urgencyLow);
+                const totalHigh = Math.round(subtotalHigh + permitHigh + urgencyHigh);
+
+                return {
+                    low: totalLow,
+                    high: totalHigh,
+                    baseLow: Math.round(lowBase),
+                    baseHigh: Math.round(highBase),
+                    tradeLow: Math.round(tradeLow),
+                    tradeHigh: Math.round(tradeHigh),
+                    permitLow: Math.round(permitLow),
+                    permitHigh: Math.round(permitHigh),
+                    urgencyLow: Math.round(urgencyLow),
+                    urgencyHigh: Math.round(urgencyHigh),
+                    trades,
+                    mod,
+                    pType,
+                    quality,
+                    site,
+                    permit,
+                    sqft,
+                    floors,
+                    deadline: deadlineVal
+                };
+            }
+
+            // ─── Display Estimate ──────────────────────────────────
+
+            function displayEstimate(e) {
+                const modLabels = {
+                    'cosmetic': 'Cosmetic Only',
+                    'light-structural': 'Light Structural',
+                    'moderate-structural': 'Moderate Structural',
+                    'heavy-structural': 'Heavy Structural'
+                };
+                const qualityLabels = { economy: 'Economy', standard: 'Standard', premium: 'Premium' };
+
+                let tradeNames = e.trades.map(t => t.name.charAt(0).toUpperCase() + t.name.slice(1)).join(', ') || 'None selected';
+
+                estimateCard.innerHTML = `
+                    <div class="total-range">$${e.low.toLocaleString()} <span class="currency">–</span> $${e.high.toLocaleString()}</div>
+                    <div class="estimate-sub">Preliminary cost range · ${e.sqft.toLocaleString()} sq ft · ${qualityLabels[e.quality]}</div>
+
+                    <table class="breakdown-table">
+                        <tr>
+                            <td class="breakdown-label">Base Construction (${e.pType.replace(/-/g,' ')})</td>
+                            <td class="breakdown-value">$${e.baseLow.toLocaleString()} – $${e.baseHigh.toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td class="breakdown-label">Trades (${e.trades.length} selected)</td>
+                            <td class="breakdown-value">+$${e.tradeLow.toLocaleString()} – $${e.tradeHigh.toLocaleString()}</td>
+                        </tr>
+                        ${e.permitLow > 0 ? `
+                        <tr>
+                            <td class="breakdown-label">Permit Fees (${e.permit.replace('-',' ').replace('none','None')})</td>
+                            <td class="breakdown-value">+$${e.permitLow.toLocaleString()} – $${e.permitHigh.toLocaleString()}</td>
+                        </tr>` : ''}
+                        ${e.urgencyLow > 0 ? `
+                        <tr>
+                            <td class="breakdown-label">Urgency Premium (${e.deadline ? 'Within 60 days' : ''})</td>
+                            <td class="breakdown-value">+$${e.urgencyLow.toLocaleString()} – $${e.urgencyHigh.toLocaleString()}</td>
+                        </tr>` : ''}
+                        <tr class="breakdown-total">
+                            <td>Total Estimated Range</td>
+                            <td class="breakdown-value">$${e.low.toLocaleString()} – $${e.high.toLocaleString()}</td>
+                        </tr>
+                    </table>
+                    <div class="estimate-note">
+                        <strong>Modification:</strong> ${modLabels[e.mod] || e.mod} ·
+                        <strong>Quality:</strong> ${qualityLabels[e.quality]} ·
+                        <strong>Site:</strong> ${e.site.charAt(0).toUpperCase() + e.site.slice(1)}
+                        ${e.deadline ? ` · <strong>Target:</strong> ${e.deadline}` : ''}
+                        <br><em>*Preliminary estimate. Final pricing requires detailed scope review and site visit.</em>
+                    </div>
+                `;
+                estimateData = e;
+            }
+
+            // ─── Step 1 → 2 ──────────────────────────────────────
+
+            toEstimateBtn.addEventListener('click', function() {
+                if (toEstimateBtn.disabled) return;
+                const e = calculateEstimate();
+                scopeData = {
+                    pType: projectType.value,
+                    sqft: parseFloat(sqftInput.value),
+                    floors: parseInt(floorsInput.value) || 1,
+                    mod: modType.value,
+                    quality: qualityTier.value,
+                    site: siteCondition.value,
+                    permit: permitRequired.value,
+                    deadline: deadlineInput.value,
+                    trades: e.trades
+                };
+                displayEstimate(e);
+                showStep(2);
+            });
+
+            backToScopeBtn.addEventListener('click', () => showStep(1));
+
+            // ─── Step 2 → 3 ──────────────────────────────────────
+
+            toContactBtn.addEventListener('click', () => {
+                if (!estimateData) return;
+                showStep(3);
+            });
+
+            backToEstimateBtn.addEventListener('click', () => showStep(2));
+
+            // ─── Contact validation ──────────────────────────────
+
+            function validateContact() {
+                const valid = fullName.value.trim() && email.value.trim() && phone.value.trim();
+                generateProposalBtn.disabled = !valid;
+            }
+
+            [fullName, email, phone].forEach(el => el.addEventListener('input', validateContact));
+
+            // ─── Generate Proposal ────────────────────────────────
+
+            generateProposalBtn.addEventListener('click', function() {
+                if (generateProposalBtn.disabled || !estimateData) return;
+
+                contactData = {
+                    name: fullName.value.trim(),
+                    company: company.value.trim(),
+                    email: email.value.trim(),
+                    phone: phone.value.trim(),
+                    notes: notes.value.trim()
+                };
+
+                // Save lead
+                const lead = {
+                    scope: scopeData,
+                    estimate: estimateData,
+                    contact: contactData,
+                    timestamp: new Date().toISOString()
+                };
+                leads.push(lead);
+                localStorage.setItem('mackenzie_leads', JSON.stringify(leads));
+                renderLeadsTable();
+
+                // Show summary
+                const e = estimateData;
+                const c = contactData;
+                const s = scopeData;
+                summaryBox.innerHTML = `
+                    <div class="summary-row"><strong>Project:</strong> <span>${s.pType.replace(/-/g,' ')} · ${s.sqft} sq ft</span></div>
+                    <div class="summary-row"><strong>Estimate:</strong> <span>$${e.low.toLocaleString()} – $${e.high.toLocaleString()}</span></div>
+                    <div class="summary-row"><strong>Client:</strong> <span>${c.name}${c.company ? ' ('+c.company+')' : ''}</span></div>
+                    <div class="summary-row"><strong>Email:</strong> <span>${c.email}</span></div>
+                    <div class="summary-row"><strong>Phone:</strong> <span>${c.phone}</span></div>
+                `;
+
+                showStep(4);
+                showToast('📄 Proposal generated for ' + c.name);
+                console.log('📐 Lead captured:', lead);
+
+                // Auto-download after a moment
+                setTimeout(() => {
+                    generatePDF(lead);
+                }, 500);
+            });
+
+            // ─── PDF Generator ─────────────────────────────────────
+
+            function generatePDF(lead) {
+                const e = lead.estimate;
+                const c = lead.contact;
+                const s = lead.scope;
+
+                const modLabels = {
+                    'cosmetic': 'Cosmetic Only',
+                    'light-structural': 'Light Structural',
+                    'moderate-structural': 'Moderate Structural',
+                    'heavy-structural': 'Heavy Structural'
+                };
+                const qualityLabels = { economy: 'Economy', standard: 'Standard', premium: 'Premium' };
+
+                let tradeList = e.trades.map(t => t.name.charAt(0).toUpperCase() + t.name.slice(1) + ' (' + t.skill + ')')
+                .join(', ') || 'None selected';
+
+                const htmlContent = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head><title>Mackenzie Contracting – Proposal</title>
+                    <style>
+                        body { font-family: 'Inter', Arial, sans-serif; padding: 2rem; color: #1f2937; max-width: 900px; margin:0 auto; }
+                        .header { border-bottom: 4px solid #f59e0b; padding-bottom: 1rem; margin-bottom: 2rem; display:flex; justify-content:space-between; align-items:center; }
+                        .header h1 { font-size: 2rem; margin:0; } .header h1 span { color: #f59e0b; }
+                        .header .date { color: #6b7280; font-size:0.9rem; }
+                        .section { margin-bottom: 1.5rem; }
+                        .section h2 { font-size: 1.1rem; color: #1f2937; border-bottom: 1px solid #e5e7eb; padding-bottom:0.3rem; margin-bottom:0.8rem; }
+                        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+                        th, td { padding: 0.6rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+                        .total { font-size: 1.6rem; font-weight: 800; }
+                        .total span { font-size:1.2rem; font-weight:400; color:#6b7280; }
+                        .footer { margin-top: 2rem; font-size: 0.8rem; color: #6b7280; border-top: 1px solid #e5e7eb; padding-top:1rem; text-align:center; }
+                        .highlight { color: #f59e0b; font-weight:700; }
+                        .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+                        .two-col .item { padding:0.2rem 0; }
+                        .two-col .label { color:#6b7280; }
+                    </style>
+                    </head>
+                    <body>
+                        <div class="header">
+                            <h1>Mackenzie<span>.</span> Contracting</h1>
+                            <div class="date">${new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' })}</div>
+                        </div>
+
+                        <div class="section">
+                            <h2>Project Estimate</h2>
+                            <div class="two-col">
+                                <div><span class="label">Client:</span> ${c.name}${c.company ? ' ('+c.company+')' : ''}</div>
+                                <div><span class="label">Email:</span> ${c.email}</div>
+                                <div><span class="label">Phone:</span> ${c.phone}</div>
+                                <div><span class="label">Project:</span> ${s.pType.replace(/-/g,' ')}</div>
+                                <div><span class="label">Size:</span> ${s.sqft.toLocaleString()} sq ft</div>
+                                <div><span class="label">Quality:</span> ${qualityLabels[s.quality]}</div>
+                                ${s.deadline ? `<div><span class="label">Target:</span> ${s.deadline}</div>` : ''}
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h2>Cost Breakdown</h2>
+                            <div class="total">$${e.low.toLocaleString()} <span>–</span> $${e.high.toLocaleString()}</div>
+                            <table>
+                                <tr><td>Base Construction</td><td>$${e.baseLow.toLocaleString()} – $${e.baseHigh.toLocaleString()}</td></tr>
+                                <tr><td>Trades (${e.trades.length})</td><td>+$${e.tradeLow.toLocaleString()} – $${e.tradeHigh.toLocaleString()}</td></tr>
+                                ${e.permitLow > 0 ? `<tr><td>Permit Fees</td><td>+$${e.permitLow.toLocaleString()} – $${e.permitHigh.toLocaleString()}</td></tr>` : ''}
+                                ${e.urgencyLow > 0 ? `<tr><td>Urgency Premium</td><td>+$${e.urgencyLow.toLocaleString()} – $${e.urgencyHigh.toLocaleString()}</td></tr>` : ''}
+                                <tr style="font-weight:700; border-top:2px solid #1f2937;"><td>Total</td><td class="highlight">$${e.low.toLocaleString()} – $${e.high.toLocaleString()}</td></tr>
+                            </table>
+                            <p style="font-size:0.85rem; color:#6b7280;"><em>Modification: ${modLabels[s.mod]} · Site: ${s.site.charAt(0).toUpperCase()+s.site.slice(1)} · Trades: ${tradeList}</em></p>
+                        </div>
+
+                        <div class="section">
+                            <h2>Scope Notes</h2>
+                            <p style="color:#4b5563;">${c.notes || 'No additional notes provided.'}</p>
+                        </div>
+
+                        <div class="footer">
+                            <p>Mackenzie Contracting · Licensed & Insured · contact@mackenziecontracting.com</p>
+                            <p>Preliminary estimate – final pricing requires detailed scope review and site visit.</p>
+                            <p>Generated on ${new Date().toLocaleDateString()}</p>
+                        </div>
+                    </body>
+                    </html>
+                `;
+
+                // Create a Blob and download
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Mackenzie_Proposal_${c.name.replace(/\s/g,'_')}_${new Date().toISOString().slice(0,10)}.html`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            // ─── Download PDF button ──────────────────────────────
+
+            downloadPdfBtn.addEventListener('click', function() {
+                const lastLead = leads[leads.length - 1];
+                if (lastLead) {
+                    generatePDF(lastLead);
+                    showToast('📄 Downloading proposal...');
+                } else {
+                    showToast('No proposal available.');
+                }
+            });
+
+            // ─── New Estimate ──────────────────────────────────────
+
+            newEstimateBtn.addEventListener('click', function() {
+                // Reset all inputs
+                projectType.value = 'renovation';
+                sqftInput.value = '';
+                floorsInput.value = '1';
+                modType.value = 'cosmetic';
+                qualityTier.value = 'standard';
+                siteCondition.value = 'suburban';
+                permitRequired.value = 'none';
+                deadlineInput.value = '';
+                document.querySelectorAll('#tradeGrid input[type="checkbox"]').forEach(cb => cb.checked = false);
+                document.querySelectorAll('#tradeGrid .skill-select').forEach(sel => sel.value = 'intermediate');
+                fullName.value = '';
+                company.value = '';
+                email.value = '';
+                phone.value = '';
+                notes.value = '';
+                estimateData = null;
+                scopeData = {};
+                contactData = {};
+                validateScope();
+                showStep(1);
+            });
+
+            // ─── Staff panel controls ─────────────────────────────
+
+            clearLeadsBtn.addEventListener('click', function() {
+                if (leads.length === 0) {
+                    showToast('No leads to clear.');
+                    return;
+                }
+                if (confirm('⚠️ Delete ALL estimate requests?')) {
+                    leads = [];
+                    localStorage.setItem('mackenzie_leads', JSON.stringify(leads));
+                    renderLeadsTable();
+                    showToast('🗑️ All leads cleared.');
+                }
+            });
+
+            refreshLeadsBtn.addEventListener('click', function() {
+                leads = JSON.parse(localStorage.getItem('mackenzie_leads') || '[]');
+                renderLeadsTable();
+                showToast('🔄 Refreshed.');
+            });
+
+            // ─── Init ─────────────────────────────────────────────
+
+            renderLeadsTable();
+            validateScope();
+            showStep(1);
+
+        })();
+    </script>
+</body>
+</html>
