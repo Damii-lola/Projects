@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spruce Cleaning · Instant Estimate & Book</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f2f7f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .widget {
+            max-width: 780px;
+            width: 100%;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            border: 1px solid #dce8dc;
+        }
+
+        /* ── Header ── */
+        .widget-header {
+            background: #1b4332;
+            color: white;
+            padding: 1.8rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 4px solid #f4d35e;
+        }
+
+        .logo-icon {
+            font-size: 2.8rem;
+            color: #f4d35e;
+        }
+
+        .brand h2 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            margin: 0;
+            color: white;
+        }
+
+        .brand h2 span {
+            color: #f4d35e;
+        }
+
+        .brand p {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #c7e0c7;
+            margin-top: 0.2rem;
+        }
+
+        /* ── Progress ── */
+        .progress-wrap {
+            padding: 1.5rem 2rem 0.8rem;
+            position: relative;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #dce8dc;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .step.active .step-circle {
+            background: #1b4332;
+            color: white;
+            border-color: #f4d35e;
+            box-shadow: 0 0 0 4px rgba(27, 67, 50, 0.15);
+        }
+
+        .step.completed .step-circle {
+            background: #1b4332;
+            color: white;
+            border-color: #1b4332;
+        }
+
+        .step-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #1b4332;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 17px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #dce8dc;
+            z-index: 1;
+            margin: 0 48px;
+            border-radius: 3px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #1b4332;
+            transition: width 0.4s ease;
+            border-radius: 3px;
+        }
+
+        /* ── Body ── */
+        .widget-body {
+            padding: 2rem 2rem 1.5rem;
+        }
+
+        .panel {
+            display: none;
+            animation: fadeSlide 0.35s ease;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        h3 i {
+            color: #f4d35e;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            flex: 1 1 160px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #4a5568;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 2px solid #dce8dc;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #f9fafb;
+            transition: 0.2s;
+            color: #1a202c;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #1b4332;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(27, 67, 50, 0.1);
+        }
+
+        .frequency-options {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .freq-btn {
+            flex: 1 1 100px;
+            padding: 0.7rem 1rem;
+            border: 2px solid #dce8dc;
+            border-radius: 10px;
+            font-weight: 600;
+            background: white;
+            cursor: pointer;
+            transition: 0.15s;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #2d3748;
+        }
+
+        .freq-btn:hover {
+            border-color: #1b4332;
+        }
+
+        .freq-btn.selected {
+            background: #1b4332;
+            color: white;
+            border-color: #1b4332;
+        }
+
+        .freq-btn .sub {
+            display: block;
+            font-weight: 400;
+            font-size: 0.65rem;
+            opacity: 0.8;
+            margin-top: 0.1rem;
+        }
+
+        .addon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .addon-card {
+            border: 2px solid #dce8dc;
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            transition: 0.2s;
+            background: white;
+        }
+
+        .addon-card i {
+            font-size: 1.4rem;
+            color: #4a5568;
+            width: 28px;
+        }
+
+        .addon-card span {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #2d3748;
+        }
+
+        .addon-card:hover {
+            border-color: #1b4332;
+            background: #f0f7f2;
+        }
+
+        .addon-card.selected {
+            border-color: #1b4332;
+            background: #e6f0e6;
+            box-shadow: 0 0 0 3px rgba(27, 67, 50, 0.1);
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            padding: 0.85rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #dce8dc;
+            color: #475569;
+        }
+
+        .btn-outline:hover {
+            border-color: #1b4332;
+            color: #1b4332;
+        }
+
+        .btn-primary {
+            background: #1b4332;
+            color: white;
+            box-shadow: 0 4px 12px rgba(27, 67, 50, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #143727;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(27, 67, 50, 0.35);
+        }
+
+        .btn-primary:disabled {
+            background: #cbd5e0;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-accent {
+            background: #f4d35e;
+            color: #1b4332;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(244, 211, 94, 0.4);
+        }
+
+        .btn-accent:hover:not(:disabled) {
+            background: #e0b84c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(244, 211, 94, 0.5);
+        }
+
+        .btn-accent:disabled {
+            background: #cbd5e0;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* ── Quote Card ── */
+        .quote-card {
+            background: #f0f7f2;
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin: 1.2rem 0;
+            border: 2px solid #c3e1c3;
+        }
+
+        .total-price {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1b4332;
+        }
+
+        .total-price .period {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .quote-sub {
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin-top: 0.2rem;
+        }
+
+        .breakdown-table {
+            width: 100%;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            border-collapse: collapse;
+        }
+
+        .breakdown-table tr {
+            border-bottom: 1px dashed #c3e1c3;
+        }
+
+        .breakdown-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-table td {
+            padding: 0.5rem 0.2rem;
+        }
+
+        .breakdown-label {
+            color: #4a5568;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .breakdown-total td {
+            border-top: 2px solid #1b4332;
+            padding-top: 0.8rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .breakdown-total .breakdown-value {
+            color: #f4d35e;
+            font-size: 1.2rem;
+        }
+
+        /* ── Calendar ── */
+        .time-slots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 0.8rem;
+        }
+
+        .time-slot {
+            padding: 0.5rem 1.2rem;
+            border: 2px solid #dce8dc;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: white;
+            transition: 0.15s;
+        }
+
+        .time-slot.unavailable {
+            background: #f4f7f2;
+            color: #a0aec0;
+            text-decoration: line-through;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .time-slot:not(.unavailable):hover {
+            border-color: #1b4332;
+            background: #f0f7f2;
+        }
+
+        .time-slot.selected {
+            background: #1b4332;
+            color: white;
+            border-color: #1b4332;
+        }
+
+        /* ── Success Panel ── */
+        .success-panel {
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .success-panel .check-icon {
+            font-size: 3.5rem;
+            color: #2d6a4f;
+            margin-bottom: 1rem;
+        }
+
+        .summary-box {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: left;
+            margin: 1.5rem 0;
+            border: 1px solid #dce8dc;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed #dce8dc;
+            padding-bottom: 0.4rem;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        /* ── Staff Panel ── */
+        .staff-panel {
+            border-top: 1px solid #dce8dc;
+            padding: 1.5rem 2rem 2rem;
+            background: #f8fafc;
+        }
+
+        .staff-panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .staff-panel h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .staff-panel h4 .badge {
+            background: #f4d35e;
+            color: #1b4332;
+            font-size: 0.65rem;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-actions .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .panel-actions .btn-clear {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .panel-actions .btn-clear:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .panel-actions .btn-refresh {
+            background: #dce8dc;
+            color: #475569;
+        }
+
+        .panel-actions .btn-refresh:hover {
+            background: #cbd5e0;
+        }
+
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .leads-table th {
+            text-align: left;
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            color: #64748b;
+            font-weight: 600;
+            border-bottom: 1px solid #dce8dc;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+        }
+
+        .leads-table td {
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            border-bottom: 1px solid #edf2f7;
+            color: #1a202c;
+        }
+
+        .leads-table .new-row {
+            animation: flashRow 0.6s ease;
+        }
+
+        @keyframes flashRow {
+            0% {
+                background: rgba(244, 211, 94, 0.12);
+            }
+            100% {
+                background: transparent;
+            }
+        }
+
+        /* ── Toast ── */
+        .custom-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .widget-header {
+                padding: 1.2rem 1.2rem;
+                flex-wrap: wrap;
+            }
+            .widget-body {
+                padding: 1.2rem;
+            }
+            .staff-panel {
+                padding: 1rem;
+            }
+            .progress-wrap {
+                padding: 1.2rem 1rem 0.5rem;
+            }
+            .progress-line {
+                margin: 0 20px;
+            }
+            .step-label {
+                font-size: 0.55rem;
+            }
+            .frequency-options {
+                flex-direction: column;
+            }
+            .freq-btn {
+                flex: 1 1 auto;
+            }
+            .addon-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+            }
+            .leads-table {
+                font-size: 0.7rem;
+            }
+            .total-price {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="widget">
+        <!-- ── Header ── -->
+        <div class="widget-header">
+            <i class="fas fa-tree logo-icon"></i>
+            <div class="brand">
+                <h2>Spruce<span>.</span> Cleaning Services</h2>
+                <p>Instant Estimate &amp; One‑Click Booking</p>
+            </div>
+        </div>
+
+        <!-- ── Progress ── -->
+        <div class="progress-wrap">
+            <div class="progress-line">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="steps" id="stepIndicator">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Scope</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Add‑ons</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Quote</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Book</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Body ── -->
+        <div class="widget-body">
+            <!-- Step 1: Scope & Frequency -->
+            <div class="panel active" data-panel="1">
+                <h3><i class="fas fa-ruler-combined"></i> Space Details</h3>
+                <div class="form-row">
+                    <div class="form-group" style="flex:2;">
+                        <label>Total Square Footage *</label>
+                        <input type="number" id="sqft" placeholder="e.g., 2500" min="300" step="100" />
+                    </div>
+                    <div class="form-group">
+                        <label>Offices / Desks</label>
+                        <input type="number" id="offices" placeholder="0" min="0" value="0" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Restrooms</label>
+                        <input type="number" id="restrooms" placeholder="0" min="0" value="0" />
+                    </div>
+                    <div class="form-group">
+                        <label>Breakrooms / Kitchens</label>
+                        <input type="number" id="breakrooms" placeholder="0" min="0" value="0" />
+                    </div>
+                </div>
+                <label style="font-weight:600; font-size:0.75rem; color:#4a5568; margin-bottom:0.3rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">Preferred Frequency</label>
+                <div class="frequency-options" id="freqOptions">
+                    <div class="freq-btn selected" data-freq="daily">
+                        Daily
+                        <span class="sub">5x/week</span>
+                    </div>
+                    <div class="freq-btn" data-freq="weekly">
+                        Weekly
+                        <span class="sub">1x/week</span>
+                    </div>
+                    <div class="freq-btn" data-freq="biweekly">
+                        Bi‑Weekly
+                        <span class="sub">Every 2 weeks</span>
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:flex-end;">
+                    <button class="btn btn-primary" id="toAddonsBtn" disabled>
+                        Next: Add‑ons <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Add‑on Services -->
+            <div class="panel" data-panel="2">
+                <h3><i class="fas fa-sparkles"></i> Specialty Add‑ons</h3>
+                <p style="color:#4a5568; margin-bottom:1.2rem;">Select any additional services you'd like included.</p>
+                <div class="addon-grid" id="addonGrid">
+                    <div class="addon-card" data-addon="carpet-shampoo">
+                        <i class="fas fa-water"></i> <span>Carpet Shampoo</span>
+                    </div>
+                    <div class="addon-card" data-addon="window-wash">
+                        <i class="fas fa-window-maximize"></i> <span>Window Washing</span>
+                    </div>
+                    <div class="addon-card" data-addon="floor-wax">
+                        <i class="fas fa-broom"></i> <span>Floor Waxing</span>
+                    </div>
+                    <div class="addon-card" data-addon="disinfection">
+                        <i class="fas fa-shield-virus"></i> <span>Deep Disinfection</span>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToScope"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-primary" id="calculateBtn">
+                        <i class="fas fa-calculator"></i> Calculate Estimate
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Quote & Accept -->
+            <div class="panel" data-panel="3">
+                <h3><i class="fas fa-file-invoice-dollar"></i> Your Instant Estimate</h3>
+                <div class="quote-card" id="quoteCard"></div>
+                <p style="font-size:0.8rem; color:#4a5568;">*Final price confirmed after walkthrough. You can still book your initial deep clean now.</p>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToAddons"><i class="fas fa-arrow-left"></i> Modify</button>
+                    <button class="btn btn-accent" id="acceptBookBtn">
+                        <i class="fas fa-calendar-check"></i> Accept &amp; Book Initial Clean
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Booking Calendar & Contact -->
+            <div class="panel" data-panel="4">
+                <h3><i class="fas fa-calendar-alt"></i> Choose Date &amp; Contact</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="bookDate" min="" />
+                    </div>
+                </div>
+                <label>Available Time Slots</label>
+                <div class="time-slots" id="timeSlotsContainer"></div>
+                <div class="form-row" style="margin-top:1.5rem;">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="fullName" placeholder="Jane Cooper" />
+                    </div>
+                    <div class="form-group">
+                        <label>Company / Property *</label>
+                        <input type="text" id="companyName" placeholder="Acme Inc." />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" placeholder="jane@acme.com" />
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="tel" id="phone" placeholder="(555) 000-0000" />
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToQuote"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-accent" id="confirmBookingBtn" disabled>
+                        <i class="fas fa-check"></i> Confirm Booking
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 5: Success -->
+            <div class="panel success-panel" data-panel="5" id="successPanel">
+                <div class="check-icon"><i class="fas fa-check-circle"></i></div>
+                <h3>Initial Clean Booked &amp; Lead Saved!</h3>
+                <p style="color:#4a5568;">You'll receive a confirmation SMS and email. Our team is ready to make your space shine.</p>
+                <div class="summary-box" id="summaryBox"></div>
+                <button class="btn btn-primary" id="newEstimateBtn" style="margin-top:1.2rem;">
+                    <i class="fas fa-redo-alt"></i> Get Another Estimate
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Staff Panel ── -->
+        <div class="staff-panel" id="staffPanel">
+            <div class="panel-header">
+                <h4><i class="fas fa-bolt" style="color:#f4d35e;"></i> Booking Feed <span class="badge" id="leadCount">0</span></h4>
+                <div class="panel-actions">
+                    <button class="btn-sm btn-refresh" id="refreshLeads"><i class="fas fa-sync-alt"></i></button>
+                    <button class="btn-sm btn-clear" id="clearLeads"><i class="fas fa-trash"></i> Clear</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="leads-table" id="leadsTable">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Contact</th>
+                            <th>Sq Ft</th>
+                            <th>Freq</th>
+                            <th>Estimate</th>
+                            <th>Booked</th>
+                            <th style="width:30px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsBody">
+                        <tr><td colspan="7" style="text-align:center; color:#94a3b8; padding:1rem 0;">No bookings yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── State ─────────────────────────────────────────────
+            let currentStep = 1;
+            let scope = {};
+            let frequency = 'daily';
+            let addons = [];
+            let quote = null;
+            let bookDate = null;
+            let bookTime = null;
+            let leads = JSON.parse(localStorage.getItem('spruce_leads') || '[]');
+
+            // ─── DOM refs ──────────────────────────────────────────
+            const sqftInput = document.getElementById('sqft');
+            const officesInput = document.getElementById('offices');
+            const restroomsInput = document.getElementById('restrooms');
+            const breakroomsInput = document.getElementById('breakrooms');
+            const freqBtns = document.querySelectorAll('.freq-btn');
+            const toAddonsBtn = document.getElementById('toAddonsBtn');
+            const backToScopeBtn = document.getElementById('backToScope');
+            const addonCards = document.querySelectorAll('.addon-card');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const backToAddonsBtn = document.getElementById('backToAddons');
+            const acceptBookBtn = document.getElementById('acceptBookBtn');
+            const quoteCard = document.getElementById('quoteCard');
+
+            const bookDateInput = document.getElementById('bookDate');
+            const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+            const fullName = document.getElementById('fullName');
+            const companyName = document.getElementById('companyName');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+            const confirmBookingBtn = document.getElementById('confirmBookingBtn');
+            const backToQuoteBtn = document.getElementById('backToQuote');
+            const newEstimateBtn = document.getElementById('newEstimateBtn');
+            const summaryBox = document.getElementById('summaryBox');
+
+            const leadsBody = document.getElementById('leadsBody');
+            const leadCount = document.getElementById('leadCount');
+            const clearLeadsBtn = document.getElementById('clearLeads');
+            const refreshLeadsBtn = document.getElementById('refreshLeads');
+
+            // ─── Helpers ────────────────────────────────────────────
+
+            function showStep(step) {
+                currentStep = step;
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                const target = document.querySelector(`.panel[data-panel="${step}"]`);
+                if (target) target.classList.add('active');
+
+                document.querySelectorAll('.step').forEach(s => {
+                    const num = parseInt(s.dataset.step);
+                    s.classList.remove('active', 'completed');
+                    if (num === step) s.classList.add('active');
+                    else if (num < step) s.classList.add('completed');
+                });
+                const percent = Math.min(((step - 1) / 3) * 100, 100);
+                document.getElementById('progressFill').style.width = percent + '%';
+
+                if (step === 4) {
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    bookDateInput.min = tomorrow.toISOString().split('T')[0];
+                    if (!bookDateInput.value) bookDateInput.value = tomorrow.toISOString().split('T')[0];
+                    renderTimeSlots();
+                    validateBookingForm();
+                }
+            }
+
+            function renderLeadsTable() {
+                const tbody = leadsBody;
+                if (leads.length === 0) {
+                    tbody.innerHTML =
+                        '<tr><td colspan="7" style="text-align:center; color:#94a3b8; padding:1rem 0;">No bookings yet</td></tr>';
+                } else {
+                    let html = '';
+                    const reversed = [...leads].reverse();
+                    reversed.forEach((lead, idx) => {
+                        const isNew = idx === 0 ? 'new-row' : '';
+                        const estimate = lead.quote ? `$${lead.quote.low.toLocaleString()} – $${lead.quote.high.toLocaleString()}` :
+                            '—';
+                        const freq = lead.frequency || '—';
+                        const sqft = lead.scope?.sqft || '—';
+                        const booked = lead.booking ? `${lead.booking.date} ${lead.booking.time}` : '—';
+                        html += `
+                            <tr class="${isNew}">
+                                <td><strong>${lead.contact?.company || '—'}</strong></td>
+                                <td>${lead.contact?.name || '—'}</td>
+                                <td>${sqft}</td>
+                                <td>${freq}</td>
+                                <td>${estimate}</td>
+                                <td style="font-size:0.7rem;">${booked}</td>
+                                <td><span style="font-size:0.6rem; background:#10b98120; color:#10b981; padding:0.1rem 0.5rem; border-radius:20px;">NEW</span></td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                }
+                leadCount.textContent = leads.length;
+            }
+
+            function showToast(message) {
+                const existing = document.querySelector('.custom-toast');
+                if (existing) existing.remove();
+                const toast = document.createElement('div');
+                toast.className = 'custom-toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+
+            // ─── Step 1 validation ─────────────────────────────────
+
+            function validateStep1() {
+                const sqft = parseFloat(sqftInput.value);
+                toAddonsBtn.disabled = !(sqft && sqft >= 300);
+            }
+
+            sqftInput.addEventListener('input', validateStep1);
+            validateStep1();
+
+            // ─── Frequency selection ──────────────────────────────
+
+            freqBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    freqBtns.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    frequency = this.dataset.freq;
+                });
+            });
+
+            // ─── Step 1 → 2 ──────────────────────────────────────
+
+            toAddonsBtn.addEventListener('click', function() {
+                if (toAddonsBtn.disabled) return;
+                scope = {
+                    sqft: parseFloat(sqftInput.value),
+                    offices: parseInt(officesInput.value) || 0,
+                    restrooms: parseInt(restroomsInput.value) || 0,
+                    breakrooms: parseInt(breakroomsInput.value) || 0
+                };
+                showStep(2);
+            });
+
+            backToScopeBtn.addEventListener('click', () => showStep(1));
+
+            // ─── Add‑ons selection ─────────────────────────────────
+
+            addonCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+            });
+
+            // ─── Pricing Engine ─────────────────────────────────────
+
+            function calculateQuote() {
+                const sqft = scope.sqft;
+                const offices = scope.offices;
+                const restrooms = scope.restrooms;
+                const breakrooms = scope.breakrooms;
+
+                // Frequency multipliers (visits per month)
+                const freqMap = { daily: 22, weekly: 4.3, biweekly: 2.15 };
+                const visitsPerMonth = freqMap[frequency] || 22;
+
+                // ── Base cleaning ──
+                const baseRatePerSqft = 0.085;
+                const baseMonthly = sqft * baseRatePerSqft * visitsPerMonth;
+
+                // ── Room surcharges ──
+                const officeRate = 2.50; // per office per visit
+                const restroomRate = 16; // per restroom per visit
+                const breakroomRate = 20; // per breakroom per visit
+
+                const officeMonthly = offices * officeRate * visitsPerMonth;
+                const restroomMonthly = restrooms * restroomRate * visitsPerMonth;
+                const breakroomMonthly = breakrooms * breakroomRate * visitsPerMonth;
+
+                // ── Add‑ons (flat monthly) ──
+                const addonRates = {
+                    'carpet-shampoo': 180,
+                    'window-wash': 220,
+                    'floor-wax': 250,
+                    'disinfection': 200
+                };
+                let addonMonthly = 0;
+                addons.forEach(a => {
+                    addonMonthly += addonRates[a] || 0;
+                });
+
+                // ── Totals ──
+                const totalMonthly = Math.round(baseMonthly + officeMonthly + restroomMonthly + breakroomMonthly +
+                    addonMonthly);
+                const low = Math.round(totalMonthly * 0.88);
+                const high = Math.round(totalMonthly * 1.12);
+
+                return {
+                    sqft,
+                    offices,
+                    restrooms,
+                    breakrooms,
+                    frequency,
+                    visitsPerMonth,
+                    baseMonthly: Math.round(baseMonthly),
+                    officeMonthly: Math.round(officeMonthly),
+                    restroomMonthly: Math.round(restroomMonthly),
+                    breakroomMonthly: Math.round(breakroomMonthly),
+                    addonMonthly,
+                    totalMonthly,
+                    low,
+                    high
+                };
+            }
+
+            // ─── Display Quote ─────────────────────────────────────
+
+            function displayQuote(q) {
+                const freqLabels = { daily: 'Daily (5x/week)', weekly: 'Weekly', biweekly: 'Bi‑Weekly' };
+                const addonNames = [];
+                if (addons.includes('carpet-shampoo')) addonNames.push('Carpet Shampoo');
+                if (addons.includes('window-wash')) addonNames.push('Window Washing');
+                if (addons.includes('floor-wax')) addonNames.push('Floor Waxing');
+                if (addons.includes('disinfection')) addonNames.push('Deep Disinfection');
+                const addonList = addonNames.length ? addonNames.join(', ') : 'None';
+
+                quoteCard.innerHTML = `
+                    <div class="total-price">$${q.low.toLocaleString()} <span class="period">–</span> $${q.high.toLocaleString()}<span class="period"> / month</span></div>
+                    <div class="quote-sub">${q.sqft.toLocaleString()} sq ft · ${freqLabels[q.frequency]}</div>
+                    <table class="breakdown-table">
+                        <tr>
+                            <td class="breakdown-label">Base Cleaning (${q.sqft.toLocaleString()} sq ft)</td>
+                            <td class="breakdown-value">$${q.baseMonthly.toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td class="breakdown-label">Offices / Desks (${q.offices})</td>
+                            <td class="breakdown-value">+$${q.officeMonthly.toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td class="breakdown-label">Restrooms (${q.restrooms})</td>
+                            <td class="breakdown-value">+$${q.restroomMonthly.toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td class="breakdown-label">Breakrooms / Kitchens (${q.breakrooms})</td>
+                            <td class="breakdown-value">+$${q.breakroomMonthly.toLocaleString()}</td>
+                        </tr>
+                        ${q.addonMonthly > 0 ? `
+                        <tr>
+                            <td class="breakdown-label">Add‑on Services</td>
+                            <td class="breakdown-value">+$${q.addonMonthly.toLocaleString()}</td>
+                        </tr>` : ''}
+                        <tr class="breakdown-total">
+                            <td>Total Monthly Estimate</td>
+                            <td class="breakdown-value">$${q.low.toLocaleString()} – $${q.high.toLocaleString()}</td>
+                        </tr>
+                    </table>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.8rem;">
+                        <span style="font-size:0.75rem; color:#4a5568;"><i class="fas fa-arrows-spin"></i> ${q.visitsPerMonth.toFixed(1)} visits/mo</span>
+                        <span style="font-size:0.75rem; color:#4a5568;">Add‑ons: ${addonList}</span>
+                    </div>
+                `;
+                quote = q;
+                showStep(3);
+            }
+
+            // ─── Step 2 → 3 ──────────────────────────────────────
+
+            calculateBtn.addEventListener('click', function() {
+                addons = [];
+                addonCards.forEach(card => {
+                    if (card.classList.contains('selected')) {
+                        addons.push(card.dataset.addon);
+                    }
+                });
+                const q = calculateQuote();
+                displayQuote(q);
+            });
+
+            backToAddonsBtn.addEventListener('click', () => showStep(2));
+
+            // ─── Step 3 → 4 ──────────────────────────────────────
+
+            acceptBookBtn.addEventListener('click', function() {
+                if (!quote) return;
+                showStep(4);
+            });
+
+            // ─── Step 4: Time slots ──────────────────────────────
+
+            function renderTimeSlots() {
+                const date = bookDateInput.value;
+                if (!date) {
+                    timeSlotsContainer.innerHTML = '<p style="color:#94a3b8;">Select a date first</p>';
+                    validateBookingForm();
+                    return;
+                }
+                const slots = ['8:00 AM', '10:00 AM', '12:00 PM', '2:00 PM', '4:00 PM', '6:00 PM'];
+                const hash = date.split('-').reduce((a, v) => a + parseInt(v || 0), 0);
+                const bookedCount = hash % 2;
+                const booked = [];
+                for (let i = 0; i < bookedCount; i++) {
+                    booked.push(slots[(hash + i * 2) % slots.length]);
+                }
+
+                timeSlotsContainer.innerHTML = '';
+                slots.forEach(slot => {
+                    const div = document.createElement('div');
+                    div.className = 'time-slot';
+                    if (booked.includes(slot)) {
+                        div.classList.add('unavailable');
+                        div.textContent = slot + ' (booked)';
+                    } else {
+                        div.textContent = slot;
+                        div.addEventListener('click', function() {
+                            document.querySelectorAll('.time-slot:not(.unavailable)').forEach(s => s.classList
+                                .remove('selected'));
+                            this.classList.add('selected');
+                            bookTime = slot;
+                            validateBookingForm();
+                        });
+                    }
+                    timeSlotsContainer.appendChild(div);
+                });
+                bookTime = null;
+                validateBookingForm();
+            }
+
+            bookDateInput.addEventListener('change', () => {
+                bookDate = bookDateInput.value;
+                renderTimeSlots();
+            });
+
+            // ─── Step 4: Contact validation ──────────────────────
+
+            function validateBookingForm() {
+                const valid = fullName.value.trim() && companyName.value.trim() &&
+                    email.value.trim() && phone.value.trim() && bookTime;
+                confirmBookingBtn.disabled = !valid;
+            }
+
+            [fullName, companyName, email, phone].forEach(el => el.addEventListener('input', validateBookingForm));
+
+            backToQuoteBtn.addEventListener('click', () => showStep(3));
+
+            // ─── Confirm booking ──────────────────────────────────
+
+            confirmBookingBtn.addEventListener('click', function() {
+                if (confirmBookingBtn.disabled || !quote) return;
+
+                const lead = {
+                    scope: scope,
+                    frequency: frequency,
+                    addons: addons,
+                    quote: quote,
+                    booking: {
+                        date: bookDateInput.value,
+                        time: bookTime
+                    },
+                    contact: {
+                        name: fullName.value.trim(),
+                        company: companyName.value.trim(),
+                        email: email.value.trim(),
+                        phone: phone.value.trim()
+                    },
+                    timestamp: new Date().toISOString()
+                };
+
+                // Store lead
+                leads.push(lead);
+                localStorage.setItem('spruce_leads', JSON.stringify(leads));
+                renderLeadsTable();
+
+                // Show confirmation
+                summaryBox.innerHTML = `
+                    <div class="summary-row"><strong>Estimate:</strong> <span>$${quote.low.toLocaleString()} – $${quote.high.toLocaleString()}/mo</span></div>
+                    <div class="summary-row"><strong>Frequency:</strong> <span>${frequency}</span></div>
+                    <div class="summary-row"><strong>Initial Clean:</strong> <span>${lead.booking.date} at ${lead.booking.time}</span></div>
+                    <div class="summary-row"><strong>Contact:</strong> <span>${lead.contact.name} (${lead.contact.company})</span></div>
+                `;
+
+                showStep(5);
+                showToast(`🌲 Booking confirmed for ${lead.contact.company}`);
+                console.log('🌲 Booking captured:', lead);
+
+                // Simulate sending confirmation email/SMS
+            });
+
+            // ─── New Estimate ──────────────────────────────────────
+
+            newEstimateBtn.addEventListener('click', function() {
+                // Reset all fields
+                sqftInput.value = '';
+                officesInput.value = '0';
+                restroomsInput.value = '0';
+                breakroomsInput.value = '0';
+                freqBtns.forEach(b => b.classList.remove('selected'));
+                document.querySelector('.freq-btn[data-freq="daily"]').classList.add('selected');
+                frequency = 'daily';
+                addonCards.forEach(c => c.classList.remove('selected'));
+                bookDateInput.value = '';
+                timeSlotsContainer.innerHTML = '';
+                fullName.value = '';
+                companyName.value = '';
+                email.value = '';
+                phone.value = '';
+                quote = null;
+                addons = [];
+                scope = {};
+                bookDate = null;
+                bookTime = null;
+                toAddonsBtn.disabled = true;
+                confirmBookingBtn.disabled = true;
+                showStep(1);
+            });
+
+            // ─── Staff panel controls ─────────────────────────────
+
+            clearLeadsBtn.addEventListener('click', function() {
+                if (leads.length === 0) {
+                    showToast('No bookings to clear.');
+                    return;
+                }
+                if (confirm('⚠️ Delete ALL bookings?')) {
+                    leads = [];
+                    localStorage.setItem('spruce_leads', JSON.stringify(leads));
+                    renderLeadsTable();
+                    showToast('🗑️ All bookings cleared.');
+                }
+            });
+
+            refreshLeadsBtn.addEventListener('click', function() {
+                leads = JSON.parse(localStorage.getItem('spruce_leads') || '[]');
+                renderLeadsTable();
+                showToast('🔄 Refreshed.');
+            });
+
+            // ─── Init ─────────────────────────────────────────────
+
+            renderLeadsTable();
+            validateStep1();
+            showStep(1);
+
+        })();
+    </script>
+</body>
+</html>
