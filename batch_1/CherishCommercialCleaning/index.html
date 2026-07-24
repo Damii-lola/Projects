@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cherish · Instant Quote & Walkthrough</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cherish · Commercial Cleaning Instant Quote</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
     <style>
         * {
             margin: 0;
@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #f7f9fc;
+            background: #f4f7fb;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,32 +24,33 @@
         }
 
         .cherish-widget {
-            max-width: 680px;
+            max-width: 800px;
             width: 100%;
             background: #ffffff;
             border-radius: 28px;
-            box-shadow: 0 25px 60px rgba(0,20,30,0.08);
+            box-shadow: 0 20px 60px rgba(0, 20, 30, 0.08);
             overflow: hidden;
             border: 1px solid #eef2f6;
         }
 
-        /* Header */
+        /* ── Header ── */
         .widget-header {
-            background: linear-gradient(105deg, #f0f7f4 0%, #ffffff 100%);
-            padding: 2rem 2rem 1.5rem;
+            background: linear-gradient(105deg, #f0f9f6 0%, #ffffff 100%);
+            padding: 2rem 2.5rem 1.5rem;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.2rem;
+            flex-wrap: wrap;
         }
 
         .brand-icon {
-            font-size: 2.5rem;
-            color: #3b7a6e; /* soft teal-green – caring, clean */
+            font-size: 2.8rem;
+            color: #2b6e5f;
         }
 
         .brand-text h2 {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: #1a202c;
             letter-spacing: -0.3px;
@@ -57,21 +58,21 @@
         }
 
         .brand-text h2 span {
-            color: #3b7a6e;
+            color: #2b6e5f;
         }
 
         .brand-text p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #4a5568;
             font-weight: 500;
             margin-top: 0.2rem;
         }
 
-        /* Steps */
+        /* ── Progress Steps ── */
         .step-indicator {
             display: flex;
             justify-content: space-between;
-            padding: 1.5rem 2rem 0.8rem;
+            padding: 1.8rem 2.5rem 0.8rem;
             position: relative;
         }
 
@@ -85,8 +86,8 @@
         }
 
         .step-circle {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: #e2e8f0;
             color: #718096;
@@ -94,28 +95,31 @@
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             transition: 0.3s;
+            border: 2px solid transparent;
         }
 
         .step.active .step-circle {
-            background: #3b7a6e;
+            background: #2b6e5f;
             color: white;
-            box-shadow: 0 4px 12px rgba(59,122,110,0.3);
+            border-color: #2b6e5f;
+            box-shadow: 0 4px 12px rgba(43, 110, 95, 0.3);
         }
 
         .step.completed .step-circle {
-            background: #3b7a6e;
+            background: #2b6e5f;
             color: white;
+            border-color: #2b6e5f;
         }
 
         .step-label {
             font-size: 0.7rem;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
             margin-top: 0.4rem;
             color: #a0aec0;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.5px;
         }
 
         .step.active .step-label,
@@ -125,50 +129,63 @@
 
         .progress-bar {
             position: absolute;
-            top: 16px;
+            top: 18px;
             left: 0;
             right: 0;
             height: 4px;
             background: #e2e8f0;
             z-index: 1;
-            margin: 0 45px;
+            margin: 0 50px;
             border-radius: 4px;
         }
 
         .progress-fill {
             height: 100%;
-            background: #3b7a6e;
-            transition: width 0.3s;
+            background: #2b6e5f;
+            transition: width 0.4s ease;
             border-radius: 4px;
         }
 
-        /* Body */
+        /* ── Body ── */
         .widget-body {
-            padding: 2rem;
+            padding: 2rem 2.5rem 2.5rem;
         }
 
         .step-panel {
             display: none;
-            animation: fade 0.3s ease;
+            animation: fadeSlide 0.35s ease;
         }
 
         .step-panel.active {
             display: block;
         }
 
-        @keyframes fade {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h3 {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #1a202c;
             margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
 
-        /* Form elements */
+        h3 i {
+            color: #2b6e5f;
+        }
+
+        /* ── Form ── */
         .form-row {
             display: flex;
             flex-wrap: wrap;
@@ -177,7 +194,7 @@
         }
 
         .form-group {
-            flex: 1 1 160px;
+            flex: 1 1 180px;
         }
 
         .form-group label {
@@ -188,7 +205,11 @@
             margin-bottom: 0.4rem;
         }
 
-        select, input[type="number"] {
+        select,
+        input[type="number"],
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
             width: 100%;
             padding: 0.8rem 1rem;
             border: 2px solid #e2e8f0;
@@ -197,6 +218,8 @@
             font-size: 0.95rem;
             background: #f9fafb;
             appearance: none;
+            transition: 0.2s;
+            color: #1a202c;
         }
 
         select {
@@ -206,30 +229,79 @@
             background-size: 12px;
         }
 
-        input:focus, select:focus {
-            border-color: #3b7a6e;
+        input:focus,
+        select:focus {
+            border-color: #2b6e5f;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(59,122,110,0.12);
+            box-shadow: 0 0 0 3px rgba(43, 110, 95, 0.12);
         }
 
+        .addons-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 0.8rem 0 1.2rem;
+        }
+
+        .addon-check {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #f9fafb;
+            padding: 0.4rem 1rem 0.4rem 0.8rem;
+            border-radius: 30px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #2d3748;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .addon-check:hover {
+            border-color: #2b6e5f;
+        }
+
+        .addon-check input {
+            width: 16px;
+            height: 16px;
+            accent-color: #2b6e5f;
+            cursor: pointer;
+        }
+
+        /* ── Quote Display ── */
         .quote-result {
             background: #f0f9f6;
             border: 2px solid #c6f6e8;
             border-radius: 16px;
-            padding: 1.5rem;
+            padding: 1.8rem;
             margin: 1.5rem 0;
+            transition: 0.3s;
+        }
+
+        .quote-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .quote-price {
-            font-size: 2rem;
+            font-size: 2.4rem;
             font-weight: 800;
             color: #1a202c;
+        }
+
+        .quote-price .period {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #4a5568;
         }
 
         .quote-range {
             font-size: 1rem;
             color: #4a5568;
-            margin-top: 0.2rem;
         }
 
         .quote-details {
@@ -238,10 +310,42 @@
             color: #2d3748;
             display: flex;
             flex-wrap: wrap;
-            gap: 0.8rem;
+            gap: 0.8rem 1.5rem;
         }
 
-        /* Calendar */
+        .quote-details .item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .quote-details .item i {
+            color: #2b6e5f;
+            width: 18px;
+        }
+
+        .quote-breakdown {
+            margin-top: 1rem;
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 0.85rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            border-bottom: 1px dashed #edf2f7;
+        }
+
+        .breakdown-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
+        }
+
+        /* ── Calendar ── */
         .calendar-box {
             margin-bottom: 1.5rem;
         }
@@ -254,10 +358,10 @@
         }
 
         .time-slot {
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 1.2rem;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
-            font-weight: 500;
+            font-weight: 600;
             font-size: 0.85rem;
             cursor: pointer;
             transition: 0.15s;
@@ -269,21 +373,21 @@
             color: #a0aec0;
             text-decoration: line-through;
             cursor: not-allowed;
-            opacity: 0.7;
+            opacity: 0.6;
         }
 
         .time-slot:not(.booked):hover {
-            border-color: #3b7a6e;
+            border-color: #2b6e5f;
             background: #e6fffa;
         }
 
         .time-slot.selected {
-            background: #3b7a6e;
+            background: #2b6e5f;
             color: white;
-            border-color: #3b7a6e;
+            border-color: #2b6e5f;
         }
 
-        /* Buttons */
+        /* ── Buttons ── */
         .btn-group {
             display: flex;
             justify-content: space-between;
@@ -293,7 +397,7 @@
         }
 
         .btn {
-            padding: 0.8rem 1.8rem;
+            padding: 0.8rem 2rem;
             border-radius: 14px;
             font-weight: 600;
             border: none;
@@ -301,7 +405,7 @@
             transition: 0.2s;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.6rem;
             font-size: 0.95rem;
         }
 
@@ -312,19 +416,20 @@
         }
 
         .btn-outline:hover {
-            border-color: #3b7a6e;
-            color: #3b7a6e;
+            border-color: #2b6e5f;
+            color: #2b6e5f;
         }
 
         .btn-primary {
-            background: #3b7a6e;
+            background: #2b6e5f;
             color: white;
-            box-shadow: 0 4px 12px rgba(59,122,110,0.4);
+            box-shadow: 0 4px 12px rgba(43, 110, 95, 0.3);
         }
 
-        .btn-primary:hover {
-            background: #2f6258;
-            transform: translateY(-1px);
+        .btn-primary:hover:not(:disabled) {
+            background: #1f5a4e;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(43, 110, 95, 0.35);
         }
 
         .btn-primary:disabled {
@@ -334,14 +439,14 @@
             transform: none;
         }
 
-        /* Confirmation */
+        /* ── Confirmation ── */
         .confirmation-panel {
             text-align: center;
             padding: 1rem 0;
         }
 
         .check-icon {
-            font-size: 3rem;
+            font-size: 3.5rem;
             color: #38a169;
             margin-bottom: 0.8rem;
         }
@@ -349,26 +454,212 @@
         .summary-box {
             background: #f7fafc;
             border-radius: 14px;
-            padding: 1.2rem;
+            padding: 1.2rem 1.5rem;
             text-align: left;
             margin: 1.5rem 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-box .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .summary-box .row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-box .label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        /* ── Staff Panel ── */
+        .staff-panel {
+            border-top: 1px solid #e2e8f0;
+            padding: 1.5rem 2.5rem 2rem;
+            background: #f8fafc;
+        }
+
+        .staff-panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .staff-panel h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .staff-panel h4 .badge {
+            background: #2b6e5f;
+            color: white;
+            font-size: 0.65rem;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-actions .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .panel-actions .btn-clear {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .panel-actions .btn-clear:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .panel-actions .btn-refresh {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .panel-actions .btn-refresh:hover {
+            background: #cbd5e0;
+        }
+
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .leads-table th {
+            text-align: left;
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            color: #64748b;
+            font-weight: 600;
+            border-bottom: 1px solid #e2e8f0;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+        }
+
+        .leads-table td {
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            border-bottom: 1px solid #edf2f7;
+            color: #2d3748;
+        }
+
+        .leads-table .new-row {
+            animation: flashRow 0.6s ease;
+        }
+
+        @keyframes flashRow {
+            0% {
+                background: rgba(43, 110, 95, 0.12);
+            }
+            100% {
+                background: transparent;
+            }
+        }
+
+        /* ── Toast ── */
+        .custom-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a202c;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .widget-header {
+                padding: 1.5rem 1.2rem;
+            }
+            .widget-body {
+                padding: 1.5rem 1.2rem;
+            }
+            .staff-panel {
+                padding: 1.2rem;
+            }
+            .step-indicator {
+                padding: 1.2rem 0.5rem 0.5rem;
+            }
+            .progress-bar {
+                margin: 0 15px;
+            }
+            .step-label {
+                font-size: 0.6rem;
+            }
+            .quote-main {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+            }
+            .addons-grid {
+                gap: 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="cherish-widget" id="widget">
+    <div class="cherish-widget" id="cherishWidget">
         <!-- Header -->
         <div class="widget-header">
             <i class="fas fa-hand-sparkles brand-icon"></i>
             <div class="brand-text">
                 <h2>Cherish<span>.</span> Commercial Cleaning</h2>
-                <p>Instant Quote & Walkthrough Scheduler</p>
+                <p>Instant Quote &amp; Walkthrough Scheduler</p>
             </div>
         </div>
 
-        <!-- Steps -->
+        <!-- Progress Steps -->
         <div class="step-indicator" id="stepIndicator">
-            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%;"></div></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
             <div class="step active" data-step="1">
                 <div class="step-circle">1</div>
                 <div class="step-label">Facility</div>
@@ -387,7 +678,7 @@
             </div>
         </div>
 
-        <!-- Body panels -->
+        <!-- Body -->
         <div class="widget-body">
             <!-- Step 1: Facility Parameters -->
             <div class="step-panel active" data-panel="1">
@@ -401,17 +692,20 @@
                             <option value="industrial">Industrial / Warehouse</option>
                             <option value="retail">Retail</option>
                             <option value="education">Education</option>
+                            <option value="hospitality">Hospitality</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="government">Government</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Total Sq. Footage</label>
-                        <input type="number" id="sqft" placeholder="e.g., 5000" min="500" step="100">
+                        <input type="number" id="sqft" placeholder="e.g., 5000" min="500" step="100" value="10000" />
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Number of Floors</label>
-                        <input type="number" id="floors" placeholder="1" min="1" value="1">
+                        <input type="number" id="floors" placeholder="1" min="1" value="1" />
                     </div>
                     <div class="form-group">
                         <label>Cleaning Frequency</label>
@@ -420,19 +714,52 @@
                             <option value="3x">3x per week</option>
                             <option value="weekly">Weekly</option>
                             <option value="biweekly">Bi-weekly</option>
+                            <option value="monthly">Monthly</option>
                         </select>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top:0.5rem;">
+                    <label>Additional services (optional)</label>
+                    <div class="addons-grid" id="addonsGrid">
+                        <label class="addon-check">
+                            <input type="checkbox" value="windows" /> Windows
+                        </label>
+                        <label class="addon-check">
+                            <input type="checkbox" value="restrooms" /> Restrooms
+                        </label>
+                        <label class="addon-check">
+                            <input type="checkbox" value="floor-stripping" /> Floor Stripping
+                        </label>
+                        <label class="addon-check">
+                            <input type="checkbox" value="carpet-cleaning" /> Carpet Cleaning
+                        </label>
+                        <label class="addon-check">
+                            <input type="checkbox" value="exterior-pressure" /> Exterior Pressure
+                        </label>
                     </div>
                 </div>
                 <div class="btn-group">
                     <div></div>
-                    <button class="btn btn-primary" id="toQuote" disabled>Calculate Estimate <i class="fas fa-calculator"></i></button>
+                    <button class="btn btn-primary" id="toQuote">Calculate Estimate <i class="fas fa-calculator"></i></button>
                 </div>
             </div>
 
             <!-- Step 2: Instant Quote -->
             <div class="step-panel" data-panel="2">
                 <h3><i class="fas fa-tag"></i> Your Estimated Rate</h3>
-                <div class="quote-result" id="quoteDisplay"></div>
+                <div class="quote-result" id="quoteDisplay">
+                    <div class="quote-main">
+                        <div>
+                            <div class="quote-price" id="quotePrice">$0</div>
+                            <div class="quote-range" id="quoteRange">per month</div>
+                        </div>
+                        <div>
+                            <span class="badge" style="background:#2b6e5f;color:white;padding:0.3rem 1rem;border-radius:30px;font-weight:600;">Estimate</span>
+                        </div>
+                    </div>
+                    <div class="quote-details" id="quoteDetails"></div>
+                    <div class="quote-breakdown" id="quoteBreakdown"></div>
+                </div>
                 <p style="font-size:0.85rem; color:#718096;">*Estimate based on industry standards. Final pricing after walkthrough.</p>
                 <div class="btn-group">
                     <button class="btn btn-outline" id="backToParams"><i class="fas fa-arrow-left"></i> Modify</button>
@@ -442,10 +769,10 @@
 
             <!-- Step 3: Walkthrough Scheduling -->
             <div class="step-panel" data-panel="3">
-                <h3><i class="fas fa-calendar-alt"></i> Pick an inspection date & time</h3>
+                <h3><i class="fas fa-calendar-alt"></i> Pick an inspection date &amp; time</h3>
                 <div class="calendar-box">
                     <label>Date</label>
-                    <input type="date" id="walkDate" min="">
+                    <input type="date" id="walkDate" min="" />
                 </div>
                 <label>Available time slots</label>
                 <div class="time-slots" id="timeSlots"></div>
@@ -462,21 +789,21 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Full Name *</label>
-                            <input type="text" id="fullName" placeholder="Jane Cooper" required>
+                            <input type="text" id="fullName" placeholder="Jane Cooper" required />
                         </div>
                         <div class="form-group">
                             <label>Company *</label>
-                            <input type="text" id="company" placeholder="Acme Inc." required>
+                            <input type="text" id="company" placeholder="Acme Inc." required />
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Email *</label>
-                            <input type="email" id="email" placeholder="jane@acme.com" required>
+                            <input type="email" id="email" placeholder="jane@acme.com" required />
                         </div>
                         <div class="form-group">
                             <label>Phone *</label>
-                            <input type="tel" id="phone" placeholder="(555) 000-0000" required>
+                            <input type="tel" id="phone" placeholder="(555) 000-0000" required />
                         </div>
                     </div>
                 </form>
@@ -486,30 +813,88 @@
                 </div>
             </div>
 
-            <!-- Hidden confirmation panel (shown after submission) -->
+            <!-- Step 5: Confirmation -->
             <div class="step-panel confirmation-panel" data-panel="5" id="confirmationPanel">
                 <div class="check-icon"><i class="fas fa-check-circle"></i></div>
                 <h3>Walkthrough Confirmed!</h3>
-                <p style="color:#4a5568; margin-bottom:1rem;">A confirmation has been sent to your email and phone.</p>
+                <p style="color:#4a5568; margin-bottom:0.5rem;">A confirmation has been sent to your email and phone.</p>
                 <div class="summary-box" id="summaryBox"></div>
                 <button class="btn btn-primary" id="newRequest" style="margin-top:1rem;">New Quote <i class="fas fa-redo-alt"></i></button>
+            </div>
+        </div>
+
+        <!-- Staff Panel -->
+        <div class="staff-panel" id="staffPanel">
+            <div class="panel-header">
+                <h4><i class="fas fa-bolt" style="color:#2b6e5f;"></i> Walkthrough Requests <span class="badge" id="leadCount">0</span></h4>
+                <div class="panel-actions">
+                    <button class="btn-sm btn-refresh" id="refreshLeads"><i class="fas fa-sync-alt"></i></button>
+                    <button class="btn-sm btn-clear" id="clearLeads"><i class="fas fa-trash"></i> Clear</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="leads-table" id="leadsTable">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Contact</th>
+                            <th>Facility</th>
+                            <th>Estimate</th>
+                            <th>Scheduled</th>
+                            <th style="width:30px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsBody">
+                        <tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:1rem 0;">No walkthrough requests yet</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
         (function() {
-            // State
-            let currentStep = 1;
-            let facilityParams = {};
-            let estimatedRange = null;
-            let selectedDate = null;
-            let selectedTime = null;
+            'use strict';
 
-            // DOM
+            // ─── Constants ──────────────────────────────────────────
+            const BASE_RATES = {
+                office: 0.10,
+                medical: 0.13,
+                industrial: 0.09,
+                retail: 0.11,
+                education: 0.10,
+                hospitality: 0.12,
+                healthcare: 0.14,
+                government: 0.11
+            };
+
+            const FREQ_MULTIPLIER = {
+                daily: 1.8,
+                '3x': 1.3,
+                weekly: 1.0,
+                biweekly: 0.7,
+                monthly: 0.5
+            };
+
+            const ADDON_COSTS = {
+                windows: 0.02,
+                restrooms: 0.015,
+                'floor-stripping': 0.025,
+                'carpet-cleaning': 0.020,
+                'exterior-pressure': 0.030
+            };
+
+            // ─── DOM refs ───────────────────────────────────────────
+            const steps = document.querySelectorAll('.step');
             const panels = document.querySelectorAll('.step-panel');
-            const stepsUI = document.querySelectorAll('.step');
             const progressFill = document.getElementById('progressFill');
+
+            const facilityType = document.getElementById('facilityType');
+            const sqftInput = document.getElementById('sqft');
+            const floorsInput = document.getElementById('floors');
+            const frequencySelect = document.getElementById('frequency');
+            const addonCheckboxes = document.querySelectorAll('#addonsGrid input[type="checkbox"]');
+
             const toQuoteBtn = document.getElementById('toQuote');
             const backToParamsBtn = document.getElementById('backToParams');
             const bookWalkthroughBtn = document.getElementById('bookWalkthrough');
@@ -518,46 +903,78 @@
             const backToScheduleBtn = document.getElementById('backToSchedule');
             const confirmBtn = document.getElementById('confirmBooking');
             const newRequestBtn = document.getElementById('newRequest');
+
             const quoteDisplay = document.getElementById('quoteDisplay');
+            const quotePrice = document.getElementById('quotePrice');
+            const quoteRange = document.getElementById('quoteRange');
+            const quoteDetails = document.getElementById('quoteDetails');
+            const quoteBreakdown = document.getElementById('quoteBreakdown');
+
             const walkDateInput = document.getElementById('walkDate');
             const timeSlotsDiv = document.getElementById('timeSlots');
             const contactForm = document.getElementById('contactForm');
             const summaryBox = document.getElementById('summaryBox');
+            const leadsBody = document.getElementById('leadsBody');
+            const leadCount = document.getElementById('leadCount');
+            const clearLeadsBtn = document.getElementById('clearLeads');
+            const refreshLeadsBtn = document.getElementById('refreshLeads');
 
-            // Facility inputs
-            const sqftInput = document.getElementById('sqft');
-            const floorsInput = document.getElementById('floors');
-            const facilityTypeSelect = document.getElementById('facilityType');
-            const frequencySelect = document.getElementById('frequency');
+            // ─── State ─────────────────────────────────────────────
+            let currentStep = 1;
+            let facilityParams = {};
+            let estimatedRange = null;
+            let selectedDate = null;
+            let selectedTime = null;
+            let leads = JSON.parse(localStorage.getItem('cherish_leads') || '[]');
 
-            // Validation for step 1
-            function validateStep1() {
-                const sqft = parseInt(sqftInput.value);
-                toQuoteBtn.disabled = !(sqft && sqft >= 500);
+            // ─── Helpers ────────────────────────────────────────────
+
+            function renderLeadsTable() {
+                const tbody = leadsBody;
+                if (leads.length === 0) {
+                    tbody.innerHTML =
+                        '<tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:1rem 0;">No walkthrough requests yet</td></tr>';
+                } else {
+                    let html = '';
+                    const reversed = [...leads].reverse();
+                    reversed.forEach((lead, idx) => {
+                        const isNew = idx === 0 ? 'new-row' : '';
+                        const est = lead.estimate ? `$${lead.estimate.low.toLocaleString()} – $${lead.estimate.high.toLocaleString()}` :
+                            '—';
+                        const dateTime = lead.walkDate ? `${lead.walkDate} ${lead.walkTime || ''}` : '—';
+                        html += `
+                            <tr class="${isNew}">
+                                <td><strong>${lead.company || '—'}</strong></td>
+                                <td>${lead.name || '—'}</td>
+                                <td>${lead.facility || '—'}</td>
+                                <td>${est}</td>
+                                <td style="font-size:0.8rem;">${dateTime}</td>
+                                <td><span style="font-size:0.6rem; background:#10b98120; color:#10b981; padding:0.1rem 0.5rem; border-radius:20px;">NEW</span></td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                }
+                leadCount.textContent = leads.length;
             }
-            sqftInput.addEventListener('input', validateStep1);
-            floorsInput.addEventListener('input', validateStep1); // not critical
 
-            // Helper: show step
             function showStep(step) {
                 currentStep = step;
                 panels.forEach(p => p.classList.remove('active'));
-                const targetPanel = document.querySelector(`.step-panel[data-panel="${step}"]`);
-                if (targetPanel) targetPanel.classList.add('active');
+                const target = document.querySelector(`.step-panel[data-panel="${step}"]`);
+                if (target) target.classList.add('active');
 
-                stepsUI.forEach(s => {
-                    const sNum = parseInt(s.dataset.step);
+                steps.forEach(s => {
+                    const num = parseInt(s.dataset.step);
                     s.classList.remove('active', 'completed');
-                    if (sNum === step) s.classList.add('active');
-                    else if (sNum < step) s.classList.add('completed');
+                    if (num === step) s.classList.add('active');
+                    else if (num < step) s.classList.add('completed');
                 });
 
-                const progressPercent = ((step - 1) / 3) * 100; // 4 main steps, max 100% after step 4
-                progressFill.style.width = Math.min(progressPercent, 100) + '%';
+                const pct = Math.min(((step - 1) / 3) * 100, 100);
+                progressFill.style.width = pct + '%';
 
-                // Special triggers
                 if (step === 3) {
-                    // set min date to tomorrow
                     const tomorrow = new Date();
                     tomorrow.setDate(tomorrow.getDate() + 1);
                     walkDateInput.min = tomorrow.toISOString().split('T')[0];
@@ -569,78 +986,105 @@
                 }
             }
 
-            // Step 1 -> 2: calculate estimate
-            toQuoteBtn.addEventListener('click', () => {
-                const sqft = parseInt(sqftInput.value);
+            // ─── Calculate Estimate ────────────────────────────────
+
+            function calculateEstimate() {
+                const type = facilityType.value;
+                const sqft = parseInt(sqftInput.value) || 0;
                 const floors = parseInt(floorsInput.value) || 1;
-                const facility = facilityTypeSelect.value;
                 const freq = frequencySelect.value;
+                const addons = [];
+                addonCheckboxes.forEach(cb => {
+                    if (cb.checked) addons.push(cb.value);
+                });
 
-                facilityParams = { sqft, floors, facility, freq };
+                if (sqft < 500) {
+                    alert('Please enter a valid square footage (minimum 500 sq ft).');
+                    return false;
+                }
 
-                // Rate formula (simplified industry rates)
-                const baseRates = {
-                    office: 0.10,
-                    medical: 0.13,
-                    industrial: 0.09,
-                    retail: 0.11,
-                    education: 0.10
-                };
-                const freqMultiplier = {
-                    daily: 1.8,
-                    '3x': 1.3,
-                    weekly: 1.0,
-                    biweekly: 0.7
-                };
-                const floorFactor = 1 + (floors - 1) * 0.05; // slight increase per floor
+                const baseRate = BASE_RATES[type] || 0.10;
+                const freqMul = FREQ_MULTIPLIER[freq] || 1.0;
+                const floorFactor = 1 + (floors - 1) * 0.04;
 
-                let basePerSqft = baseRates[facility] || 0.10;
-                let monthlyRate = sqft * basePerSqft * freqMultiplier[freq] * floorFactor;
-                let low = Math.round(monthlyRate * 0.85);
-                let high = Math.round(monthlyRate * 1.15);
-                estimatedRange = { low, high, monthly: Math.round(monthlyRate) };
+                let baseMonthly = sqft * baseRate * freqMul * floorFactor;
+                let addonCost = 0;
+                addons.forEach(a => {
+                    addonCost += sqft * (ADDON_COSTS[a] || 0.02) * freqMul;
+                });
 
-                quoteDisplay.innerHTML = `
-                    <div class="quote-price">$${low.toLocaleString()} – $${high.toLocaleString()}<span style="font-size:1rem; font-weight:500;"> /month</span></div>
-                    <div class="quote-range">Estimated baseline: ~$${Math.round(monthlyRate).toLocaleString()}/mo</div>
-                    <div class="quote-details">
-                        <span><i class="fas fa-ruler-combined"></i> ${sqft.toLocaleString()} sq ft</span>
-                        <span><i class="fas fa-layer-group"></i> ${floors} floor(s)</span>
-                        <span><i class="fas fa-sync-alt"></i> ${freq.replace('3x','3x/week')}</span>
-                    </div>
+                let totalMonthly = baseMonthly + addonCost;
+                let low = Math.round(totalMonthly * 0.85);
+                let high = Math.round(totalMonthly * 1.15);
+                const monthly = Math.round(totalMonthly);
+
+                estimatedRange = { low, high, monthly };
+
+                // Store params
+                facilityParams = { type, sqft, floors, freq, addons };
+
+                // Display
+                quotePrice.innerHTML = `$${low.toLocaleString()} – $${high.toLocaleString()}`;
+                quoteRange.textContent = `per month (estimated)`;
+
+                // Details
+                quoteDetails.innerHTML = `
+                    <span class="item"><i class="fas fa-ruler-combined"></i> ${sqft.toLocaleString()} sq ft</span>
+                    <span class="item"><i class="fas fa-layer-group"></i> ${floors} floor(s)</span>
+                    <span class="item"><i class="fas fa-sync-alt"></i> ${freq.replace('3x','3x/week')}</span>
+                    <span class="item"><i class="fas fa-tag"></i> ${type.charAt(0).toUpperCase() + type.slice(1)}</span>
+                    ${addons.length ? `<span class="item"><i class="fas fa-plus-circle"></i> ${addons.join(', ')}</span>` : ''}
                 `;
-                showStep(2);
-            });
 
-            backToParamsBtn.addEventListener('click', () => showStep(1));
+                // Breakdown
+                let breakdownHtml = `
+                    <div class="breakdown-row"><span>Base rate (${type})</span><span>$${(baseRate * sqft).toFixed(2)}</span></div>
+                    <div class="breakdown-row"><span>Frequency multiplier (${freq})</span><span>${freqMul.toFixed(2)}x</span></div>
+                    <div class="breakdown-row"><span>Floor factor</span><span>${floorFactor.toFixed(2)}x</span></div>
+                `;
+                if (addonCost > 0) {
+                    breakdownHtml += `<div class="breakdown-row"><span>Add‑on services</span><span>+$${addonCost.toFixed(2)}</span></div>`;
+                }
+                breakdownHtml +=
+                    `<div class="breakdown-row"><span>Estimated monthly</span><span><strong>$${monthly.toLocaleString()}</strong></span></div>`;
+                quoteBreakdown.innerHTML = breakdownHtml;
 
-            // Step 2 -> 3
-            bookWalkthroughBtn.addEventListener('click', () => showStep(3));
+                return true;
+            }
 
-            // Step 3 time slots generation
+            // ─── Time Slots ─────────────────────────────────────────
+
             function renderTimeSlots() {
                 const dateVal = walkDateInput.value;
                 if (!dateVal) return;
                 const slots = ['9:00 AM', '10:30 AM', '12:00 PM', '1:30 PM', '3:00 PM', '4:30 PM'];
-                // Simulate some booked slots based on date hash
-                const hash = dateVal.split('-').reduce((a,v) => a + parseInt(v||0), 0);
-                const bookedCount = hash % 3; // 0-2 slots booked
-                let bookedSlots = [];
-                for (let i=0; i<bookedCount; i++) {
-                    bookedSlots.push(slots[(hash + i*2) % slots.length]);
+                // Simulate booked slots based on date hash
+                const hash = dateVal.split('-').reduce((a, v) => a + parseInt(v || 0), 0);
+                const bookedCount = hash % 3; // 0-2 booked
+                const booked = [];
+                for (let i = 0; i < bookedCount; i++) {
+                    booked.push(slots[(hash + i * 2) % slots.length]);
+                }
+                // Add weekend simulation: if Saturday or Sunday, fewer slots
+                const day = new Date(dateVal + 'T00:00:00').getDay();
+                if (day === 0 || day === 6) {
+                    // Sunday: only 2 slots, Saturday: 3 slots
+                    const limit = day === 0 ? 2 : 3;
+                    while (slots.length > limit) slots.pop();
                 }
 
                 timeSlotsDiv.innerHTML = '';
                 slots.forEach(slot => {
                     const div = document.createElement('div');
                     div.className = 'time-slot';
-                    if (bookedSlots.includes(slot)) {
+                    if (booked.includes(slot)) {
                         div.classList.add('booked');
                         div.textContent = slot + ' (unavailable)';
                     } else {
                         div.textContent = slot;
                         div.addEventListener('click', function() {
-                            document.querySelectorAll('.time-slot:not(.booked)').forEach(s => s.classList.remove('selected'));
+                            document.querySelectorAll('.time-slot:not(.booked)').forEach(s => s.classList.remove(
+                            'selected'));
                             this.classList.add('selected');
                             selectedTime = slot;
                             toContactBtn.disabled = false;
@@ -652,19 +1096,8 @@
                 toContactBtn.disabled = true;
             }
 
-            walkDateInput.addEventListener('change', () => {
-                selectedDate = walkDateInput.value;
-                renderTimeSlots();
-            });
+            // ─── Contact validation ────────────────────────────────
 
-            backToQuoteBtn.addEventListener('click', () => showStep(2));
-
-            toContactBtn.addEventListener('click', () => {
-                if (!selectedTime) return;
-                showStep(4);
-            });
-
-            // Step 4 validation
             function validateContactForm() {
                 const name = document.getElementById('fullName').value.trim();
                 const company = document.getElementById('company').value.trim();
@@ -673,15 +1106,38 @@
                 confirmBtn.disabled = !(name && company && email && phone);
             }
 
-            contactForm.addEventListener('input', validateContactForm);
+            // ─── Event listeners ────────────────────────────────────
+
+            // Step 1 → 2
+            toQuoteBtn.addEventListener('click', function() {
+                if (calculateEstimate()) {
+                    showStep(2);
+                }
+            });
+
+            // Step 2 back
+            backToParamsBtn.addEventListener('click', () => showStep(1));
+
+            // Step 2 → 3
+            bookWalkthroughBtn.addEventListener('click', () => showStep(3));
+
+            // Step 3 back
+            backToQuoteBtn.addEventListener('click', () => showStep(2));
+
+            // Step 3 → 4
+            toContactBtn.addEventListener('click', () => {
+                if (selectedTime) showStep(4);
+            });
+
+            // Step 4 back
             backToScheduleBtn.addEventListener('click', () => showStep(3));
 
-            // Confirm booking
-            confirmBtn.addEventListener('click', () => {
+            // Step 4 → 5 (confirm)
+            confirmBtn.addEventListener('click', function() {
                 const lead = {
                     ...facilityParams,
                     estimate: estimatedRange,
-                    walkDate: selectedDate,
+                    walkDate: selectedDate || walkDateInput.value,
                     walkTime: selectedTime,
                     name: document.getElementById('fullName').value.trim(),
                     company: document.getElementById('company').value.trim(),
@@ -690,40 +1146,91 @@
                     timestamp: new Date().toISOString()
                 };
 
-                // Store lead
-                let leads = JSON.parse(localStorage.getItem('cherish_leads') || '[]');
+                // Store
                 leads.push(lead);
                 localStorage.setItem('cherish_leads', JSON.stringify(leads));
-                console.log('📋 Walkthrough booked:', lead);
+                renderLeadsTable();
 
                 // Show confirmation
                 summaryBox.innerHTML = `
-                    <p><strong>Facility:</strong> ${lead.facility} – ${lead.sqft.toLocaleString()} sq ft</p>
-                    <p><strong>Estimate:</strong> $${lead.estimate.low.toLocaleString()} – $${lead.estimate.high.toLocaleString()}/mo</p>
-                    <p><strong>Walkthrough:</strong> ${lead.walkDate} at ${lead.walkTime}</p>
-                    <p><strong>Contact:</strong> ${lead.name} (${lead.company})</p>
+                    <div class="row"><span class="label">Facility</span><span>${lead.type || '—'}</span></div>
+                    <div class="row"><span class="label">Size</span><span>${lead.sqft || 0} sq ft, ${lead.floors || 1} floor(s)</span></div>
+                    <div class="row"><span class="label">Frequency</span><span>${lead.freq || '—'}</span></div>
+                    <div class="row"><span class="label">Estimate</span><span>$${lead.estimate.low.toLocaleString()} – $${lead.estimate.high.toLocaleString()}/mo</span></div>
+                    <div class="row"><span class="label">Walkthrough</span><span>${lead.walkDate || '—'} at ${lead.walkTime || '—'}</span></div>
+                    <div class="row"><span class="label">Contact</span><span>${lead.name} (${lead.company})</span></div>
                 `;
                 showStep(5);
+                showToast('✅ Walkthrough confirmed for ' + lead.company);
+                console.log('📋 Walkthrough booked:', lead);
             });
 
-            newRequestBtn.addEventListener('click', () => {
-                // Reset
+            // Step 5 → reset
+            newRequestBtn.addEventListener('click', function() {
                 contactForm.reset();
                 sqftInput.value = '';
                 floorsInput.value = '1';
-                facilityTypeSelect.value = 'office';
+                facilityType.value = 'office';
                 frequencySelect.value = 'daily';
-                selectedDate = null;
-                selectedTime = null;
+                addonCheckboxes.forEach(cb => cb.checked = false);
                 walkDateInput.value = '';
                 timeSlotsDiv.innerHTML = '';
-                validateStep1();
+                selectedTime = null;
+                selectedDate = null;
                 showStep(1);
             });
 
-            // Initial
-            validateStep1();
+            // ─── Form live validation ──────────────────────────────
+
+            contactForm.addEventListener('input', validateContactForm);
+
+            // ─── Staff panel controls ──────────────────────────────
+
+            clearLeadsBtn.addEventListener('click', function() {
+                if (leads.length === 0) {
+                    showToast('No leads to clear.');
+                    return;
+                }
+                if (confirm('⚠️ Delete ALL walkthrough requests?')) {
+                    leads = [];
+                    localStorage.setItem('cherish_leads', JSON.stringify(leads));
+                    renderLeadsTable();
+                    showToast('🗑️ All leads cleared.');
+                }
+            });
+
+            refreshLeadsBtn.addEventListener('click', function() {
+                leads = JSON.parse(localStorage.getItem('cherish_leads') || '[]');
+                renderLeadsTable();
+                showToast('🔄 Refreshed.');
+            });
+
+            // ─── Toast ──────────────────────────────────────────────
+
+            function showToast(message) {
+                const existing = document.querySelector('.custom-toast');
+                if (existing) existing.remove();
+
+                const toast = document.createElement('div');
+                toast.className = 'custom-toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+
+            // ─── Init ──────────────────────────────────────────────
+
+            renderLeadsTable();
             showStep(1);
+            // Pre-fill a default sqft
+            sqftInput.value = 10000;
+            calculateEstimate();
+
         })();
     </script>
 </body>
