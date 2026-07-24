@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrity Home Services · Instant HVAC Quote</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f6fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .widget {
+            max-width: 680px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.06);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Header */
+        .widget-header {
+            background: #0f172a; /* deep navy */
+            color: white;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 4px solid #f97316;
+        }
+
+        .shield-icon {
+            font-size: 2.5rem;
+            color: #f97316;
+        }
+
+        .brand h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            margin: 0;
+        }
+
+        .brand h2 span {
+            color: #f97316;
+        }
+
+        .brand p {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #94a3b8;
+            margin-top: 0.2rem;
+        }
+
+        /* Progress */
+        .progress-container {
+            padding: 1.5rem 2rem 0.8rem;
+            position: relative;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+
+        .step.active .step-circle {
+            background: #0f172a;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(15,23,42,0.15);
+        }
+
+        .step.completed .step-circle {
+            background: #0f172a;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+            color: #94a3b8;
+            letter-spacing: 0.4px;
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #0f172a;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 16px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e2e8f0;
+            z-index: 1;
+            margin: 0 45px;
+            border-radius: 3px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #0f172a;
+            transition: width 0.3s;
+            border-radius: 3px;
+        }
+
+        /* Body */
+        .widget-body {
+            padding: 2rem;
+        }
+
+        .step-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1.2rem;
+        }
+
+        /* Form elements */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            flex: 1 1 160px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #475569;
+            margin-bottom: 0.4rem;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #f8fafc;
+            transition: 0.2s;
+        }
+
+        select:focus, input:focus {
+            border-color: #0f172a;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(15,23,42,0.1);
+        }
+
+        .symptom-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .symptom-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem 0.8rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .symptom-card i {
+            font-size: 1.6rem;
+            color: #64748b;
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+
+        .symptom-card span {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #1e293b;
+        }
+
+        .symptom-card:hover {
+            border-color: #0f172a;
+            background: #f1f5f9;
+        }
+
+        .symptom-card.selected {
+            border-color: #0f172a;
+            background: #e2e8f0;
+            box-shadow: 0 0 0 3px rgba(15,23,42,0.1);
+        }
+
+        .urgency-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .urgency-btn {
+            flex: 1 1 100px;
+            padding: 0.7rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-weight: 600;
+            background: white;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .urgency-btn:hover {
+            border-color: #0f172a;
+        }
+
+        .urgency-btn.selected {
+            background: #0f172a;
+            color: white;
+            border-color: #0f172a;
+        }
+
+        .btn {
+            padding: 0.85rem 2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-outline:hover {
+            border-color: #0f172a;
+            color: #0f172a;
+        }
+
+        .btn-primary {
+            background: #0f172a;
+            color: white;
+            box-shadow: 0 4px 12px rgba(15,23,42,0.25);
+        }
+
+        .btn-primary:hover {
+            background: #1e293b;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            background: #cbd5e1;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-danger {
+            background: #f97316;
+            color: white;
+            box-shadow: 0 4px 12px rgba(249,115,22,0.4);
+        }
+
+        .btn-danger:hover {
+            background: #ea580c;
+        }
+
+        .quote-card {
+            background: #f1f5f9;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 2px solid #e2e8f0;
+        }
+
+        .price-range {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .price-detail {
+            font-size: 0.85rem;
+            color: #475569;
+            margin-top: 0.2rem;
+        }
+
+        .breakdown {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+        }
+
+        .breakdown-label {
+            color: #64748b;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .calendar-box {
+            margin-bottom: 1.5rem;
+        }
+
+        .time-slots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .time-slot {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: white;
+            transition: 0.15s;
+        }
+
+        .time-slot.unavailable {
+            background: #f1f5f9;
+            color: #94a3b8;
+            text-decoration: line-through;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .time-slot:not(.unavailable):hover {
+            border-color: #0f172a;
+            background: #f1f5f9;
+        }
+
+        .time-slot.selected {
+            background: #0f172a;
+            color: white;
+            border-color: #0f172a;
+        }
+
+        .confirmation-panel {
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .confirmation-panel i.fa-check-circle {
+            font-size: 3rem;
+            color: #16a34a;
+            margin-bottom: 1rem;
+        }
+
+        .summary-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: left;
+            margin: 1rem 0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+        }
+
+        @media (max-width: 500px) {
+            .widget-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="widget">
+        <!-- Header -->
+        <div class="widget-header">
+            <i class="fas fa-shield-haltered shield-icon"></i>
+            <div class="brand">
+                <h2>Integrity<span>.</span> Home Services</h2>
+                <p>Honest Pricing · Instant Booking</p>
+            </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-container">
+            <div class="progress-line"><div class="progress-fill" id="progressFill" style="width:0;"></div></div>
+            <div class="progress-steps" id="progressSteps">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Issue</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Estimate</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Schedule</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Confirm</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body -->
+        <div class="widget-body" id="widgetBody">
+            <!-- Step 1: Issue Selector -->
+            <div class="step-content active" data-panel="1">
+                <h3>What’s going on with your system?</h3>
+                <div class="form-row">
+                    <div class="form-group" style="flex:2;">
+                        <label>System Type</label>
+                        <select id="systemType">
+                            <option value="central-ac">Central AC</option>
+                            <option value="heat-pump">Heat Pump</option>
+                            <option value="furnace">Furnace</option>
+                            <option value="ductless">Ductless Mini-Split</option>
+                        </select>
+                    </div>
+                </div>
+                <label style="font-weight:600; font-size:0.8rem; color:#475569; margin-bottom:0.5rem;">Select Symptom</label>
+                <div class="symptom-grid" id="symptomGrid">
+                    <div class="symptom-card" data-symptom="no-cooling">
+                        <i class="fas fa-temperature-high"></i>
+                        <span>No Cooling / Heating</span>
+                    </div>
+                    <div class="symptom-card" data-symptom="strange-noise">
+                        <i class="fas fa-volume-up"></i>
+                        <span>Strange Noise</span>
+                    </div>
+                    <div class="symptom-card" data-symptom="short-cycling">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Short Cycling</span>
+                    </div>
+                    <div class="symptom-card" data-symptom="leak-water">
+                        <i class="fas fa-tint"></i>
+                        <span>Water Leak</span>
+                    </div>
+                    <div class="symptom-card" data-symptom="ice-build">
+                        <i class="fas fa-icicles"></i>
+                        <span>Ice / Frost</span>
+                    </div>
+                    <div class="symptom-card" data-symptom="no-power">
+                        <i class="fas fa-power-off"></i>
+                        <span>No Power</span>
+                    </div>
+                </div>
+                <label style="font-weight:600; font-size:0.8rem; color:#475569; margin-bottom:0.5rem;">How urgent?</label>
+                <div class="urgency-options" id="urgencyOptions">
+                    <div class="urgency-btn" data-urgency="standard">Standard</div>
+                    <div class="urgency-btn" data-urgency="same-day">Same Day</div>
+                    <div class="urgency-btn" data-urgency="emergency">Emergency</div>
+                </div>
+                <div style="display:flex; justify-content:flex-end;">
+                    <button class="btn btn-primary" id="getEstimateBtn" disabled>
+                        Get Estimate <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Estimate Display -->
+            <div class="step-content" data-panel="2">
+                <h3><i class="fas fa-calculator"></i> Your Transparent Estimate</h3>
+                <div class="quote-card" id="quoteCard"></div>
+                <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+                    <button class="btn btn-outline" id="backToIssue"><i class="fas fa-arrow-left"></i> Change</button>
+                    <button class="btn btn-danger" id="bookNowBtn"><i class="fas fa-calendar-check"></i> Book Appointment</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Schedule -->
+            <div class="step-content" data-panel="3">
+                <h3>Pick a date & time for dispatch</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="apptDate" min="">
+                    </div>
+                </div>
+                <label>Available time slots</label>
+                <div class="time-slots" id="timeSlotsContainer"></div>
+                <div style="display:flex; justify-content:space-between; margin-top:1.5rem;">
+                    <button class="btn btn-outline" id="backToEstimate"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-primary" id="toContactBtn" disabled>Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Step 4: Contact & Confirm -->
+            <div class="step-content" data-panel="4">
+                <h3>Your contact information</h3>
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="fullName" placeholder="Jane Smith" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone *</label>
+                            <input type="tel" id="phone" placeholder="(555) 000-0000" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="email" placeholder="jane@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Address *</label>
+                            <input type="text" id="address" placeholder="123 Main St, City" required>
+                        </div>
+                    </div>
+                </form>
+                <div style="display:flex; justify-content:space-between; margin-top:1.5rem;">
+                    <button class="btn btn-outline" id="backToSchedule"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-primary" id="confirmBooking" disabled>Confirm & Dispatch <i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+
+            <!-- Hidden confirmation panel -->
+            <div class="step-content confirmation-panel" data-panel="5" id="confirmationPanel">
+                <i class="fas fa-check-circle"></i>
+                <h3>Appointment Confirmed!</h3>
+                <p style="color:#475569;">Your technician has been alerted. Check your phone for an SMS with details and safety steps.</p>
+                <div class="summary-box" id="summaryBox"></div>
+                <button class="btn btn-primary" id="newRequestBtn"><i class="fas fa-redo-alt"></i> New Estimate</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            let currentStep = 1;
+            let selectedSystem = null;
+            let selectedSymptom = null;
+            let selectedUrgency = 'standard';
+            let estimatedRange = null;
+            let selectedDate = null;
+            let selectedTime = null;
+
+            // DOM
+            const stepContents = document.querySelectorAll('.step-content');
+            const stepsUI = document.querySelectorAll('.step');
+            const progressFill = document.getElementById('progressFill');
+            const systemSelect = document.getElementById('systemType');
+            const symptomCards = document.querySelectorAll('.symptom-card');
+            const urgencyBtns = document.querySelectorAll('.urgency-btn');
+            const getEstimateBtn = document.getElementById('getEstimateBtn');
+            const backToIssueBtn = document.getElementById('backToIssue');
+            const bookNowBtn = document.getElementById('bookNowBtn');
+            const backToEstimateBtn = document.getElementById('backToEstimate');
+            const apptDateInput = document.getElementById('apptDate');
+            const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+            const toContactBtn = document.getElementById('toContactBtn');
+            const backToScheduleBtn = document.getElementById('backToSchedule');
+            const confirmBtn = document.getElementById('confirmBooking');
+            const newRequestBtn = document.getElementById('newRequestBtn');
+            const quoteCard = document.getElementById('quoteCard');
+            const summaryBox = document.getElementById('summaryBox');
+
+            const fullName = document.getElementById('fullName');
+            const phone = document.getElementById('phone');
+            const email = document.getElementById('email');
+            const address = document.getElementById('address');
+
+            // Show step
+            function showStep(step) {
+                currentStep = step;
+                stepContents.forEach(p => p.classList.remove('active'));
+                const target = document.querySelector(`.step-content[data-panel="${step}"]`);
+                if (target) target.classList.add('active');
+
+                stepsUI.forEach(s => {
+                    const num = parseInt(s.dataset.step);
+                    s.classList.remove('active', 'completed');
+                    if (num === step) s.classList.add('active');
+                    else if (num < step) s.classList.add('completed');
+                });
+                const percent = ((step - 1) / 3) * 100;
+                progressFill.style.width = Math.min(100, percent) + '%';
+
+                if (step === 3) {
+                    const today = new Date();
+                    const tomorrow = new Date(today);
+                    tomorrow.setDate(today.getDate() + 1);
+                    apptDateInput.min = tomorrow.toISOString().split('T')[0];
+                    if (!apptDateInput.value) apptDateInput.value = tomorrow.toISOString().split('T')[0];
+                    renderTimeSlots();
+                }
+                if (step === 4) validateContact();
+            }
+
+            // Step 1: selection
+            systemSelect.addEventListener('change', () => {
+                selectedSystem = systemSelect.value;
+                validateStep1();
+            });
+            symptomCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    symptomCards.forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedSymptom = this.dataset.symptom;
+                    validateStep1();
+                });
+            });
+            urgencyBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    urgencyBtns.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedUrgency = this.dataset.urgency;
+                    validateStep1();
+                });
+            });
+            // default urgency
+            document.querySelector('.urgency-btn[data-urgency="standard"]').classList.add('selected');
+
+            function validateStep1() {
+                getEstimateBtn.disabled = !(selectedSymptom && selectedSystem);
+            }
+            validateStep1();
+
+            // Pricing engine
+            function calculateEstimate() {
+                const baseDiag = 89;
+                const afterHoursDiag = 149;
+                const emergencyDiag = 199;
+                let diagFee = baseDiag;
+                if (selectedUrgency === 'same-day') diagFee = afterHoursDiag;
+                if (selectedUrgency === 'emergency') diagFee = emergencyDiag;
+
+                const laborRate = 120; // per hour
+                const symptomHours = {
+                    'no-cooling': { min: 2, max: 4 },
+                    'strange-noise': { min: 1, max: 3 },
+                    'short-cycling': { min: 1, max: 2.5 },
+                    'leak-water': { min: 1, max: 3 },
+                    'ice-build': { min: 1.5, max: 3 },
+                    'no-power': { min: 1, max: 2 }
+                };
+                const h = symptomHours[selectedSymptom] || { min: 1, max: 2 };
+                const laborLow = h.min * laborRate;
+                const laborHigh = h.max * laborRate;
+
+                const partsEstimate = {
+                    'no-cooling': { low: 150, high: 600 },
+                    'strange-noise': { low: 100, high: 450 },
+                    'short-cycling': { low: 80, high: 350 },
+                    'leak-water': { low: 50, high: 300 },
+                    'ice-build': { low: 100, high: 500 },
+                    'no-power': { low: 80, high: 400 }
+                };
+                const parts = partsEstimate[selectedSymptom] || { low: 50, high: 300 };
+
+                const lowTotal = diagFee + laborLow + parts.low;
+                const highTotal = diagFee + laborHigh + parts.high;
+
+                return {
+                    diagFee,
+                    laborLow,
+                    laborHigh,
+                    partsLow: parts.low,
+                    partsHigh: parts.high,
+                    lowTotal,
+                    highTotal,
+                    urgency: selectedUrgency,
+                    symptom: selectedSymptom,
+                    system: selectedSystem
+                };
+            }
+
+            getEstimateBtn.addEventListener('click', () => {
+                if (getEstimateBtn.disabled) return;
+                estimatedRange = calculateEstimate();
+                const e = estimatedRange;
+                quoteCard.innerHTML = `
+                    <div class="price-range">$${e.lowTotal} – $${e.highTotal}</div>
+                    <div class="price-detail">Estimated total including diagnostic, labor & parts</div>
+                    <div class="breakdown">
+                        <div class="breakdown-row"><span class="breakdown-label">Diagnostic Fee (${e.urgency})</span><span class="breakdown-value">$${e.diagFee}</span></div>
+                        <div class="breakdown-row"><span class="breakdown-label">Labor (${e.laborLow/120} – ${e.laborHigh/120} hrs @ $120/hr)</span><span class="breakdown-value">$${e.laborLow} – $${e.laborHigh}</span></div>
+                        <div class="breakdown-row"><span class="breakdown-label">Parts (estimated)</span><span class="breakdown-value">$${e.partsLow} – $${e.partsHigh}</span></div>
+                    </div>
+                    <p style="font-size:0.75rem; margin-top:1rem; color:#64748b;">Final price confirmed after technician diagnosis. No hidden fees.</p>
+                `;
+                showStep(2);
+            });
+
+            backToIssueBtn.addEventListener('click', () => showStep(1));
+            bookNowBtn.addEventListener('click', () => showStep(3));
+
+            // Step 3 time slots
+            function renderTimeSlots() {
+                const date = apptDateInput.value;
+                if (!date) return;
+                const slots = ['8:00 AM', '10:00 AM', '12:00 PM', '2:00 PM', '4:00 PM', '6:00 PM'];
+                const hash = date.split('-').reduce((a,v) => a + parseInt(v||0), 0);
+                const bookedCount = hash % 2;
+                let booked = [];
+                for (let i=0; i<bookedCount; i++) booked.push(slots[(hash+i*2)%slots.length]);
+
+                timeSlotsContainer.innerHTML = '';
+                slots.forEach(slot => {
+                    const div = document.createElement('div');
+                    div.className = 'time-slot';
+                    if (booked.includes(slot)) {
+                        div.classList.add('unavailable');
+                        div.textContent = slot + ' (booked)';
+                    } else {
+                        div.textContent = slot;
+                        div.addEventListener('click', function() {
+                            document.querySelectorAll('.time-slot:not(.unavailable)').forEach(s => s.classList.remove('selected'));
+                            this.classList.add('selected');
+                            selectedTime = slot;
+                            toContactBtn.disabled = false;
+                        });
+                    }
+                    timeSlotsContainer.appendChild(div);
+                });
+                selectedTime = null;
+                toContactBtn.disabled = true;
+            }
+
+            apptDateInput.addEventListener('change', () => {
+                selectedDate = apptDateInput.value;
+                renderTimeSlots();
+            });
+
+            backToEstimateBtn.addEventListener('click', () => showStep(2));
+            toContactBtn.addEventListener('click', () => {
+                if (!selectedTime) return;
+                showStep(4);
+            });
+
+            // Contact validation
+            function validateContact() {
+                const valid = fullName.value.trim() && phone.value.trim() && address.value.trim();
+                confirmBtn.disabled = !valid;
+            }
+            [fullName, phone, address].forEach(el => el.addEventListener('input', validateContact));
+
+            backToScheduleBtn.addEventListener('click', () => showStep(3));
+
+            // Submit
+            confirmBtn.addEventListener('click', () => {
+                if (confirmBtn.disabled) return;
+                const booking = {
+                    ...estimatedRange,
+                    date: selectedDate,
+                    time: selectedTime,
+                    name: fullName.value.trim(),
+                    phone: phone.value.trim(),
+                    email: email.value.trim(),
+                    address: address.value.trim(),
+                    timestamp: new Date().toISOString()
+                };
+                let bookings = JSON.parse(localStorage.getItem('integrity_bookings') || '[]');
+                bookings.push(booking);
+                localStorage.setItem('integrity_bookings', JSON.stringify(bookings));
+                console.log('🔧 Booking confirmed:', booking);
+
+                summaryBox.innerHTML = `
+                    <div class="summary-row"><strong>Issue:</strong> <span>${booking.symptom.replace('-',' ')} (${booking.system})</span></div>
+                    <div class="summary-row"><strong>Estimate:</strong> <span>$${booking.lowTotal} – $${booking.highTotal}</span></div>
+                    <div class="summary-row"><strong>Appointment:</strong> <span>${booking.date} at ${booking.time}</span></div>
+                    <div class="summary-row"><strong>Name:</strong> <span>${booking.name}</span></div>
+                    <div class="summary-row"><strong>Phone:</strong> <span>${booking.phone}</span></div>
+                `;
+                showStep(5);
+            });
+
+            newRequestBtn.addEventListener('click', () => {
+                // Reset all
+                symptomCards.forEach(c => c.classList.remove('selected'));
+                document.querySelector('.urgency-btn[data-urgency="standard"]').classList.add('selected');
+                systemSelect.value = 'central-ac';
+                fullName.value = phone.value = email.value = address.value = '';
+                apptDateInput.value = '';
+                timeSlotsContainer.innerHTML = '';
+                estimatedRange = null;
+                selectedSymptom = null;
+                selectedUrgency = 'standard';
+                selectedSystem = 'central-ac';
+                getEstimateBtn.disabled = true;
+                showStep(1);
+            });
+
+            // initial
+            showStep(1);
+        })();
+    </script>
+</body>
+</html>
