@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Integrity Home Services · Instant HVAC Quote</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
     <style>
         * {
             margin: 0;
@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #f4f6fa;
+            background: #f1f5f9;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,20 +24,20 @@
         }
 
         .widget {
-            max-width: 680px;
+            max-width: 760px;
             width: 100%;
             background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.06);
+            border-radius: 28px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
             overflow: hidden;
             border: 1px solid #e2e8f0;
         }
 
-        /* Header */
+        /* ── Header ── */
         .widget-header {
-            background: #0f172a; /* deep navy */
+            background: #0f172a;
             color: white;
-            padding: 2rem;
+            padding: 1.8rem 2rem;
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -45,7 +45,7 @@
         }
 
         .shield-icon {
-            font-size: 2.5rem;
+            font-size: 2.6rem;
             color: #f97316;
         }
 
@@ -67,7 +67,7 @@
             margin-top: 0.2rem;
         }
 
-        /* Progress */
+        /* ── Progress ── */
         .progress-container {
             padding: 1.5rem 2rem 0.8rem;
             position: relative;
@@ -89,8 +89,8 @@
         }
 
         .step-circle {
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             background: #e2e8f0;
             color: #64748b;
@@ -100,22 +100,25 @@
             font-weight: 700;
             font-size: 0.85rem;
             transition: 0.3s;
+            border: 2px solid transparent;
         }
 
         .step.active .step-circle {
             background: #0f172a;
             color: white;
-            box-shadow: 0 0 0 4px rgba(15,23,42,0.15);
+            border-color: #f97316;
+            box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.12);
         }
 
         .step.completed .step-circle {
             background: #0f172a;
             color: white;
+            border-color: #0f172a;
         }
 
         .step-label {
             font-size: 0.7rem;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
             margin-top: 0.4rem;
             color: #94a3b8;
@@ -129,7 +132,7 @@
 
         .progress-line {
             position: absolute;
-            top: 16px;
+            top: 17px;
             left: 0;
             right: 0;
             height: 3px;
@@ -142,27 +145,33 @@
         .progress-fill {
             height: 100%;
             background: #0f172a;
-            transition: width 0.3s;
+            transition: width 0.4s ease;
             border-radius: 3px;
         }
 
-        /* Body */
+        /* ── Body ── */
         .widget-body {
-            padding: 2rem;
+            padding: 2rem 2rem 1.5rem;
         }
 
         .step-content {
             display: none;
-            animation: fadeIn 0.3s;
+            animation: fadeSlide 0.35s ease;
         }
 
         .step-content.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h3 {
@@ -170,9 +179,15 @@
             font-weight: 700;
             color: #1e293b;
             margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
 
-        /* Form elements */
+        h3 i {
+            color: #f97316;
+        }
+
         .form-row {
             display: flex;
             flex-wrap: wrap;
@@ -189,24 +204,30 @@
             font-weight: 600;
             font-size: 0.8rem;
             color: #475569;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.3rem;
         }
 
-        select, input[type="number"] {
+        select,
+        input[type="number"],
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.7rem 1rem;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
             font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             background: #f8fafc;
             transition: 0.2s;
+            color: #1e293b;
         }
 
-        select:focus, input:focus {
+        select:focus,
+        input:focus {
             border-color: #0f172a;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(15,23,42,0.1);
+            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
         }
 
         .symptom-grid {
@@ -220,22 +241,23 @@
             background: #f8fafc;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
-            padding: 1rem 0.8rem;
+            padding: 1rem 0.6rem;
             text-align: center;
             cursor: pointer;
             transition: 0.2s;
         }
 
         .symptom-card i {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             color: #64748b;
             display: block;
             margin-bottom: 0.4rem;
+            transition: 0.2s;
         }
 
         .symptom-card span {
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #1e293b;
         }
 
@@ -245,9 +267,13 @@
         }
 
         .symptom-card.selected {
-            border-color: #0f172a;
-            background: #e2e8f0;
-            box-shadow: 0 0 0 3px rgba(15,23,42,0.1);
+            border-color: #f97316;
+            background: #fff7ed;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+        }
+
+        .symptom-card.selected i {
+            color: #f97316;
         }
 
         .urgency-options {
@@ -259,13 +285,15 @@
 
         .urgency-btn {
             flex: 1 1 100px;
-            padding: 0.7rem 1rem;
+            padding: 0.6rem 1rem;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
             font-weight: 600;
             background: white;
             cursor: pointer;
             transition: 0.15s;
+            text-align: center;
+            font-size: 0.9rem;
         }
 
         .urgency-btn:hover {
@@ -279,7 +307,7 @@
         }
 
         .btn {
-            padding: 0.85rem 2rem;
+            padding: 0.8rem 2rem;
             border-radius: 10px;
             font-weight: 700;
             border: none;
@@ -305,12 +333,13 @@
         .btn-primary {
             background: #0f172a;
             color: white;
-            box-shadow: 0 4px 12px rgba(15,23,42,0.25);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             background: #1e293b;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
         }
 
         .btn-primary:disabled {
@@ -320,16 +349,24 @@
             transform: none;
         }
 
-        .btn-danger {
+        .btn-accent {
             background: #f97316;
             color: white;
-            box-shadow: 0 4px 12px rgba(249,115,22,0.4);
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
         }
 
-        .btn-danger:hover {
+        .btn-accent:hover:not(:disabled) {
             background: #ea580c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4);
         }
 
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* ── Quote Card ── */
         .quote-card {
             background: #f1f5f9;
             border-radius: 16px;
@@ -339,13 +376,13 @@
         }
 
         .price-range {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 800;
             color: #1e293b;
         }
 
         .price-detail {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: #475569;
             margin-top: 0.2rem;
         }
@@ -359,6 +396,13 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 0.4rem;
+            padding: 0.2rem 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .breakdown-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
         }
 
         .breakdown-label {
@@ -370,6 +414,31 @@
             color: #1e293b;
         }
 
+        .confidence-badge {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .confidence-high {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .confidence-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .confidence-low {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* ── Calendar ── */
         .calendar-box {
             margin-bottom: 1.5rem;
         }
@@ -377,15 +446,15 @@
         .time-slots {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
+            gap: 0.6rem;
+            margin-top: 0.6rem;
         }
 
         .time-slot {
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 1.2rem;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
-            font-weight: 500;
+            font-weight: 600;
             font-size: 0.85rem;
             cursor: pointer;
             background: white;
@@ -411,13 +480,22 @@
             border-color: #0f172a;
         }
 
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* ── Confirmation ── */
         .confirmation-panel {
             text-align: center;
             padding: 1rem 0;
         }
 
-        .confirmation-panel i.fa-check-circle {
-            font-size: 3rem;
+        .confirmation-panel .check-icon {
+            font-size: 3.5rem;
             color: #16a34a;
             margin-bottom: 1rem;
         }
@@ -425,39 +503,209 @@
         .summary-box {
             background: #f8fafc;
             border-radius: 12px;
-            padding: 1rem;
+            padding: 1.2rem;
             text-align: left;
-            margin: 1rem 0;
+            margin: 1.5rem 0;
+            border: 1px solid #e2e8f0;
         }
 
         .summary-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 0.4rem;
+            font-size: 0.95rem;
         }
 
-        @media (max-width: 500px) {
+        /* ── Staff Panel ── */
+        .staff-panel {
+            border-top: 1px solid #e2e8f0;
+            padding: 1.5rem 2rem 2rem;
+            background: #f8fafc;
+        }
+
+        .staff-panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .staff-panel h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .staff-panel h4 .badge {
+            background: #f97316;
+            color: white;
+            font-size: 0.65rem;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-actions .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .panel-actions .btn-clear {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .panel-actions .btn-clear:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .panel-actions .btn-refresh {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .panel-actions .btn-refresh:hover {
+            background: #cbd5e0;
+        }
+
+        .bookings-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .bookings-table th {
+            text-align: left;
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            color: #64748b;
+            font-weight: 600;
+            border-bottom: 1px solid #e2e8f0;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+        }
+
+        .bookings-table td {
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            border-bottom: 1px solid #edf2f7;
+            color: #1e293b;
+        }
+
+        .bookings-table .new-row {
+            animation: flashRow 0.6s ease;
+        }
+
+        @keyframes flashRow {
+            0% {
+                background: rgba(249, 115, 22, 0.12);
+            }
+            100% {
+                background: transparent;
+            }
+        }
+
+        /* ── Toast ── */
+        .custom-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .widget-header {
+                padding: 1.2rem;
+                flex-wrap: wrap;
+            }
             .widget-body {
-                padding: 1.5rem;
+                padding: 1.2rem;
+            }
+            .staff-panel {
+                padding: 1rem;
+            }
+            .progress-container {
+                padding: 1.2rem 1rem 0.5rem;
+            }
+            .progress-line {
+                margin: 0 20px;
+            }
+            .symptom-grid {
+                grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            }
+            .urgency-btn {
+                flex: 1 1 80px;
+                font-size: 0.8rem;
+                padding: 0.5rem 0.8rem;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+            }
+            .bookings-table {
+                font-size: 0.7rem;
+            }
+            .price-range {
+                font-size: 1.6rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="widget">
-        <!-- Header -->
+        <!-- ── Header ── -->
         <div class="widget-header">
-            <i class="fas fa-shield-haltered shield-icon"></i>
+            <i class="fas fa-shield-halved shield-icon"></i>
             <div class="brand">
                 <h2>Integrity<span>.</span> Home Services</h2>
                 <p>Honest Pricing · Instant Booking</p>
             </div>
         </div>
 
-        <!-- Progress -->
+        <!-- ── Progress ── -->
         <div class="progress-container">
-            <div class="progress-line"><div class="progress-fill" id="progressFill" style="width:0;"></div></div>
-            <div class="progress-steps" id="progressSteps">
+            <div class="progress-line">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-steps">
                 <div class="step active" data-step="1">
                     <div class="step-circle">1</div>
                     <div class="step-label">Issue</div>
@@ -477,27 +725,41 @@
             </div>
         </div>
 
-        <!-- Body -->
+        <!-- ── Body ── -->
         <div class="widget-body" id="widgetBody">
             <!-- Step 1: Issue Selector -->
             <div class="step-content active" data-panel="1">
-                <h3>What’s going on with your system?</h3>
+                <h3><i class="fas fa-wrench"></i> What's going on?</h3>
                 <div class="form-row">
-                    <div class="form-group" style="flex:2;">
+                    <div class="form-group">
                         <label>System Type</label>
                         <select id="systemType">
                             <option value="central-ac">Central AC</option>
                             <option value="heat-pump">Heat Pump</option>
                             <option value="furnace">Furnace</option>
-                            <option value="ductless">Ductless Mini-Split</option>
+                            <option value="ductless">Ductless Mini‑Split</option>
+                            <option value="geothermal">Geothermal</option>
+                            <option value="air-handler">Air Handler</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label>System Age (years)</label>
+                        <input type="number" id="systemAge" value="8" min="1" max="40" />
+                    </div>
+                    <div class="form-group">
+                        <label>Approx. Sq. Ft.</label>
+                        <input type="number" id="sqft" value="2000" min="500" step="100" />
+                    </div>
                 </div>
-                <label style="font-weight:600; font-size:0.8rem; color:#475569; margin-bottom:0.5rem;">Select Symptom</label>
+                <label style="font-weight:600; font-size:0.8rem; color:#475569; margin-bottom:0.4rem; display:block;">Select Symptom</label>
                 <div class="symptom-grid" id="symptomGrid">
                     <div class="symptom-card" data-symptom="no-cooling">
                         <i class="fas fa-temperature-high"></i>
-                        <span>No Cooling / Heating</span>
+                        <span>No Cooling</span>
+                    </div>
+                    <div class="symptom-card" data-symptom="no-heating">
+                        <i class="fas fa-temperature-low"></i>
+                        <span>No Heating</span>
                     </div>
                     <div class="symptom-card" data-symptom="strange-noise">
                         <i class="fas fa-volume-up"></i>
@@ -507,27 +769,39 @@
                         <i class="fas fa-sync-alt"></i>
                         <span>Short Cycling</span>
                     </div>
-                    <div class="symptom-card" data-symptom="leak-water">
+                    <div class="symptom-card" data-symptom="water-leak">
                         <i class="fas fa-tint"></i>
                         <span>Water Leak</span>
                     </div>
                     <div class="symptom-card" data-symptom="ice-build">
-                        <i class="fas fa-icicles"></i>
-                        <span>Ice / Frost</span>
+                        <i class="fas fa-snowflake"></i>
+                        <span>Ice Build‑Up</span>
                     </div>
                     <div class="symptom-card" data-symptom="no-power">
                         <i class="fas fa-power-off"></i>
                         <span>No Power</span>
                     </div>
+                    <div class="symptom-card" data-symptom="burning-smell">
+                        <i class="fas fa-fire"></i>
+                        <span>Burning Smell</span>
+                    </div>
+                    <div class="symptom-card" data-symptom="high-bills">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span>High Bills</span>
+                    </div>
+                    <div class="symptom-card" data-symptom="thermostat">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Thermostat Issues</span>
+                    </div>
                 </div>
-                <label style="font-weight:600; font-size:0.8rem; color:#475569; margin-bottom:0.5rem;">How urgent?</label>
+                <label style="font-weight:600; font-size:0.8rem; color:#475569; margin-bottom:0.4rem; display:block;">Urgency</label>
                 <div class="urgency-options" id="urgencyOptions">
                     <div class="urgency-btn" data-urgency="standard">Standard</div>
-                    <div class="urgency-btn" data-urgency="same-day">Same Day</div>
+                    <div class="urgency-btn" data-urgency="same-day">Same‑Day</div>
                     <div class="urgency-btn" data-urgency="emergency">Emergency</div>
                 </div>
                 <div style="display:flex; justify-content:flex-end;">
-                    <button class="btn btn-primary" id="getEstimateBtn" disabled>
+                    <button class="btn btn-accent" id="getEstimateBtn" disabled>
                         Get Estimate <i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
@@ -537,24 +811,22 @@
             <div class="step-content" data-panel="2">
                 <h3><i class="fas fa-calculator"></i> Your Transparent Estimate</h3>
                 <div class="quote-card" id="quoteCard"></div>
-                <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+                <div class="btn-group">
                     <button class="btn btn-outline" id="backToIssue"><i class="fas fa-arrow-left"></i> Change</button>
-                    <button class="btn btn-danger" id="bookNowBtn"><i class="fas fa-calendar-check"></i> Book Appointment</button>
+                    <button class="btn btn-accent" id="bookNowBtn"><i class="fas fa-calendar-check"></i> Book Appointment</button>
                 </div>
             </div>
 
             <!-- Step 3: Schedule -->
             <div class="step-content" data-panel="3">
-                <h3>Pick a date & time for dispatch</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Date</label>
-                        <input type="date" id="apptDate" min="">
-                    </div>
+                <h3><i class="fas fa-calendar-alt"></i> Pick a date & time</h3>
+                <div class="calendar-box">
+                    <label>Date</label>
+                    <input type="date" id="apptDate" min="" />
                 </div>
                 <label>Available time slots</label>
                 <div class="time-slots" id="timeSlotsContainer"></div>
-                <div style="display:flex; justify-content:space-between; margin-top:1.5rem;">
+                <div class="btn-group">
                     <button class="btn btn-outline" id="backToEstimate"><i class="fas fa-arrow-left"></i> Back</button>
                     <button class="btn btn-primary" id="toContactBtn" disabled>Next <i class="fas fa-arrow-right"></i></button>
                 </div>
@@ -562,66 +834,103 @@
 
             <!-- Step 4: Contact & Confirm -->
             <div class="step-content" data-panel="4">
-                <h3>Your contact information</h3>
+                <h3><i class="fas fa-user-tie"></i> Your details</h3>
                 <form id="contactForm">
                     <div class="form-row">
                         <div class="form-group">
                             <label>Full Name *</label>
-                            <input type="text" id="fullName" placeholder="Jane Smith" required>
+                            <input type="text" id="fullName" placeholder="Jane Smith" required />
                         </div>
                         <div class="form-group">
                             <label>Phone *</label>
-                            <input type="tel" id="phone" placeholder="(555) 000-0000" required>
+                            <input type="tel" id="phone" placeholder="(555) 000-0000" required />
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" id="email" placeholder="jane@example.com">
+                            <input type="email" id="email" placeholder="jane@example.com" />
                         </div>
                         <div class="form-group">
                             <label>Address *</label>
-                            <input type="text" id="address" placeholder="123 Main St, City" required>
+                            <input type="text" id="address" placeholder="123 Main St, City" required />
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label>Access notes (optional)</label>
+                        <input type="text" id="notes" placeholder="Gate code, parking instructions..." />
+                    </div>
                 </form>
-                <div style="display:flex; justify-content:space-between; margin-top:1.5rem;">
+                <div class="btn-group">
                     <button class="btn btn-outline" id="backToSchedule"><i class="fas fa-arrow-left"></i> Back</button>
-                    <button class="btn btn-primary" id="confirmBooking" disabled>Confirm & Dispatch <i class="fas fa-paper-plane"></i></button>
+                    <button class="btn btn-accent" id="confirmBooking" disabled>
+                        <i class="fas fa-paper-plane"></i> Confirm & Dispatch
+                    </button>
                 </div>
             </div>
 
-            <!-- Hidden confirmation panel -->
+            <!-- Step 5: Confirmation -->
             <div class="step-content confirmation-panel" data-panel="5" id="confirmationPanel">
-                <i class="fas fa-check-circle"></i>
+                <div class="check-icon"><i class="fas fa-check-circle"></i></div>
                 <h3>Appointment Confirmed!</h3>
                 <p style="color:#475569;">Your technician has been alerted. Check your phone for an SMS with details and safety steps.</p>
                 <div class="summary-box" id="summaryBox"></div>
                 <button class="btn btn-primary" id="newRequestBtn"><i class="fas fa-redo-alt"></i> New Estimate</button>
             </div>
         </div>
+
+        <!-- ── Staff Panel ── -->
+        <div class="staff-panel" id="staffPanel">
+            <div class="panel-header">
+                <h4><i class="fas fa-bolt" style="color:#f97316;"></i> Dispatch Feed <span class="badge" id="bookingCount">0</span></h4>
+                <div class="panel-actions">
+                    <button class="btn-sm btn-refresh" id="refreshBookings"><i class="fas fa-sync-alt"></i></button>
+                    <button class="btn-sm btn-clear" id="clearBookings"><i class="fas fa-trash"></i> Clear</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="bookings-table" id="bookingsTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Issue</th>
+                            <th>Estimate</th>
+                            <th>Time</th>
+                            <th style="width:30px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsBody">
+                        <tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:1rem 0;">No bookings yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script>
         (function() {
+            'use strict';
+
+            // ─── State ─────────────────────────────────────────────
             let currentStep = 1;
-            let selectedSystem = null;
             let selectedSymptom = null;
             let selectedUrgency = 'standard';
             let estimatedRange = null;
             let selectedDate = null;
             let selectedTime = null;
+            let bookings = JSON.parse(localStorage.getItem('integrity_bookings') || '[]');
 
-            // DOM
-            const stepContents = document.querySelectorAll('.step-content');
-            const stepsUI = document.querySelectorAll('.step');
-            const progressFill = document.getElementById('progressFill');
-            const systemSelect = document.getElementById('systemType');
+            // ─── DOM refs ──────────────────────────────────────────
+            const systemType = document.getElementById('systemType');
+            const systemAge = document.getElementById('systemAge');
+            const sqftInput = document.getElementById('sqft');
             const symptomCards = document.querySelectorAll('.symptom-card');
             const urgencyBtns = document.querySelectorAll('.urgency-btn');
             const getEstimateBtn = document.getElementById('getEstimateBtn');
             const backToIssueBtn = document.getElementById('backToIssue');
             const bookNowBtn = document.getElementById('bookNowBtn');
+            const quoteCard = document.getElementById('quoteCard');
             const backToEstimateBtn = document.getElementById('backToEstimate');
             const apptDateInput = document.getElementById('apptDate');
             const timeSlotsContainer = document.getElementById('timeSlotsContainer');
@@ -629,34 +938,38 @@
             const backToScheduleBtn = document.getElementById('backToSchedule');
             const confirmBtn = document.getElementById('confirmBooking');
             const newRequestBtn = document.getElementById('newRequestBtn');
-            const quoteCard = document.getElementById('quoteCard');
-            const summaryBox = document.getElementById('summaryBox');
 
             const fullName = document.getElementById('fullName');
             const phone = document.getElementById('phone');
             const email = document.getElementById('email');
             const address = document.getElementById('address');
+            const notes = document.getElementById('notes');
 
-            // Show step
+            const bookingCount = document.getElementById('bookingCount');
+            const bookingsBody = document.getElementById('bookingsBody');
+            const clearBookingsBtn = document.getElementById('clearBookings');
+            const refreshBookingsBtn = document.getElementById('refreshBookings');
+
+            // ─── Helpers ────────────────────────────────────────────
+
             function showStep(step) {
                 currentStep = step;
-                stepContents.forEach(p => p.classList.remove('active'));
+                document.querySelectorAll('.step-content').forEach(p => p.classList.remove('active'));
                 const target = document.querySelector(`.step-content[data-panel="${step}"]`);
                 if (target) target.classList.add('active');
 
-                stepsUI.forEach(s => {
+                document.querySelectorAll('.step').forEach(s => {
                     const num = parseInt(s.dataset.step);
                     s.classList.remove('active', 'completed');
                     if (num === step) s.classList.add('active');
                     else if (num < step) s.classList.add('completed');
                 });
-                const percent = ((step - 1) / 3) * 100;
-                progressFill.style.width = Math.min(100, percent) + '%';
+                const percent = Math.min(((step - 1) / 3) * 100, 100);
+                document.getElementById('progressFill').style.width = percent + '%';
 
                 if (step === 3) {
-                    const today = new Date();
-                    const tomorrow = new Date(today);
-                    tomorrow.setDate(today.getDate() + 1);
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
                     apptDateInput.min = tomorrow.toISOString().split('T')[0];
                     if (!apptDateInput.value) apptDateInput.value = tomorrow.toISOString().split('T')[0];
                     renderTimeSlots();
@@ -664,11 +977,56 @@
                 if (step === 4) validateContact();
             }
 
-            // Step 1: selection
-            systemSelect.addEventListener('change', () => {
-                selectedSystem = systemSelect.value;
-                validateStep1();
-            });
+            function renderBookingsTable() {
+                const tbody = bookingsBody;
+                if (bookings.length === 0) {
+                    tbody.innerHTML =
+                        '<tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:1rem 0;">No bookings yet</td></tr>';
+                } else {
+                    let html = '';
+                    const reversed = [...bookings].reverse();
+                    reversed.forEach((b, idx) => {
+                        const isNew = idx === 0 ? 'new-row' : '';
+                        const issue = b.symptom ? b.symptom.replace(/-/g, ' ') : '—';
+                        const est = b.lowTotal ? `$${b.lowTotal}–$${b.highTotal}` : '—';
+                        const time = b.timestamp ? new Date(b.timestamp).toLocaleTimeString([], { hour: '2-digit',
+                            minute: '2-digit' }) : '—';
+                        html += `
+                            <tr class="${isNew}">
+                                <td><strong>${b.name || '—'}</strong></td>
+                                <td>${b.phone || '—'}</td>
+                                <td>${issue}</td>
+                                <td>${est}</td>
+                                <td style="font-size:0.7rem;">${time}</td>
+                                <td><span style="font-size:0.6rem; background:#10b98120; color:#10b981; padding:0.1rem 0.5rem; border-radius:20px;">NEW</span></td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                }
+                bookingCount.textContent = bookings.length;
+            }
+
+            function showToast(message) {
+                const existing = document.querySelector('.custom-toast');
+                if (existing) existing.remove();
+                const toast = document.createElement('div');
+                toast.className = 'custom-toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+
+            // ─── Step 1: Selection ─────────────────────────────────
+
+            function validateStep1() {
+                getEstimateBtn.disabled = !selectedSymptom;
+            }
+
             symptomCards.forEach(card => {
                 card.addEventListener('click', function() {
                     symptomCards.forEach(c => c.classList.remove('selected'));
@@ -677,100 +1035,171 @@
                     validateStep1();
                 });
             });
+
             urgencyBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     urgencyBtns.forEach(b => b.classList.remove('selected'));
                     this.classList.add('selected');
                     selectedUrgency = this.dataset.urgency;
-                    validateStep1();
                 });
             });
             // default urgency
             document.querySelector('.urgency-btn[data-urgency="standard"]').classList.add('selected');
 
-            function validateStep1() {
-                getEstimateBtn.disabled = !(selectedSymptom && selectedSystem);
-            }
-            validateStep1();
+            // ─── Pricing Engine ────────────────────────────────────
 
-            // Pricing engine
             function calculateEstimate() {
-                const baseDiag = 89;
-                const afterHoursDiag = 149;
-                const emergencyDiag = 199;
-                let diagFee = baseDiag;
-                if (selectedUrgency === 'same-day') diagFee = afterHoursDiag;
-                if (selectedUrgency === 'emergency') diagFee = emergencyDiag;
+                const system = systemType.value;
+                const age = parseInt(systemAge.value) || 8;
+                const sqft = parseInt(sqftInput.value) || 2000;
 
-                const laborRate = 120; // per hour
+                // Base diagnostic fee
+                const diagBase = 89;
+                const urgencyFee = { standard: 0, 'same-day': 50, emergency: 100 };
+                const urgencyPremium = urgencyFee[selectedUrgency] || 0;
+
+                // Labor: symptom complexity in hours
                 const symptomHours = {
-                    'no-cooling': { min: 2, max: 4 },
+                    'no-cooling': { min: 2, max: 4.5 },
+                    'no-heating': { min: 2, max: 4 },
                     'strange-noise': { min: 1, max: 3 },
-                    'short-cycling': { min: 1, max: 2.5 },
-                    'leak-water': { min: 1, max: 3 },
-                    'ice-build': { min: 1.5, max: 3 },
-                    'no-power': { min: 1, max: 2 }
+                    'short-cycling': { min: 1.5, max: 3 },
+                    'water-leak': { min: 1, max: 3 },
+                    'ice-build': { min: 2, max: 4 },
+                    'no-power': { min: 1.5, max: 3 },
+                    'burning-smell': { min: 2.5, max: 5 },
+                    'high-bills': { min: 1, max: 3 },
+                    'thermostat': { min: 1, max: 2.5 }
                 };
-                const h = symptomHours[selectedSymptom] || { min: 1, max: 2 };
-                const laborLow = h.min * laborRate;
-                const laborHigh = h.max * laborRate;
+                const hours = symptomHours[selectedSymptom] || { min: 1.5, max: 3 };
+                const laborRate = 125;
+                const laborLow = hours.min * laborRate;
+                const laborHigh = hours.max * laborRate;
 
-                const partsEstimate = {
-                    'no-cooling': { low: 150, high: 600 },
-                    'strange-noise': { low: 100, high: 450 },
-                    'short-cycling': { low: 80, high: 350 },
-                    'leak-water': { low: 50, high: 300 },
-                    'ice-build': { low: 100, high: 500 },
-                    'no-power': { low: 80, high: 400 }
+                // Parts estimate (based on symptom)
+                const partsRange = {
+                    'no-cooling': { low: 150, high: 700 },
+                    'no-heating': { low: 120, high: 600 },
+                    'strange-noise': { low: 80, high: 450 },
+                    'short-cycling': { low: 100, high: 500 },
+                    'water-leak': { low: 60, high: 350 },
+                    'ice-build': { low: 120, high: 550 },
+                    'no-power': { low: 80, high: 400 },
+                    'burning-smell': { low: 200, high: 900 },
+                    'high-bills': { low: 50, high: 300 },
+                    'thermostat': { low: 40, high: 250 }
                 };
-                const parts = partsEstimate[selectedSymptom] || { low: 50, high: 300 };
+                const parts = partsRange[selectedSymptom] || { low: 50, high: 300 };
 
-                const lowTotal = diagFee + laborLow + parts.low;
-                const highTotal = diagFee + laborHigh + parts.high;
+                // Age factor
+                const ageFactor = 1 + Math.max(0, (age - 5) * 0.03); // +3% per year over 5
+
+                // Square footage factor
+                const sqftFactor = 1 + Math.max(0, (sqft - 1500) / 1500 * 0.05);
+
+                // Calculate total
+                const diagTotal = diagBase + urgencyPremium;
+                const laborTotalLow = laborLow * ageFactor * sqftFactor;
+                const laborTotalHigh = laborHigh * ageFactor * sqftFactor;
+                const partsLow = parts.low * ageFactor;
+                const partsHigh = parts.high * ageFactor;
+
+                const lowTotal = Math.round(diagTotal + laborTotalLow + partsLow);
+                const highTotal = Math.round(diagTotal + laborTotalHigh + partsHigh);
 
                 return {
-                    diagFee,
-                    laborLow,
-                    laborHigh,
-                    partsLow: parts.low,
-                    partsHigh: parts.high,
+                    diagTotal,
+                    laborLow: Math.round(laborTotalLow),
+                    laborHigh: Math.round(laborTotalHigh),
+                    partsLow: Math.round(partsLow),
+                    partsHigh: Math.round(partsHigh),
                     lowTotal,
                     highTotal,
                     urgency: selectedUrgency,
                     symptom: selectedSymptom,
-                    system: selectedSystem
+                    system: system,
+                    age,
+                    sqft,
+                    confidence: sqft > 500 && age < 30 ? 'high' : age > 25 ? 'low' : 'medium'
                 };
             }
 
-            getEstimateBtn.addEventListener('click', () => {
-                if (getEstimateBtn.disabled) return;
-                estimatedRange = calculateEstimate();
-                const e = estimatedRange;
+            // ─── Display Quote ─────────────────────────────────────
+
+            function displayQuote(quote) {
+                const confidenceLabel = {
+                    high: 'High Confidence',
+                    medium: 'Medium Confidence',
+                    low: 'Low Confidence'
+                };
+                const confClass = {
+                    high: 'confidence-high',
+                    medium: 'confidence-medium',
+                    low: 'confidence-low'
+                };
                 quoteCard.innerHTML = `
-                    <div class="price-range">$${e.lowTotal} – $${e.highTotal}</div>
+                    <div class="price-range">$${quote.lowTotal} – $${quote.highTotal}</div>
                     <div class="price-detail">Estimated total including diagnostic, labor & parts</div>
                     <div class="breakdown">
-                        <div class="breakdown-row"><span class="breakdown-label">Diagnostic Fee (${e.urgency})</span><span class="breakdown-value">$${e.diagFee}</span></div>
-                        <div class="breakdown-row"><span class="breakdown-label">Labor (${e.laborLow/120} – ${e.laborHigh/120} hrs @ $120/hr)</span><span class="breakdown-value">$${e.laborLow} – $${e.laborHigh}</span></div>
-                        <div class="breakdown-row"><span class="breakdown-label">Parts (estimated)</span><span class="breakdown-value">$${e.partsLow} – $${e.partsHigh}</span></div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Diagnostic Fee <span style="text-transform:capitalize;">(${quote.urgency})</span></span>
+                            <span class="breakdown-value">$${quote.diagTotal}</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Labor (${(quote.laborLow/125).toFixed(1)} – ${(quote.laborHigh/125).toFixed(1)} hrs @ $125/hr)</span>
+                            <span class="breakdown-value">$${quote.laborLow} – $${quote.laborHigh}</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Parts (estimated)</span>
+                            <span class="breakdown-value">$${quote.partsLow} – $${quote.partsHigh}</span>
+                        </div>
+                        <div class="breakdown-row" style="font-weight:700; border-top:2px dashed #e2e8f0; padding-top:0.6rem; margin-top:0.2rem;">
+                            <span class="breakdown-label">Total Estimate</span>
+                            <span class="breakdown-value" style="color:#f97316; font-size:1.1rem;">$${quote.lowTotal} – $${quote.highTotal}</span>
+                        </div>
                     </div>
-                    <p style="font-size:0.75rem; margin-top:1rem; color:#64748b;">Final price confirmed after technician diagnosis. No hidden fees.</p>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem;">
+                        <span class="confidence-badge ${confClass[quote.confidence]}">${confidenceLabel[quote.confidence]}</span>
+                        <span style="font-size:0.75rem; color:#64748b;">Final price after diagnosis</span>
+                    </div>
                 `;
+                estimatedRange = quote;
                 showStep(2);
+            }
+
+            // ─── Step 1 → 2 ──────────────────────────────────────
+
+            getEstimateBtn.addEventListener('click', function() {
+                if (getEstimateBtn.disabled) return;
+                const quote = calculateEstimate();
+                displayQuote(quote);
             });
 
             backToIssueBtn.addEventListener('click', () => showStep(1));
-            bookNowBtn.addEventListener('click', () => showStep(3));
 
-            // Step 3 time slots
+            // ─── Step 2 → 3 ──────────────────────────────────────
+
+            bookNowBtn.addEventListener('click', () => {
+                if (!estimatedRange) return;
+                showStep(3);
+            });
+
+            // ─── Step 3: Time Slots ──────────────────────────────
+
             function renderTimeSlots() {
                 const date = apptDateInput.value;
-                if (!date) return;
+                if (!date) {
+                    timeSlotsContainer.innerHTML = '<p style="color:#94a3b8;">Select a date first</p>';
+                    toContactBtn.disabled = true;
+                    return;
+                }
                 const slots = ['8:00 AM', '10:00 AM', '12:00 PM', '2:00 PM', '4:00 PM', '6:00 PM'];
-                const hash = date.split('-').reduce((a,v) => a + parseInt(v||0), 0);
+                const hash = date.split('-').reduce((a, v) => a + parseInt(v || 0), 0);
                 const bookedCount = hash % 2;
-                let booked = [];
-                for (let i=0; i<bookedCount; i++) booked.push(slots[(hash+i*2)%slots.length]);
+                const booked = [];
+                for (let i = 0; i < bookedCount; i++) {
+                    booked.push(slots[(hash + i * 2) % slots.length]);
+                }
 
                 timeSlotsContainer.innerHTML = '';
                 slots.forEach(slot => {
@@ -782,7 +1211,8 @@
                     } else {
                         div.textContent = slot;
                         div.addEventListener('click', function() {
-                            document.querySelectorAll('.time-slot:not(.unavailable)').forEach(s => s.classList.remove('selected'));
+                            document.querySelectorAll('.time-slot:not(.unavailable)').forEach(s => s.classList
+                                .remove('selected'));
                             this.classList.add('selected');
                             selectedTime = slot;
                             toContactBtn.disabled = false;
@@ -800,23 +1230,27 @@
             });
 
             backToEstimateBtn.addEventListener('click', () => showStep(2));
+
             toContactBtn.addEventListener('click', () => {
-                if (!selectedTime) return;
-                showStep(4);
+                if (selectedTime) showStep(4);
             });
 
-            // Contact validation
+            // ─── Step 4: Contact validation ──────────────────────
+
             function validateContact() {
                 const valid = fullName.value.trim() && phone.value.trim() && address.value.trim();
                 confirmBtn.disabled = !valid;
             }
+
             [fullName, phone, address].forEach(el => el.addEventListener('input', validateContact));
 
             backToScheduleBtn.addEventListener('click', () => showStep(3));
 
-            // Submit
-            confirmBtn.addEventListener('click', () => {
+            // ─── Submit booking ────────────────────────────────────
+
+            confirmBtn.addEventListener('click', function() {
                 if (confirmBtn.disabled) return;
+
                 const booking = {
                     ...estimatedRange,
                     date: selectedDate,
@@ -825,41 +1259,84 @@
                     phone: phone.value.trim(),
                     email: email.value.trim(),
                     address: address.value.trim(),
+                    notes: notes.value.trim(),
                     timestamp: new Date().toISOString()
                 };
-                let bookings = JSON.parse(localStorage.getItem('integrity_bookings') || '[]');
+
                 bookings.push(booking);
                 localStorage.setItem('integrity_bookings', JSON.stringify(bookings));
-                console.log('🔧 Booking confirmed:', booking);
+                renderBookingsTable();
 
-                summaryBox.innerHTML = `
-                    <div class="summary-row"><strong>Issue:</strong> <span>${booking.symptom.replace('-',' ')} (${booking.system})</span></div>
+                // Show confirmation
+                document.getElementById('summaryBox').innerHTML = `
+                    <div class="summary-row"><strong>Issue:</strong> <span>${booking.symptom.replace(/-/g,' ')}</span></div>
+                    <div class="summary-row"><strong>System:</strong> <span>${booking.system.replace(/-/g,' ')}</span></div>
                     <div class="summary-row"><strong>Estimate:</strong> <span>$${booking.lowTotal} – $${booking.highTotal}</span></div>
                     <div class="summary-row"><strong>Appointment:</strong> <span>${booking.date} at ${booking.time}</span></div>
                     <div class="summary-row"><strong>Name:</strong> <span>${booking.name}</span></div>
                     <div class="summary-row"><strong>Phone:</strong> <span>${booking.phone}</span></div>
+                    ${booking.notes ? `<div class="summary-row"><strong>Notes:</strong> <span>${booking.notes}</span></div>` : ''}
                 `;
                 showStep(5);
+                showToast(`✅ Appointment confirmed for ${booking.name}`);
+                console.log('🔧 Booking confirmed:', booking);
             });
 
-            newRequestBtn.addEventListener('click', () => {
-                // Reset all
+            // ─── New request ───────────────────────────────────────
+
+            newRequestBtn.addEventListener('click', function() {
+                // Reset selections
                 symptomCards.forEach(c => c.classList.remove('selected'));
                 document.querySelector('.urgency-btn[data-urgency="standard"]').classList.add('selected');
-                systemSelect.value = 'central-ac';
-                fullName.value = phone.value = email.value = address.value = '';
+                document.querySelectorAll('.urgency-btn').forEach(b => {
+                    if (b.dataset.urgency !== 'standard') b.classList.remove('selected');
+                });
+                systemType.value = 'central-ac';
+                systemAge.value = 8;
+                sqftInput.value = 2000;
+                fullName.value = '';
+                phone.value = '';
+                email.value = '';
+                address.value = '';
+                notes.value = '';
                 apptDateInput.value = '';
                 timeSlotsContainer.innerHTML = '';
-                estimatedRange = null;
                 selectedSymptom = null;
                 selectedUrgency = 'standard';
-                selectedSystem = 'central-ac';
+                estimatedRange = null;
+                selectedDate = null;
+                selectedTime = null;
                 getEstimateBtn.disabled = true;
                 showStep(1);
             });
 
-            // initial
+            // ─── Staff panel controls ─────────────────────────────
+
+            clearBookingsBtn.addEventListener('click', function() {
+                if (bookings.length === 0) {
+                    showToast('No bookings to clear.');
+                    return;
+                }
+                if (confirm('⚠️ Delete ALL bookings?')) {
+                    bookings = [];
+                    localStorage.setItem('integrity_bookings', JSON.stringify(bookings));
+                    renderBookingsTable();
+                    showToast('🗑️ All bookings cleared.');
+                }
+            });
+
+            refreshBookingsBtn.addEventListener('click', function() {
+                bookings = JSON.parse(localStorage.getItem('integrity_bookings') || '[]');
+                renderBookingsTable();
+                showToast('🔄 Refreshed.');
+            });
+
+            // ─── Init ─────────────────────────────────────────────
+
+            renderBookingsTable();
+            validateStep1();
             showStep(1);
+
         })();
     </script>
 </body>
