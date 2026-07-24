@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sano Office Care · Instant Cleaning Quote</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f9fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .widget {
+            max-width: 780px;
+            width: 100%;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            border: 1px solid #e6f0f5;
+        }
+
+        /* ── Header ── */
+        .widget-header {
+            background: #0077b6;
+            color: white;
+            padding: 1.8rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 4px solid #f4a261;
+        }
+
+        .header-icon {
+            font-size: 2.8rem;
+            color: #f4a261;
+        }
+
+        .brand h2 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            margin: 0;
+            color: white;
+        }
+
+        .brand h2 span {
+            color: #f4a261;
+        }
+
+        .brand p {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #caf0f8;
+            margin-top: 0.2rem;
+        }
+
+        /* ── Progress ── */
+        .progress-wrap {
+            padding: 1.5rem 2rem 0.8rem;
+            position: relative;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .step.active .step-circle {
+            background: #0077b6;
+            color: white;
+            border-color: #f4a261;
+            box-shadow: 0 0 0 4px rgba(0, 119, 182, 0.15);
+        }
+
+        .step.completed .step-circle {
+            background: #0077b6;
+            color: white;
+            border-color: #0077b6;
+        }
+
+        .step-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+            color: #94a3b8;
+            letter-spacing: 0.4px;
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #0077b6;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 17px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e2e8f0;
+            z-index: 1;
+            margin: 0 48px;
+            border-radius: 3px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #0077b6;
+            transition: width 0.4s ease;
+            border-radius: 3px;
+        }
+
+        /* ── Body ── */
+        .widget-body {
+            padding: 2rem 2rem 1.5rem;
+        }
+
+        .panel {
+            display: none;
+            animation: fadeSlide 0.35s ease;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0b3b5c;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        h3 i {
+            color: #f4a261;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            flex: 1 1 160px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #475569;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #f9fafb;
+            transition: 0.2s;
+            color: #0b3b5c;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #0077b6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.12);
+        }
+
+        .checkbox-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .checkbox-grid label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: #334155;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .checkbox-grid input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            accent-color: #f4a261;
+            cursor: pointer;
+        }
+
+        .frequency-options {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .freq-btn {
+            flex: 1 1 100px;
+            padding: 0.7rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-weight: 600;
+            background: white;
+            cursor: pointer;
+            transition: 0.15s;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #334155;
+        }
+
+        .freq-btn:hover {
+            border-color: #0077b6;
+        }
+
+        .freq-btn.selected {
+            background: #0077b6;
+            color: white;
+            border-color: #0077b6;
+        }
+
+        .freq-btn .sub {
+            display: block;
+            font-weight: 400;
+            font-size: 0.65rem;
+            opacity: 0.8;
+            margin-top: 0.1rem;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            padding: 0.85rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-outline:hover {
+            border-color: #0077b6;
+            color: #0077b6;
+        }
+
+        .btn-primary {
+            background: #0077b6;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 119, 182, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #006494;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 119, 182, 0.35);
+        }
+
+        .btn-primary:disabled {
+            background: #cbd5e1;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-accent {
+            background: #f4a261;
+            color: white;
+            box-shadow: 0 4px 12px rgba(244, 162, 97, 0.35);
+        }
+
+        .btn-accent:hover:not(:disabled) {
+            background: #e07a5f;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(244, 162, 97, 0.4);
+        }
+
+        .btn-accent:disabled {
+            background: #cbd5e1;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* ── Quote Card ── */
+        .quote-card {
+            background: #f0f9ff;
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin: 1.2rem 0;
+            border: 2px solid #bae6fd;
+        }
+
+        .total-price {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #0b3b5c;
+        }
+
+        .total-price .period {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        .quote-sub {
+            font-size: 0.9rem;
+            color: #475569;
+            margin-top: 0.2rem;
+        }
+
+        .breakdown-table {
+            width: 100%;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            border-collapse: collapse;
+        }
+
+        .breakdown-table tr {
+            border-bottom: 1px dashed #bae6fd;
+        }
+
+        .breakdown-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-table td {
+            padding: 0.5rem 0.2rem;
+        }
+
+        .breakdown-label {
+            color: #475569;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .breakdown-total td {
+            border-top: 2px solid #0077b6;
+            padding-top: 0.8rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .breakdown-total .breakdown-value {
+            color: #f4a261;
+            font-size: 1.2rem;
+        }
+
+        /* ── Success Panel ── */
+        .success-panel {
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .success-panel .check-icon {
+            font-size: 3.5rem;
+            color: #2a9d8f;
+            margin-bottom: 1rem;
+        }
+
+        .summary-box {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: left;
+            margin: 1.5rem 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed #e2e8f0;
+            padding-bottom: 0.4rem;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        /* ── Staff Panel ── */
+        .staff-panel {
+            border-top: 1px solid #e2e8f0;
+            padding: 1.5rem 2rem 2rem;
+            background: #f8fafc;
+        }
+
+        .staff-panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .staff-panel h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .staff-panel h4 .badge {
+            background: #f4a261;
+            color: white;
+            font-size: 0.65rem;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-actions .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .panel-actions .btn-clear {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .panel-actions .btn-clear:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .panel-actions .btn-refresh {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .panel-actions .btn-refresh:hover {
+            background: #cbd5e0;
+        }
+
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .leads-table th {
+            text-align: left;
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            color: #64748b;
+            font-weight: 600;
+            border-bottom: 1px solid #e2e8f0;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+        }
+
+        .leads-table td {
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            border-bottom: 1px solid #edf2f7;
+            color: #1e293b;
+        }
+
+        .leads-table .new-row {
+            animation: flashRow 0.6s ease;
+        }
+
+        @keyframes flashRow {
+            0% {
+                background: rgba(244, 162, 97, 0.12);
+            }
+            100% {
+                background: transparent;
+            }
+        }
+
+        /* ── Toast ── */
+        .custom-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .widget-header {
+                padding: 1.2rem 1.2rem;
+                flex-wrap: wrap;
+            }
+            .widget-body {
+                padding: 1.2rem;
+            }
+            .staff-panel {
+                padding: 1rem;
+            }
+            .progress-wrap {
+                padding: 1.2rem 1rem 0.5rem;
+            }
+            .progress-line {
+                margin: 0 20px;
+            }
+            .step-label {
+                font-size: 0.55rem;
+            }
+            .frequency-options {
+                flex-direction: column;
+            }
+            .freq-btn {
+                flex: 1 1 auto;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+            }
+            .leads-table {
+                font-size: 0.7rem;
+            }
+            .total-price {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="widget">
+        <!-- ── Header ── -->
+        <div class="widget-header">
+            <i class="fas fa-soap header-icon"></i>
+            <div class="brand">
+                <h2>Sano<span>.</span> Office Care Inc.</h2>
+                <p>Instant Cleaning Quote &amp; Proposal</p>
+            </div>
+        </div>
+
+        <!-- ── Progress ── -->
+        <div class="progress-wrap">
+            <div class="progress-line">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="steps" id="stepIndicator">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Scope</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Frequency</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Quote</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Proposal</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Body ── -->
+        <div class="widget-body">
+            <!-- Step 1: Facility Scope -->
+            <div class="panel active" data-panel="1">
+                <h3><i class="fas fa-ruler-combined"></i> Facility Details</h3>
+                <div class="form-row">
+                    <div class="form-group" style="flex:2;">
+                        <label>Total Square Footage *</label>
+                        <input type="number" id="sqft" placeholder="e.g., 5000" min="500" step="100" />
+                    </div>
+                    <div class="form-group">
+                        <label>Desks / Workstations</label>
+                        <input type="number" id="desks" placeholder="0" min="0" value="0" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Restrooms</label>
+                        <input type="number" id="restrooms" placeholder="0" min="0" value="0" />
+                    </div>
+                    <div class="form-group">
+                        <label>Kitchen / Breakrooms</label>
+                        <input type="number" id="kitchens" placeholder="0" min="0" value="0" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Number of Floors</label>
+                        <input type="number" id="floors" placeholder="1" min="1" value="1" />
+                    </div>
+                </div>
+                <label style="font-weight:600; font-size:0.75rem; color:#475569; margin-bottom:0.3rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">Floor Care Needs</label>
+                <div class="checkbox-grid" id="floorCareGrid">
+                    <label><input type="checkbox" value="carpet" /> Carpet Extraction</label>
+                    <label><input type="checkbox" value="hardwood" /> Hardwood Maintenance</label>
+                    <label><input type="checkbox" value="tile" /> Tile &amp; Grout Cleaning</label>
+                </div>
+                <div style="display:flex; justify-content:flex-end;">
+                    <button class="btn btn-primary" id="toFrequencyBtn" disabled>
+                        Next: Frequency <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Frequency & Add-ons -->
+            <div class="panel" data-panel="2">
+                <h3><i class="fas fa-calendar-week"></i> Cleaning Frequency</h3>
+                <div class="frequency-options" id="frequencyOptions">
+                    <div class="freq-btn selected" data-freq="nightly">
+                        Nightly
+                        <span class="sub">5x/week · ~22 visits/mo</span>
+                    </div>
+                    <div class="freq-btn" data-freq="3x">
+                        3x/Week
+                        <span class="sub">~13 visits/mo</span>
+                    </div>
+                    <div class="freq-btn" data-freq="weekly">
+                        Weekly
+                        <span class="sub">~4.3 visits/mo</span>
+                    </div>
+                </div>
+                <label style="font-weight:600; font-size:0.75rem; color:#475569; margin-bottom:0.3rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">Additional Services</label>
+                <div class="checkbox-grid" id="addonGrid">
+                    <label><input type="checkbox" value="window" /> Window Washing</label>
+                    <label><input type="checkbox" value="carpet-extraction" /> Carpet Extraction (extra)</label>
+                    <label><input type="checkbox" value="disinfection" /> Deep Disinfection</label>
+                    <label><input type="checkbox" value="waste-removal" /> Waste Removal</label>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToScope"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-primary" id="calculateQuoteBtn">Calculate Quote <i class="fas fa-calculator"></i></button>
+                </div>
+            </div>
+
+            <!-- Step 3: Quote Display -->
+            <div class="panel" data-panel="3">
+                <h3><i class="fas fa-file-invoice-dollar"></i> Your Transparent Quote</h3>
+                <div class="quote-card" id="quoteCard"></div>
+                <p style="font-size:0.8rem; color:#475569;">*Pricing based on your inputs. A detailed proposal will be generated next.</p>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToFrequency"><i class="fas fa-arrow-left"></i> Modify</button>
+                    <button class="btn btn-accent" id="generateProposalBtn">
+                        <i class="fas fa-file-pdf"></i> Generate Proposal
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Contact & Proposal -->
+            <div class="panel" data-panel="4">
+                <h3><i class="fas fa-envelope-open-text"></i> Send Your Proposal</h3>
+                <p style="color:#475569; margin-bottom:1.2rem;">Enter your email and we'll send a professional proposal PDF instantly.</p>
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="fullName" placeholder="Jane Cooper" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Company *</label>
+                            <input type="text" id="company" placeholder="Acme Inc." required />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="email" placeholder="jane@acme.com" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="phone" placeholder="(555) 000-0000" />
+                        </div>
+                    </div>
+                </form>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToQuote"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-accent" id="sendProposalBtn" disabled>
+                        <i class="fas fa-paper-plane"></i> Send Proposal Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 5: Success -->
+            <div class="panel success-panel" data-panel="5" id="successPanel">
+                <div class="check-icon"><i class="fas fa-check-circle"></i></div>
+                <h3>Proposal Sent &amp; Lead Captured!</h3>
+                <p style="color:#475569;">A detailed commercial cleaning proposal has been emailed to you. Our team will follow up shortly.</p>
+                <div class="summary-box" id="successSummary"></div>
+                <button class="btn btn-primary" id="newQuoteBtn" style="margin-top:1.2rem;">
+                    <i class="fas fa-redo-alt"></i> Create Another Quote
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Staff Panel ── -->
+        <div class="staff-panel" id="staffPanel">
+            <div class="panel-header">
+                <h4><i class="fas fa-bolt" style="color:#f4a261;"></i> Proposal Requests <span class="badge" id="leadCount">0</span></h4>
+                <div class="panel-actions">
+                    <button class="btn-sm btn-refresh" id="refreshLeads"><i class="fas fa-sync-alt"></i></button>
+                    <button class="btn-sm btn-clear" id="clearLeads"><i class="fas fa-trash"></i> Clear</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="leads-table" id="leadsTable">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Contact</th>
+                            <th>Sq Ft</th>
+                            <th>Frequency</th>
+                            <th>Quote</th>
+                            <th style="width:30px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsBody">
+                        <tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:1rem 0;">No proposals sent yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── State ─────────────────────────────────────────────
+            let currentStep = 1;
+            let scopeData = {};
+            let frequency = 'nightly';
+            let addOns = [];
+            let quoteData = null;
+            let leads = JSON.parse(localStorage.getItem('sano_leads') || '[]');
+
+            // ─── DOM refs ──────────────────────────────────────────
+            const sqftInput = document.getElementById('sqft');
+            const desksInput = document.getElementById('desks');
+            const restroomsInput = document.getElementById('restrooms');
+            const kitchensInput = document.getElementById('kitchens');
+            const floorsInput = document.getElementById('floors');
+            const floorCareCheckboxes = document.querySelectorAll('#floorCareGrid input[type="checkbox"]');
+            const toFrequencyBtn = document.getElementById('toFrequencyBtn');
+            const backToScopeBtn = document.getElementById('backToScope');
+
+            const freqBtns = document.querySelectorAll('.freq-btn');
+            const addonCheckboxes = document.querySelectorAll('#addonGrid input[type="checkbox"]');
+            const calculateQuoteBtn = document.getElementById('calculateQuoteBtn');
+            const backToFrequencyBtn = document.getElementById('backToFrequency');
+            const generateProposalBtn = document.getElementById('generateProposalBtn');
+            const quoteCard = document.getElementById('quoteCard');
+
+            const fullName = document.getElementById('fullName');
+            const company = document.getElementById('company');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+            const sendProposalBtn = document.getElementById('sendProposalBtn');
+            const backToQuoteBtn = document.getElementById('backToQuote');
+            const newQuoteBtn = document.getElementById('newQuoteBtn');
+            const successSummary = document.getElementById('successSummary');
+
+            const leadsBody = document.getElementById('leadsBody');
+            const leadCount = document.getElementById('leadCount');
+            const clearLeadsBtn = document.getElementById('clearLeads');
+            const refreshLeadsBtn = document.getElementById('refreshLeads');
+
+            // ─── Helpers ────────────────────────────────────────────
+
+            function showStep(step) {
+                currentStep = step;
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                const target = document.querySelector(`.panel[data-panel="${step}"]`);
+                if (target) target.classList.add('active');
+
+                document.querySelectorAll('.step').forEach(s => {
+                    const num = parseInt(s.dataset.step);
+                    s.classList.remove('active', 'completed');
+                    if (num === step) s.classList.add('active');
+                    else if (num < step) s.classList.add('completed');
+                });
+                const percent = Math.min(((step - 1) / 3) * 100, 100);
+                document.getElementById('progressFill').style.width = percent + '%';
+                if (step === 4) validateContact();
+            }
+
+            function renderLeadsTable() {
+                const tbody = leadsBody;
+                if (leads.length === 0) {
+                    tbody.innerHTML =
+                        '<tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:1rem 0;">No proposals sent yet</td></tr>';
+                } else {
+                    let html = '';
+                    const reversed = [...leads].reverse();
+                    reversed.forEach((lead, idx) => {
+                        const isNew = idx === 0 ? 'new-row' : '';
+                        const quote = lead.quote ? `$${lead.quote.low.toLocaleString()} – $${lead.quote.high.toLocaleString()}` :
+                            '—';
+                        const freq = lead.frequency || '—';
+                        const sqft = lead.scope?.sqft || '—';
+                        html += `
+                            <tr class="${isNew}">
+                                <td><strong>${lead.contact?.company || '—'}</strong></td>
+                                <td>${lead.contact?.name || '—'}</td>
+                                <td>${sqft}</td>
+                                <td>${freq}</td>
+                                <td>${quote}</td>
+                                <td><span style="font-size:0.6rem; background:#10b98120; color:#10b981; padding:0.1rem 0.5rem; border-radius:20px;">NEW</span></td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                }
+                leadCount.textContent = leads.length;
+            }
+
+            function showToast(message) {
+                const existing = document.querySelector('.custom-toast');
+                if (existing) existing.remove();
+                const toast = document.createElement('div');
+                toast.className = 'custom-toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+
+            // ─── Step 1 validation ─────────────────────────────────
+
+            function validateStep1() {
+                const sqft = parseFloat(sqftInput.value);
+                toFrequencyBtn.disabled = !(sqft && sqft >= 500);
+            }
+
+            sqftInput.addEventListener('input', validateStep1);
+            validateStep1();
+
+            // ─── Frequency selection ──────────────────────────────
+
+            freqBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    freqBtns.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    frequency = this.dataset.freq;
+                });
+            });
+
+            // ─── Step 1 → 2 ──────────────────────────────────────
+
+            toFrequencyBtn.addEventListener('click', function() {
+                if (toFrequencyBtn.disabled) return;
+                scopeData = {
+                    sqft: parseFloat(sqftInput.value),
+                    desks: parseInt(desksInput.value) || 0,
+                    restrooms: parseInt(restroomsInput.value) || 0,
+                    kitchens: parseInt(kitchensInput.value) || 0,
+                    floors: parseInt(floorsInput.value) || 1,
+                    floorCare: Array.from(floorCareCheckboxes).filter(cb => cb.checked).map(cb => cb.value)
+                };
+                showStep(2);
+            });
+
+            backToScopeBtn.addEventListener('click', () => showStep(1));
+
+            // ─── Pricing Engine ─────────────────────────────────────
+
+            function calculateQuote() {
+                const sqft = scopeData.sqft;
+                const desks = scopeData.desks;
+                const restrooms = scopeData.restrooms;
+                const kitchens = scopeData.kitchens;
+                const floors = scopeData.floors;
+                const floorCare = scopeData.floorCare;
+                const addOnsSelected = Array.from(addonCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+
+                // Frequency multipliers (visits per month)
+                const freqMap = { nightly: 22, '3x': 13, weekly: 4.3 };
+                const visitsPerMonth = freqMap[frequency] || 22;
+
+                // ── Base cleaning ──
+                const baseRatePerSqft = 0.075;
+                const baseMonthly = sqft * baseRatePerSqft * visitsPerMonth;
+
+                // ── Desks ──
+                const deskRate = 1.20; // per desk per visit
+                const deskMonthly = desks * deskRate * visitsPerMonth;
+
+                // ── Restrooms ──
+                const restroomRate = 14; // per restroom per visit
+                const restroomMonthly = restrooms * restroomRate * visitsPerMonth;
+
+                // ── Kitchens ──
+                const kitchenRate = 18; // per kitchen per visit
+                const kitchenMonthly = kitchens * kitchenRate * visitsPerMonth;
+
+                // ── Floor Care ──
+                let floorCareMonthly = 0;
+                if (floorCare.length > 0) {
+                    const floorRate = 0.03;
+                    floorCareMonthly = sqft * floorRate * visitsPerMonth * floorCare.length;
+                }
+
+                // ── Additional Services (flat monthly) ──
+                const addonRates = {
+                    'window': 180,
+                    'carpet-extraction': 150,
+                    'disinfection': 220,
+                    'waste-removal': 120
+                };
+                let addonMonthly = 0;
+                addOnsSelected.forEach(a => {
+                    addonMonthly += addonRates[a] || 0;
+                });
+
+                // ── Floor factor ──
+                const floorFactor = 1 + (floors - 1) * 0.03;
+
+                // ── Totals ──
+                const totalMonthly = Math.round((baseMonthly + deskMonthly + restroomMonthly + kitchenMonthly +
+                    floorCareMonthly + addonMonthly) * floorFactor);
+                const low = Math.round(totalMonthly * 0.90);
+                const high = Math.round(totalMonthly * 1.10);
+
+                quoteData = {
+                    sqft,
+                    desks,
+                    restrooms,
+                    kitchens,
+                    floors,
+                    floorCare,
+                    addOns: addOnsSelected,
+                    frequency,
+                    visitsPerMonth,
+                    baseMonthly: Math.round(baseMonthly * floorFactor),
+                    deskMonthly: Math.round(deskMonthly * floorFactor),
+                    restroomMonthly: Math.round(restroomMonthly * floorFactor),
+                    kitchenMonthly: Math.round(kitchenMonthly * floorFactor),
+                    floorCareMonthly: Math.round(floorCareMonthly * floorFactor),
+                    addonMonthly,
+                    totalMonthly,
+                    low,
+                    high
+                };
+
+                return quoteData;
+            }
+
+            // ─── Display Quote ─────────────────────────────────────
+
+            function displayQuote(q) {
+                const freqLabels = { nightly: 'Nightly (5x/week)', '3x': '3x/week', weekly: 'Weekly' };
+                const addOnList = q.addOns.length ? q.addOns.join(', ') : 'None';
+
+                quoteCard.innerHTML = `
+                    <div class="total-price">$${q.low.toLocaleString()} <span class="period">–</span> $${q.high.toLocaleString()}<span class="period"> / month</span></div>
+                    <div class="quote-sub">${q.sqft.toLocaleString()} sq ft · ${freqLabels[q.frequency]}</div>
+                    <table class="breakdown-table">
+                        <tr>
+                            <td class="breakdown-label">Base Cleaning (${q.sqft.toLocaleString()} sq ft)</td>
+                            <td class="breakdown-value">$${q.baseMonthly.toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td class="breakdown-label">Desks (${q.desks})</td>
+                            <td class="breakdown-value">+$${q.deskMonthly.toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td class="breakdown-label">Restrooms (${q.restrooms})</td>
+                            <td class="breakdown-value">+$${q.restroomMonthly.toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td class="breakdown-label">Kitchen/Breakrooms (${q.kitchens})</td>
+                            <td class="breakdown-value">+$${q.kitchenMonthly.toLocaleString()}</td>
+                        </tr>
+                        ${q.floorCareMonthly > 0 ? `
+                        <tr>
+                            <td class="breakdown-label">Floor Care (${q.floorCare.join(', ')})</td>
+                            <td class="breakdown-value">+$${q.floorCareMonthly.toLocaleString()}</td>
+                        </tr>` : ''}
+                        ${q.addonMonthly > 0 ? `
+                        <tr>
+                            <td class="breakdown-label">Additional Services</td>
+                            <td class="breakdown-value">+$${q.addonMonthly.toLocaleString()}</td>
+                        </tr>` : ''}
+                        <tr class="breakdown-total">
+                            <td>Total Monthly Estimate</td>
+                            <td class="breakdown-value">$${q.low.toLocaleString()} – $${q.high.toLocaleString()}</td>
+                        </tr>
+                    </table>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.8rem;">
+                        <span style="font-size:0.75rem; color:#475569;"><i class="fas fa-arrows-spin"></i> ${q.visitsPerMonth.toFixed(1)} visits/mo</span>
+                        <span style="font-size:0.75rem; color:#475569;">Add‑ons: ${addOnList}</span>
+                    </div>
+                `;
+                showStep(3);
+            }
+
+            // ─── Step 2 → 3 ──────────────────────────────────────
+
+            calculateQuoteBtn.addEventListener('click', function() {
+                const q = calculateQuote();
+                displayQuote(q);
+            });
+
+            backToFrequencyBtn.addEventListener('click', () => showStep(2));
+
+            // ─── Step 3 → 4 ──────────────────────────────────────
+
+            generateProposalBtn.addEventListener('click', function() {
+                if (!quoteData) return;
+                showStep(4);
+            });
+
+            // ─── Contact validation ──────────────────────────────
+
+            function validateContact() {
+                const valid = fullName.value.trim() && company.value.trim() && email.value.trim();
+                sendProposalBtn.disabled = !valid;
+            }
+
+            [fullName, company, email].forEach(el => el.addEventListener('input', validateContact));
+
+            backToQuoteBtn.addEventListener('click', () => showStep(3));
+
+            // ─── Send Proposal ─────────────────────────────────────
+
+            sendProposalBtn.addEventListener('click', function() {
+                if (sendProposalBtn.disabled || !quoteData) return;
+
+                const lead = {
+                    scope: scopeData,
+                    frequency: frequency,
+                    quote: quoteData,
+                    contact: {
+                        name: fullName.value.trim(),
+                        company: company.value.trim(),
+                        email: email.value.trim(),
+                        phone: phone.value.trim()
+                    },
+                    timestamp: new Date().toISOString()
+                };
+
+                // Store lead
+                leads.push(lead);
+                localStorage.setItem('sano_leads', JSON.stringify(leads));
+                renderLeadsTable();
+
+                // Show success
+                successSummary.innerHTML = `
+                    <div class="summary-row"><strong>Quote:</strong> <span>$${quoteData.low.toLocaleString()} – $${quoteData.high.toLocaleString()}/mo</span></div>
+                    <div class="summary-row"><strong>Frequency:</strong> <span>${frequency}</span></div>
+                    <div class="summary-row"><strong>Company:</strong> <span>${lead.contact.company}</span></div>
+                    <div class="summary-row"><strong>Email:</strong> <span>${lead.contact.email}</span></div>
+                `;
+
+                showStep(5);
+                showToast(`📄 Proposal sent to ${lead.contact.email}`);
+                console.log('📄 Proposal sent:', lead);
+            });
+
+            // ─── New Quote ─────────────────────────────────────────
+
+            newQuoteBtn.addEventListener('click', function() {
+                // Reset all fields
+                sqftInput.value = '';
+                desksInput.value = '0';
+                restroomsInput.value = '0';
+                kitchensInput.value = '0';
+                floorsInput.value = '1';
+                floorCareCheckboxes.forEach(cb => cb.checked = false);
+                addonCheckboxes.forEach(cb => cb.checked = false);
+                freqBtns.forEach(b => b.classList.remove('selected'));
+                document.querySelector('.freq-btn[data-freq="nightly"]').classList.add('selected');
+                frequency = 'nightly';
+                fullName.value = '';
+                company.value = '';
+                email.value = '';
+                phone.value = '';
+                quoteData = null;
+                scopeData = {};
+                toFrequencyBtn.disabled = true;
+                sendProposalBtn.disabled = true;
+                showStep(1);
+            });
+
+            // ─── Staff panel controls ─────────────────────────────
+
+            clearLeadsBtn.addEventListener('click', function() {
+                if (leads.length === 0) {
+                    showToast('No leads to clear.');
+                    return;
+                }
+                if (confirm('⚠️ Delete ALL proposals?')) {
+                    leads = [];
+                    localStorage.setItem('sano_leads', JSON.stringify(leads));
+                    renderLeadsTable();
+                    showToast('🗑️ All leads cleared.');
+                }
+            });
+
+            refreshLeadsBtn.addEventListener('click', function() {
+                leads = JSON.parse(localStorage.getItem('sano_leads') || '[]');
+                renderLeadsTable();
+                showToast('🔄 Refreshed.');
+            });
+
+            // ─── Init ─────────────────────────────────────────────
+
+            renderLeadsTable();
+            validateStep1();
+            showStep(1);
+
+        })();
+    </script>
+</body>
+</html>
