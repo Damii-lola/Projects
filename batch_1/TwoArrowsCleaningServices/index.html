@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Two Arrows Cleaning · Instant Quote & Proposal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #eef1f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .widget {
+            max-width: 840px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid #e0e4e9;
+        }
+
+        /* ── Header ── */
+        .widget-header {
+            background: #1e293b;
+            color: white;
+            padding: 1.8rem 2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 4px solid #f97316;
+        }
+
+        .logo-arrows {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 2.2rem;
+            color: #f97316;
+        }
+
+        .logo-arrows i {
+            line-height: 0.8;
+        }
+
+        .brand h2 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            margin: 0;
+            color: white;
+        }
+
+        .brand h2 span {
+            color: #f97316;
+        }
+
+        .brand p {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #94a3b8;
+            margin-top: 0.2rem;
+        }
+
+        /* ── Progress ── */
+        .progress-wrap {
+            padding: 1.5rem 2rem 0.8rem;
+            position: relative;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .step.active .step-circle {
+            background: #1e293b;
+            color: white;
+            border-color: #f97316;
+            box-shadow: 0 0 0 4px rgba(30, 41, 59, 0.15);
+        }
+
+        .step.completed .step-circle {
+            background: #1e293b;
+            color: white;
+            border-color: #1e293b;
+        }
+
+        .step-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #1e293b;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 17px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #cbd5e1;
+            z-index: 1;
+            margin: 0 48px;
+            border-radius: 3px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #1e293b;
+            transition: width 0.4s ease;
+            border-radius: 3px;
+        }
+
+        /* ── Body ── */
+        .widget-body {
+            padding: 2rem 2rem 1.5rem;
+        }
+
+        .panel {
+            display: none;
+            animation: fadeSlide 0.35s ease;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        h3 i {
+            color: #f97316;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            flex: 1 1 160px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #334155;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        select,
+        input[type="number"],
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #f8fafc;
+            transition: 0.2s;
+            color: #0f172a;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: #f97316;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
+        }
+
+        .severity-btns {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .severity-btn {
+            flex: 1 1 80px;
+            padding: 0.6rem 0.8rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            background: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #334155;
+        }
+
+        .severity-btn:hover {
+            border-color: #f97316;
+        }
+
+        .severity-btn.selected {
+            background: #f97316;
+            color: white;
+            border-color: #f97316;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.6rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .checkbox-grid label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 500;
+            color: #1e293b;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 0.2rem 0;
+        }
+
+        .checkbox-grid input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #f97316;
+            cursor: pointer;
+        }
+
+        .help-text {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.2rem;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            padding: 0.85rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #cbd5e1;
+            color: #475569;
+        }
+
+        .btn-outline:hover {
+            border-color: #f97316;
+            color: #f97316;
+        }
+
+        .btn-primary {
+            background: #f97316;
+            color: white;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #ea580c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #cbd5e1;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-dark {
+            background: #1e293b;
+            color: white;
+            box-shadow: 0 4px 12px rgba(30, 41, 59, 0.25);
+        }
+
+        .btn-dark:hover:not(:disabled) {
+            background: #0f172a;
+            transform: translateY(-2px);
+        }
+
+        .btn-dark:disabled {
+            background: #cbd5e1;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* ── Quote Card ── */
+        .quote-card {
+            background: #f1f5f9;
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin: 1.2rem 0;
+            border: 2px solid #cbd5e1;
+        }
+
+        .price-range {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .price-range .currency {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        .quote-sub {
+            font-size: 0.9rem;
+            color: #475569;
+            margin-top: 0.2rem;
+        }
+
+        .breakdown-table {
+            width: 100%;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            border-collapse: collapse;
+        }
+
+        .breakdown-table tr {
+            border-bottom: 1px dashed #cbd5e1;
+        }
+
+        .breakdown-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-table td {
+            padding: 0.4rem 0.2rem;
+        }
+
+        .breakdown-label {
+            color: #475569;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .breakdown-total td {
+            border-top: 2px solid #f97316;
+            padding-top: 0.8rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .breakdown-total .breakdown-value {
+            color: #f97316;
+            font-size: 1.2rem;
+        }
+
+        .labor-badge {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            background: rgba(30, 41, 59, 0.08);
+            color: #1e293b;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.6rem;
+        }
+
+        /* ── Success ── */
+        .success-panel {
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .success-panel .check-icon {
+            font-size: 3.5rem;
+            color: #16a34a;
+            margin-bottom: 1rem;
+        }
+
+        .summary-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: left;
+            margin: 1.5rem 0;
+            border: 1px solid #cbd5e1;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed #cbd5e1;
+            padding-bottom: 0.4rem;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        /* ── Staff Panel ── */
+        .staff-panel {
+            border-top: 1px solid #cbd5e1;
+            padding: 1.5rem 2rem 2rem;
+            background: #f8fafc;
+        }
+
+        .staff-panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .staff-panel h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .staff-panel h4 .badge {
+            background: #f97316;
+            color: white;
+            font-size: 0.65rem;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-actions .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .panel-actions .btn-clear {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .panel-actions .btn-clear:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .panel-actions .btn-refresh {
+            background: #cbd5e1;
+            color: #334155;
+        }
+
+        .panel-actions .btn-refresh:hover {
+            background: #b0c0d0;
+        }
+
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .leads-table th {
+            text-align: left;
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            color: #64748b;
+            font-weight: 600;
+            border-bottom: 2px solid #cbd5e1;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+        }
+
+        .leads-table td {
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            border-bottom: 1px solid #edf2f7;
+            color: #1e293b;
+        }
+
+        .leads-table .new-row {
+            animation: flashRow 0.6s ease;
+        }
+
+        @keyframes flashRow {
+            0% {
+                background: rgba(249, 115, 22, 0.12);
+            }
+            100% {
+                background: transparent;
+            }
+        }
+
+        .status-estimate {
+            color: #f97316;
+            font-weight: 600;
+        }
+        .status-proposal {
+            color: #16a34a;
+            font-weight: 600;
+        }
+
+        /* ── Toast ── */
+        .custom-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .widget-header {
+                padding: 1.2rem 1.2rem;
+                flex-wrap: wrap;
+            }
+            .widget-body {
+                padding: 1.2rem;
+            }
+            .staff-panel {
+                padding: 1rem;
+            }
+            .progress-wrap {
+                padding: 1.2rem 1rem 0.5rem;
+            }
+            .progress-line {
+                margin: 0 20px;
+            }
+            .step-label {
+                font-size: 0.55rem;
+            }
+            .severity-btns {
+                flex-direction: column;
+            }
+            .checkbox-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+            }
+            .leads-table {
+                font-size: 0.7rem;
+            }
+            .price-range {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="widget">
+        <!-- ── Header ── -->
+        <div class="widget-header">
+            <div class="logo-arrows">
+                <i class="fas fa-arrow-up"></i>
+                <i class="fas fa-arrow-down"></i>
+            </div>
+            <div class="brand">
+                <h2>Two Arrows<span>.</span> Cleaning</h2>
+                <p>Post‑Construction &amp; Commercial Estimates</p>
+            </div>
+        </div>
+
+        <!-- ── Progress ── -->
+        <div class="progress-wrap">
+            <div class="progress-line">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-steps" id="stepIndicator">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Scope</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Quote</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Proposal</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Body ── -->
+        <div class="widget-body">
+            <!-- Step 1: Scope Intake -->
+            <div class="panel active" data-panel="1">
+                <h3><i class="fas fa-ruler-combined"></i> Project Scope</h3>
+                <div class="form-row">
+                    <div class="form-group" style="flex:2;">
+                        <label>Project Type</label>
+                        <select id="projectType">
+                            <option value="rough">Rough Clean</option>
+                            <option value="final">Final Clean</option>
+                            <option value="touchup">Touch‑Up Clean</option>
+                            <option value="commercial-retainer">Commercial Retainer</option>
+                            <option value="medical">Medical / Lab</option>
+                            <option value="industrial">Industrial / Warehouse</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Sq Ft *</label>
+                        <input type="number" id="sqft" placeholder="2500" min="100" step="50" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Rooms / Zones</label>
+                        <input type="number" id="rooms" placeholder="5" min="1" value="1" />
+                    </div>
+                    <div class="form-group">
+                        <label>Floors / Levels</label>
+                        <input type="number" id="floors" placeholder="1" min="1" value="1" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Debris / Contamination Severity</label>
+                    <div class="severity-btns" id="severityBtns">
+                        <div class="severity-btn selected" data-severity="low">Low</div>
+                        <div class="severity-btn" data-severity="medium">Medium</div>
+                        <div class="severity-btn" data-severity="high">High</div>
+                    </div>
+                    <div class="help-text">High severity adds 20‑30% to labor and materials.</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Site Access Difficulty</label>
+                        <select id="accessDifficulty">
+                            <option value="easy">Easy (Ground Level)</option>
+                            <option value="moderate">Moderate (Stairs / Elevator)</option>
+                            <option value="difficult">Difficult (Restricted)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Waste Removal</label>
+                        <select id="wasteRemoval">
+                            <option value="none">None – Client handles</option>
+                            <option value="bags">Bagged waste only</option>
+                            <option value="dumpster">Dumpster / Roll‑off</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Equipment Needs</label>
+                        <select id="equipmentNeeds">
+                            <option value="basic">Basic (mops, vacuums)</option>
+                            <option value="specialized">Specialized (scrubbers, extractors)</option>
+                            <option value="heavy">Heavy equipment (floor grinders)</option>
+                        </select>
+                    </div>
+                </div>
+                <label style="font-weight:600; font-size:0.75rem; color:#334155; margin-bottom:0.3rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">Specialized Surface Care</label>
+                <div class="checkbox-grid" id="surfaceCare">
+                    <label><input type="checkbox" value="windows" /> Interior Windows</label>
+                    <label><input type="checkbox" value="floors-wax" /> Floor Waxing / Sealing</label>
+                    <label><input type="checkbox" value="carpet-extraction" /> Carpet Extraction</label>
+                    <label><input type="checkbox" value="concrete-dust" /> Concrete Dust Removal</label>
+                    <label><input type="checkbox" value="epoxy" /> Epoxy / Warehouse Floors</label>
+                    <label><input type="checkbox" value="high-touch" /> High‑Touch Disinfection</label>
+                    <label><input type="checkbox" value="ceiling" /> Ceiling / High Surfaces</label>
+                    <label><input type="checkbox" value="exterior" /> Exterior Pressure Washing</label>
+                </div>
+                <div style="display:flex; justify-content:flex-end;">
+                    <button class="btn btn-primary" id="getEstimateBtn" disabled>
+                        <i class="fas fa-calculator"></i> Calculate Estimate
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Quote & Labor Details -->
+            <div class="panel" data-panel="2">
+                <h3><i class="fas fa-file-invoice-dollar"></i> Instant Estimate</h3>
+                <div class="quote-card" id="quoteCard"></div>
+                <p style="font-size:0.8rem; color:#475569;"><i class="fas fa-info-circle"></i> Final pricing may vary after site visit. This estimate qualifies your project.</p>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToScope"><i class="fas fa-arrow-left"></i> Modify</button>
+                    <button class="btn btn-dark" id="proceedToProposal">
+                        <i class="fas fa-file-pdf"></i> Continue to Proposal
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Contact & Proposal -->
+            <div class="panel" data-panel="3">
+                <h3><i class="fas fa-user-check"></i> Your Details &amp; Proposal</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="fullName" placeholder="Jordan Michaels" />
+                    </div>
+                    <div class="form-group">
+                        <label>Company *</label>
+                        <input type="text" id="company" placeholder="ABC Construction" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" placeholder="jordan@abc.com" />
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="tel" id="phone" placeholder="(555) 123-4567" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Project Name</label>
+                        <input type="text" id="projectName" placeholder="Downtown Office Tower" />
+                    </div>
+                    <div class="form-group">
+                        <label>Desired Start Date</label>
+                        <input type="date" id="startDate" min="" />
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToQuote"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-primary" id="downloadProposalBtn" disabled>
+                        <i class="fas fa-download"></i> Generate &amp; Download PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Success -->
+            <div class="panel success-panel" data-panel="4" id="successPanel">
+                <div class="check-icon"><i class="fas fa-check-circle"></i></div>
+                <h3>Proposal Downloaded &amp; Lead Submitted</h3>
+                <p style="color:#475569;">Our team will review your scope and follow up within 24 hours.</p>
+                <div class="summary-box" id="summaryBox"></div>
+                <button class="btn btn-primary" id="newEstimateBtn" style="margin-top:1.2rem;">
+                    <i class="fas fa-redo-alt"></i> Start New Estimate
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Staff Panel ── -->
+        <div class="staff-panel" id="staffPanel">
+            <div class="panel-header">
+                <h4><i class="fas fa-bolt" style="color:#f97316;"></i> Office Feed <span class="badge" id="leadCount">0</span></h4>
+                <div class="panel-actions">
+                    <button class="btn-sm btn-refresh" id="refreshLeads"><i class="fas fa-sync-alt"></i></button>
+                    <button class="btn-sm btn-clear" id="clearLeads"><i class="fas fa-trash"></i> Clear</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="leads-table" id="leadsTable">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Contact</th>
+                            <th>Type</th>
+                            <th>Sq Ft</th>
+                            <th>Quote</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th style="width:30px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsBody">
+                        <tr><td colspan="8" style="text-align:center; color:#94a3b8; padding:1rem 0;">No estimates yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── State ─────────────────────────────────────────────
+            let currentStep = 1;
+            let scopeData = {};
+            let estimateData = null;
+            let severity = 'low';
+            let leads = JSON.parse(localStorage.getItem('twoarrows_leads') || '[]');
+
+            // ─── DOM refs ──────────────────────────────────────────
+            const projectType = document.getElementById('projectType');
+            const sqftInput = document.getElementById('sqft');
+            const roomsInput = document.getElementById('rooms');
+            const floorsInput = document.getElementById('floors');
+            const severityBtns = document.querySelectorAll('.severity-btn');
+            const accessDifficulty = document.getElementById('accessDifficulty');
+            const wasteRemoval = document.getElementById('wasteRemoval');
+            const equipmentNeeds = document.getElementById('equipmentNeeds');
+            const surfaceCareCheckboxes = document.querySelectorAll('#surfaceCare input[type="checkbox"]');
+
+            const getEstimateBtn = document.getElementById('getEstimateBtn');
+            const quoteCard = document.getElementById('quoteCard');
+            const backToScopeBtn = document.getElementById('backToScope');
+            const proceedToProposalBtn = document.getElementById('proceedToProposal');
+
+            const fullName = document.getElementById('fullName');
+            const company = document.getElementById('company');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+            const projectName = document.getElementById('projectName');
+            const startDate = document.getElementById('startDate');
+            const downloadProposalBtn = document.getElementById('downloadProposalBtn');
+            const backToQuoteBtn = document.getElementById('backToQuote');
+            const newEstimateBtn = document.getElementById('newEstimateBtn');
+            const summaryBox = document.getElementById('summaryBox');
+
+            const leadsBody = document.getElementById('leadsBody');
+            const leadCount = document.getElementById('leadCount');
+            const clearLeadsBtn = document.getElementById('clearLeads');
+            const refreshLeadsBtn = document.getElementById('refreshLeads');
+
+            // ─── Helpers ────────────────────────────────────────────
+
+            function showStep(step) {
+                currentStep = step;
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                const target = document.querySelector(`.panel[data-panel="${step}"]`);
+                if (target) target.classList.add('active');
+
+                document.querySelectorAll('.step').forEach(s => {
+                    const num = parseInt(s.dataset.step);
+                    s.classList.remove('active', 'completed');
+                    if (num === step) s.classList.add('active');
+                    else if (num < step) s.classList.add('completed');
+                });
+                const percent = Math.min(((step - 1) / 2) * 100, 100);
+                document.getElementById('progressFill').style.width = percent + '%';
+
+                if (step === 3) {
+                    // Set min date for start date to tomorrow
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    startDate.min = tomorrow.toISOString().split('T')[0];
+                    validateContact();
+                }
+            }
+
+            function renderLeadsTable() {
+                const tbody = leadsBody;
+                if (leads.length === 0) {
+                    tbody.innerHTML =
+                        '<tr><td colspan="8" style="text-align:center; color:#94a3b8; padding:1rem 0;">No estimates yet</td></tr>';
+                } else {
+                    let html = '';
+                    const reversed = [...leads].reverse();
+                    reversed.forEach((lead, idx) => {
+                        const isNew = idx === 0 ? 'new-row' : '';
+                        const quote = lead.estimate ? `$${lead.estimate.low.toLocaleString()} – $${lead.estimate.high.toLocaleString()}` :
+                            '—';
+                        const type = lead.scope?.type || '—';
+                        const sqft = lead.scope?.sqft || '—';
+                        const contact = lead.contact ? lead.contact.name : '—';
+                        const company = lead.contact ? lead.contact.company : '—';
+                        const status = lead.status === 'proposal_downloaded' ?
+                            `<span class="status-proposal">📄 Proposal</span>` :
+                            `<span class="status-estimate">📋 Estimate</span>`;
+                        const time = lead.timestamp ? new Date(lead.timestamp).toLocaleTimeString([], { hour: '2-digit',
+                                minute: '2-digit' }) :
+                            '—';
+                        html += `
+                            <tr class="${isNew}">
+                                <td><strong>${company}</strong></td>
+                                <td>${contact}</td>
+                                <td>${type}</td>
+                                <td>${sqft}</td>
+                                <td>${quote}</td>
+                                <td>${status}</td>
+                                <td style="font-size:0.7rem;">${time}</td>
+                                <td><span style="font-size:0.6rem; background:#10b98120; color:#10b981; padding:0.1rem 0.5rem; border-radius:20px;">NEW</span></td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                }
+                leadCount.textContent = leads.length;
+            }
+
+            function showToast(message) {
+                const existing = document.querySelector('.custom-toast');
+                if (existing) existing.remove();
+                const toast = document.createElement('div');
+                toast.className = 'custom-toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 4000);
+            }
+
+            // ─── Step 1 validation ─────────────────────────────────
+
+            function validateScope() {
+                const sqft = parseFloat(sqftInput.value);
+                getEstimateBtn.disabled = !(sqft && sqft >= 100);
+            }
+
+            sqftInput.addEventListener('input', validateScope);
+            validateScope();
+
+            // ─── Severity selection ────────────────────────────────
+
+            severityBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    severityBtns.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    severity = this.dataset.severity;
+                });
+            });
+
+            // ─── Pricing Engine ─────────────────────────────────────
+
+            function calculateEstimate() {
+                const type = projectType.value;
+                const sqft = parseFloat(sqftInput.value) || 0;
+                const rooms = parseInt(roomsInput.value) || 1;
+                const floors = parseInt(floorsInput.value) || 1;
+                const access = accessDifficulty.value;
+                const waste = wasteRemoval.value;
+                const equipment = equipmentNeeds.value;
+                const surfaceAddons = [];
+                surfaceCareCheckboxes.forEach(cb => {
+                    if (cb.checked) surfaceAddons.push(cb.value);
+                });
+
+                // ── Base rates per sq ft ──
+                const baseRates = {
+                    rough: 0.16,
+                    final: 0.20,
+                    touchup: 0.12,
+                    'commercial-retainer': 0.10,
+                    medical: 0.24,
+                    industrial: 0.14
+                };
+                let base = sqft * (baseRates[type] || 0.15);
+
+                // ── Severity multiplier ──
+                const severityMult = { low: 1.0, medium: 1.20, high: 1.35 };
+                base *= severityMult[severity] || 1.0;
+
+                // ── Room factor ──
+                const roomFactor = 1 + (rooms - 1) * 0.02;
+
+                // ── Floor factor ──
+                const floorFactor = 1 + (floors - 1) * 0.03;
+
+                // ── Access factor ──
+                const accessFactors = { easy: 1.0, moderate: 1.08, difficult: 1.18 };
+                base *= accessFactors[access] || 1.0;
+
+                // ── Waste removal ──
+                const wasteCosts = { none: 0, bags: 50, dumpster: 200 };
+                const wasteCost = wasteCosts[waste] || 0;
+
+                // ── Equipment needs ──
+                const equipmentCosts = { basic: 0, specialized: 150, heavy: 350 };
+                const equipmentCost = equipmentCosts[equipment] || 0;
+
+                // ── Surface care add‑ons (per sqft) ──
+                const addonRates = {
+                    windows: 0.02,
+                    'floors-wax': 0.04,
+                    'carpet-extraction': 0.035,
+                    'concrete-dust': 0.045,
+                    epoxy: 0.05,
+                    'high-touch': 0.015,
+                    ceiling: 0.02,
+                    exterior: 0.025
+                };
+                let addonCost = 0;
+                surfaceAddons.forEach(item => {
+                    if (addonRates[item]) addonCost += sqft * addonRates[item];
+                });
+
+                // ── Labor hours ──
+                let laborHours = Math.ceil(sqft / 350 * severityMult[severity] * roomFactor * floorFactor * 1.1);
+                if (surfaceAddons.length > 0) laborHours = Math.ceil(laborHours * (1 + surfaceAddons.length * 0.08));
+
+                // ── Total ──
+                let subtotal = base + wasteCost + equipmentCost + addonCost;
+                // Add markup (20% margin)
+                const markup = 0.20;
+                const total = Math.round(subtotal * (1 + markup));
+                const low = Math.round(total * 0.92);
+                const high = Math.round(total * 1.10);
+
+                return {
+                    type,
+                    sqft,
+                    rooms,
+                    floors,
+                    severity,
+                    access,
+                    waste,
+                    equipment,
+                    surfaceAddons,
+                    base: Math.round(base),
+                    wasteCost,
+                    equipmentCost,
+                    addonCost: Math.round(addonCost),
+                    laborHours,
+                    markup,
+                    subtotal: Math.round(subtotal),
+                    total,
+                    low,
+                    high
+                };
+            }
+
+            // ─── Display Quote ─────────────────────────────────────
+
+            function displayQuote(estimate) {
+                const typeLabels = {
+                    rough: 'Rough Clean',
+                    final: 'Final Clean',
+                    touchup: 'Touch‑Up Clean',
+                    'commercial-retainer': 'Commercial Retainer',
+                    medical: 'Medical / Lab',
+                    industrial: 'Industrial / Warehouse'
+                };
+
+                const surfaceList = estimate.surfaceAddons.length ? estimate.surfaceAddons.join(', ') : 'None';
+                const severityLabel = estimate.severity.charAt(0).toUpperCase() + estimate.severity.slice(1);
+
+                quoteCard.innerHTML = `
+                    <div class="price-range">$${estimate.low.toLocaleString()} <span class="currency">–</span> $${estimate.high.toLocaleString()}</div>
+                    <div class="quote-sub">${typeLabels[estimate.type]} · ${estimate.sqft.toLocaleString()} sq ft · ${severityLabel} debris · ${estimate.laborHours} hrs est.</div>
+                    <table class="breakdown-table">
+                        <tr>
+                            <td class="breakdown-label">Base Cleaning</td>
+                            <td class="breakdown-value">$${estimate.base.toLocaleString()}</td>
+                        </tr>
+                        ${estimate.wasteCost > 0 ? `<tr><td class="breakdown-label">Waste Removal</td><td class="breakdown-value">+$${estimate.wasteCost.toLocaleString()}</td></tr>` : ''}
+                        ${estimate.equipmentCost > 0 ? `<tr><td class="breakdown-label">Equipment</td><td class="breakdown-value">+$${estimate.equipmentCost.toLocaleString()}</td></tr>` : ''}
+                        ${estimate.addonCost > 0 ? `<tr><td class="breakdown-label">Surface Care</td><td class="breakdown-value">+$${estimate.addonCost.toLocaleString()}</td></tr>` : ''}
+                        <tr>
+                            <td class="breakdown-label">Margin (${Math.round(estimate.markup*100)}%)</td>
+                            <td class="breakdown-value">+$${Math.round(estimate.subtotal * estimate.markup).toLocaleString()}</td>
+                        </tr>
+                        <tr class="breakdown-total">
+                            <td>Total Estimate Range</td>
+                            <td class="breakdown-value">$${estimate.low.toLocaleString()} – $${estimate.high.toLocaleString()}</td>
+                        </tr>
+                    </table>
+                    <div style="display:flex; gap:0.8rem; flex-wrap:wrap; margin-top:0.6rem;">
+                        <span class="labor-badge"><i class="fas fa-clock"></i> ~${estimate.laborHours} hours</span>
+                        <span class="labor-badge"><i class="fas fa-arrows-spin"></i> ${estimate.sqft / estimate.laborHours} sqft/hr</span>
+                        <span class="labor-badge" style="background:rgba(249,115,22,0.08);">Surface: ${surfaceList}</span>
+                    </div>
+                `;
+                estimateData = estimate;
+            }
+
+            // ─── Step 1 → 2 ──────────────────────────────────────
+
+            getEstimateBtn.addEventListener('click', function() {
+                if (getEstimateBtn.disabled) return;
+                const estimate = calculateEstimate();
+                scopeData = {
+                    type: projectType.value,
+                    sqft: estimate.sqft,
+                    rooms: estimate.rooms,
+                    floors: estimate.floors,
+                    severity: estimate.severity,
+                    access: estimate.access,
+                    waste: estimate.waste,
+                    equipment: estimate.equipment,
+                    surfaceAddons: estimate.surfaceAddons
+                };
+                displayQuote(estimate);
+
+                // Store partial lead (estimate only)
+                const lead = {
+                    scope: scopeData,
+                    estimate: estimateData,
+                    contact: null,
+                    status: 'estimate_generated',
+                    timestamp: new Date().toISOString()
+                };
+                leads.push(lead);
+                localStorage.setItem('twoarrows_leads', JSON.stringify(leads));
+                renderLeadsTable();
+
+                showStep(2);
+                showToast('📊 Estimate calculated – office notified!');
+                console.log('📐 Estimate generated:', estimate);
+            });
+
+            backToScopeBtn.addEventListener('click', () => showStep(1));
+
+            // ─── Step 2 → 3 ──────────────────────────────────────
+
+            proceedToProposalBtn.addEventListener('click', function() {
+                if (!estimateData) return;
+                showStep(3);
+            });
+
+            // ─── Contact validation ──────────────────────────────
+
+            function validateContact() {
+                const valid = fullName.value.trim() && company.value.trim() &&
+                    email.value.trim() && phone.value.trim();
+                downloadProposalBtn.disabled = !valid;
+            }
+
+            [fullName, company, email, phone].forEach(el => el.addEventListener('input', validateContact));
+
+            backToQuoteBtn.addEventListener('click', () => showStep(2));
+
+            // ─── Generate Proposal ─────────────────────────────────
+
+            downloadProposalBtn.addEventListener('click', function() {
+                if (downloadProposalBtn.disabled || !estimateData) return;
+
+                const contact = {
+                    name: fullName.value.trim(),
+                    company: company.value.trim(),
+                    email: email.value.trim(),
+                    phone: phone.value.trim(),
+                    projectName: projectName.value.trim() || 'Unnamed Project',
+                    startDate: startDate.value || 'TBD'
+                };
+
+                // Update lead
+                if (leads.length > 0 && leads[leads.length - 1].status === 'estimate_generated') {
+                    leads[leads.length - 1].contact = contact;
+                    leads[leads.length - 1].status = 'proposal_downloaded';
+                } else {
+                    leads.push({
+                        scope: scopeData,
+                        estimate: estimateData,
+                        contact: contact,
+                        status: 'proposal_downloaded',
+                        timestamp: new Date().toISOString()
+                    });
+                }
+                localStorage.setItem('twoarrows_leads', JSON.stringify(leads));
+                renderLeadsTable();
+
+                // Build PDF content (opens in new tab)
+                const e = estimateData;
+                const c = contact;
+                const s = scopeData;
+                const typeLabels = {
+                    rough: 'Rough Clean',
+                    final: 'Final Clean',
+                    touchup: 'Touch‑Up Clean',
+                    'commercial-retainer': 'Commercial Retainer',
+                    medical: 'Medical / Lab',
+                    industrial: 'Industrial / Warehouse'
+                };
+                const severityLabel = s.severity.charAt(0).toUpperCase() + s.severity.slice(1);
+                const surfaceList = s.surfaceAddons.length ? s.surfaceAddons.join(', ') : 'None';
+                const wasteLabel = s.waste === 'none' ? 'Client handles' : s.waste === 'bags' ? 'Bagged waste' : 'Dumpster / Roll‑off';
+                const accessLabel = s.access === 'easy' ? 'Ground Level' : s.access === 'moderate' ? 'Stairs / Elevator' : 'Restricted';
+
+                const pdfContent = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Two Arrows Cleaning – Estimate Proposal</title>
+                        <style>
+                            body { font-family: 'Inter', Arial, sans-serif; padding: 2.5rem; color: #1e293b; max-width: 900px; margin:0 auto; }
+                            .header { border-bottom: 4px solid #f97316; padding-bottom: 1rem; margin-bottom: 2rem; display:flex; justify-content:space-between; }
+                            .header .title h1 { font-size: 2rem; margin:0; } .header .title h1 span { color: #f97316; }
+                            .header .meta { color: #64748b; font-size:0.9rem; }
+                            .section { margin-bottom: 1.5rem; }
+                            .section h2 { font-size: 1.1rem; color: #1e293b; border-bottom: 1px solid #e2e8f0; padding-bottom:0.3rem; margin-bottom:0.8rem; }
+                            .section .two-col { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; }
+                            .section .two-col .item { padding:0.2rem 0; }
+                            .section .two-col .label { color:#64748b; }
+                            table { width:100%; border-collapse:collapse; margin:1rem 0; }
+                            th, td { padding:0.6rem; border-bottom:1px solid #e2e8f0; text-align:left; }
+                            th { background:#f8fafc; font-weight:600; color:#475569; }
+                            .total-row { font-weight:700; border-top:2px solid #f97316; }
+                            .total-row td { padding-top:0.8rem; }
+                            .total-row .amount { color:#f97316; font-size:1.2rem; }
+                            .footer { margin-top: 2rem; font-size: 0.8rem; color: #64748b; border-top: 1px solid #e2e8f0; padding-top:1rem; text-align:center; }
+                            .disclaimer { font-style:italic; color:#475569; font-size:0.9rem; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="header">
+                            <div class="title">
+                                <h1>Two Arrows<span>.</span> Cleaning</h1>
+                                <p style="color:#475569;">Post‑Construction & Commercial Services</p>
+                            </div>
+                            <div class="meta">
+                                <p>Proposal Date: ${new Date().toLocaleDateString()}</p>
+                                <p>Estimate #: ${'EST-' + String(Math.floor(Math.random()*9000+1000))}</p>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h2>Project Scope</h2>
+                            <div class="two-col">
+                                <div class="item"><span class="label">Client:</span> ${c.company}</div>
+                                <div class="item"><span class="label">Contact:</span> ${c.name}</div>
+                                <div class="item"><span class="label">Email:</span> ${c.email}</div>
+                                <div class="item"><span class="label">Phone:</span> ${c.phone}</div>
+                                <div class="item"><span class="label">Project:</span> ${c.projectName}</div>
+                                <div class="item"><span class="label">Start Date:</span> ${c.startDate}</div>
+                                <div class="item"><span class="label">Type:</span> ${typeLabels[s.type]}</div>
+                                <div class="item"><span class="label">Square Footage:</span> ${s.sqft.toLocaleString()} sq ft</div>
+                                <div class="item"><span class="label">Rooms/Zones:</span> ${s.rooms}</div>
+                                <div class="item"><span class="label">Floors/Levels:</span> ${s.floors}</div>
+                                <div class="item"><span class="label">Debris Severity:</span> ${severityLabel}</div>
+                                <div class="item"><span class="label">Site Access:</span> ${accessLabel}</div>
+                                <div class="item"><span class="label">Waste Removal:</span> ${wasteLabel}</div>
+                                <div class="item"><span class="label">Equipment Needs:</span> ${s.equipment}</div>
+                                <div class="item"><span class="label">Surface Care:</span> ${surfaceList}</div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h2>Estimate</h2>
+                            <p style="font-size:1.2rem; font-weight:700;">$${e.low.toLocaleString()} – $${e.high.toLocaleString()}</p>
+                            <table>
+                                <thead><tr><th>Item</th><th>Amount</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Base Cleaning (${e.sqft} sq ft)</td><td>$${e.base.toLocaleString()}</td></tr>
+                                    ${e.wasteCost > 0 ? `<tr><td>Waste Removal</td><td>+$${e.wasteCost.toLocaleString()}</td></tr>` : ''}
+                                    ${e.equipmentCost > 0 ? `<tr><td>Equipment</td><td>+$${e.equipmentCost.toLocaleString()}</td></tr>` : ''}
+                                    ${e.addonCost > 0 ? `<tr><td>Surface Care</td><td>+$${e.addonCost.toLocaleString()}</td></tr>` : ''}
+                                    <tr><td>Labor Hours</td><td>~${e.laborHours} hrs</td></tr>
+                                    <tr class="total-row"><td>Total Estimate Range</td><td class="amount">$${e.low.toLocaleString()} – $${e.high.toLocaleString()}</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="disclaimer">*Final pricing may vary after on‑site assessment. This proposal is valid for 30 days.</p>
+                        </div>
+
+                        <div class="footer">
+                            <p>Two Arrows Cleaning Services LLC · Licensed &amp; Insured</p>
+                            <p>www.twoarrowscleaning.com · (555) 123-4567</p>
+                            <p>Generated on ${new Date().toLocaleDateString()}</p>
+                        </div>
+                    </body>
+                    </html>
+                `;
+
+                // Open PDF window and trigger print
+                const w = window.open('', '_blank', 'width=900,height=700');
+                w.document.write(pdfContent);
+                w.document.close();
+
+                showToast('📄 Proposal generated – downloading...');
+                console.log('📄 Proposal downloaded for:', contact);
+
+                // Show success panel
+                summaryBox.innerHTML = `
+                    <div class="summary-row"><strong>Quote:</strong> <span>$${e.low.toLocaleString()} – $${e.high.toLocaleString()}</span></div>
+                    <div class="summary-row"><strong>Scope:</strong> <span>${typeLabels[s.type]} · ${s.sqft.toLocaleString()} sqft</span></div>
+                    <div class="summary-row"><strong>Contact:</strong> <span>${c.name} (${c.email})</span></div>
+                    <div class="summary-row"><strong>Status:</strong> <span>Proposal downloaded</span></div>
+                `;
+                showStep(4);
+            });
+
+            // ─── New Estimate ──────────────────────────────────────
+
+            newEstimateBtn.addEventListener('click', function() {
+                // Reset all inputs
+                projectType.value = 'rough';
+                sqftInput.value = '';
+                roomsInput.value = '1';
+                floorsInput.value = '1';
+                severityBtns.forEach(b => b.classList.remove('selected'));
+                document.querySelector('.severity-btn[data-severity="low"]').classList.add('selected');
+                severity = 'low';
+                accessDifficulty.value = 'easy';
+                wasteRemoval.value = 'none';
+                equipmentNeeds.value = 'basic';
+                surfaceCareCheckboxes.forEach(cb => cb.checked = false);
+                fullName.value = '';
+                company.value = '';
+                email.value = '';
+                phone.value = '';
+                projectName.value = '';
+                startDate.value = '';
+                estimateData = null;
+                scopeData = {};
+                getEstimateBtn.disabled = true;
+                showStep(1);
+            });
+
+            // ─── Staff panel controls ─────────────────────────────
+
+            clearLeadsBtn.addEventListener('click', function() {
+                if (leads.length === 0) {
+                    showToast('No leads to clear.');
+                    return;
+                }
+                if (confirm('⚠️ Delete ALL estimate records?')) {
+                    leads = [];
+                    localStorage.setItem('twoarrows_leads', JSON.stringify(leads));
+                    renderLeadsTable();
+                    showToast('🗑️ All records cleared.');
+                }
+            });
+
+            refreshLeadsBtn.addEventListener('click', function() {
+                leads = JSON.parse(localStorage.getItem('twoarrows_leads') || '[]');
+                renderLeadsTable();
+                showToast('🔄 Refreshed.');
+            });
+
+            // ─── Init ─────────────────────────────────────────────
+
+            renderLeadsTable();
+            validateScope();
+            showStep(1);
+
+            // Set default start date (tomorrow)
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            startDate.value = tomorrow.toISOString().split('T')[0];
+
+        })();
+    </script>
+</body>
+</html>
