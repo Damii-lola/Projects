@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stout Trucking · Instant Freight Quote</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .widget {
+            max-width: 820px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        /* ── Header ── */
+        .widget-header {
+            background: #1a1a1a;
+            color: #f5f5f5;
+            padding: 1.8rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 4px solid #f97316;
+        }
+
+        .header-icon {
+            font-size: 2.8rem;
+            color: #f97316;
+        }
+
+        .brand h2 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .brand h2 span {
+            color: #f97316;
+        }
+
+        .brand p {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #bbb;
+            margin-top: 0.2rem;
+        }
+
+        .widget-body {
+            padding: 2rem 2rem 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            flex: 1 1 180px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #333;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e2e2;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #fcfcfc;
+            transition: 0.2s;
+            color: #1a1a1a;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #f97316;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+        }
+
+        .checkbox-row {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: #222;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #f97316;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 0.85rem 2.2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: #f97316;
+            color: white;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #ea580c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-dark {
+            background: #1a1a1a;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-dark:hover:not(:disabled) {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .btn-dark:disabled {
+            background: #999;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* ── Quote Panel ── */
+        .quote-panel {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f7f7f7;
+            border-radius: 16px;
+            border: 2px solid #ddd;
+            animation: fadeSlide 0.35s ease;
+            display: none;
+        }
+
+        .quote-panel.show {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dispatch-alert {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: #fff3cd;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+            border-left: 4px solid #f97316;
+        }
+
+        .dispatch-alert i {
+            color: #f97316;
+            font-size: 1.2rem;
+        }
+
+        .rate-big {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+        }
+
+        .rate-range {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .rate-breakdown {
+            width: 100%;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            border-collapse: collapse;
+        }
+
+        .rate-breakdown tr {
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .rate-breakdown tr:last-child {
+            border-bottom: none;
+        }
+
+        .rate-breakdown td {
+            padding: 0.4rem 0.2rem;
+        }
+
+        .rate-label {
+            color: #444;
+        }
+
+        .rate-value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .rate-total td {
+            border-top: 2px solid #f97316;
+            padding-top: 0.8rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .rate-total .rate-value {
+            color: #f97316;
+            font-size: 1.2rem;
+        }
+
+        .contact-section {
+            margin-top: 1.5rem;
+        }
+
+        /* ── Success Message ── */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 1.5rem 0;
+        }
+
+        .success-message .check-icon {
+            font-size: 3rem;
+            color: #16a34a;
+            margin-bottom: 0.8rem;
+        }
+
+        .summary-box {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+            text-align: left;
+            border: 1px solid #e2e2e2;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed #e2e2e2;
+            padding-bottom: 0.4rem;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        /* ── Staff Panel ── */
+        .staff-panel {
+            border-top: 1px solid #ddd;
+            padding: 1.5rem 2rem 2rem;
+            background: #fafafa;
+        }
+
+        .staff-panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .staff-panel h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .staff-panel h4 .badge {
+            background: #f97316;
+            color: white;
+            font-size: 0.65rem;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-actions .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .panel-actions .btn-clear {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .panel-actions .btn-clear:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .panel-actions .btn-refresh {
+            background: #e2e2e2;
+            color: #333;
+        }
+
+        .panel-actions .btn-refresh:hover {
+            background: #ccc;
+        }
+
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .leads-table th {
+            text-align: left;
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            color: #666;
+            font-weight: 600;
+            border-bottom: 2px solid #ddd;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+        }
+
+        .leads-table td {
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            border-bottom: 1px solid #eee;
+            color: #1a1a1a;
+        }
+
+        .leads-table .new-row {
+            animation: flashRow 0.6s ease;
+        }
+
+        @keyframes flashRow {
+            0% {
+                background: rgba(249, 115, 22, 0.12);
+            }
+            100% {
+                background: transparent;
+            }
+        }
+
+        .status-quote {
+            color: #f97316;
+            font-weight: 600;
+        }
+        .status-dispatched {
+            color: #16a34a;
+            font-weight: 600;
+        }
+
+        /* ── Toast ── */
+        .custom-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a1a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .widget-body {
+                padding: 1.2rem;
+            }
+            .staff-panel {
+                padding: 1rem;
+            }
+            .checkbox-row {
+                gap: 0.8rem;
+            }
+            .btn-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn {
+                justify-content: center;
+            }
+            .leads-table {
+                font-size: 0.7rem;
+            }
+            .rate-big {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="widget">
+        <!-- ── Header ── -->
+        <div class="widget-header">
+            <i class="fas fa-truck header-icon"></i>
+            <div class="brand">
+                <h2>Stout<span>.</span> Trucking &amp; Logistics</h2>
+                <p>Instant Quote · Carrier Rate Request</p>
+            </div>
+        </div>
+
+        <!-- ── Body ── -->
+        <div class="widget-body">
+            <!-- Freight Details -->
+            <h3><i class="fas fa-clipboard-list"></i> Shipment Details</h3>
+            <div class="form-row">
+                <div class="form-group" style="flex:2;">
+                    <label>Origin City / ZIP *</label>
+                    <input type="text" id="origin" placeholder="Chicago, IL 60601" required />
+                </div>
+                <div class="form-group" style="flex:2;">
+                    <label>Destination City / ZIP *</label>
+                    <input type="text" id="destination" placeholder="Dallas, TX 75201" required />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Equipment</label>
+                    <select id="equipment">
+                        <option value="dryvan">Dry Van</option>
+                        <option value="reefer">Reefer</option>
+                        <option value="flatbed">Flatbed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Weight (lbs) *</label>
+                    <input type="number" id="weight" placeholder="40000" min="100" step="100" required />
+                </div>
+                <div class="form-group">
+                    <label>Pickup Date</label>
+                    <input type="date" id="pickupDate" min="" />
+                </div>
+            </div>
+            <div class="checkbox-row">
+                <label class="checkbox-label"><input type="checkbox" id="tarp" /> Tarp</label>
+                <label class="checkbox-label"><input type="checkbox" id="liftgate" /> Liftgate</label>
+                <label class="checkbox-label"><input type="checkbox" id="hazmat" /> Hazmat</label>
+            </div>
+
+            <button class="btn btn-primary" id="getQuoteBtn" disabled>
+                <i class="fas fa-calculator"></i> Get Instant Quote
+            </button>
+
+            <!-- Quote Panel -->
+            <div class="quote-panel" id="quotePanel">
+                <div class="dispatch-alert">
+                    <i class="fas fa-broadcast-tower"></i>
+                    <span><strong>Urgent Dispatch Alert:</strong> Team standing by – quote request received.</span>
+                </div>
+                <div class="rate-big" id="totalRate">$0</div>
+                <div class="rate-range" id="rateRange"></div>
+                <table class="rate-breakdown" id="rateBreakdown"></table>
+
+                <div class="contact-section">
+                    <h3 style="margin-top:1rem;"><i class="fas fa-user-check"></i> Confirm &amp; Send to Dispatch</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="name" placeholder="John Doe" />
+                        </div>
+                        <div class="form-group">
+                            <label>Company *</label>
+                            <input type="text" id="company" placeholder="Acme Logistics" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="email" placeholder="john@acme.com" />
+                        </div>
+                        <div class="form-group">
+                            <label>Phone *</label>
+                            <input type="tel" id="phone" placeholder="(555) 123-4567" />
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-dark" id="bookNowBtn" disabled>
+                            <i class="fas fa-paper-plane"></i> Book &amp; Confirm Capacity
+                        </button>
+                        <p style="font-size:0.8rem; color:#555;">*Dispatch will be immediately notified.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage">
+                <div class="check-icon"><i class="fas fa-check-circle"></i></div>
+                <h3>Rate Confirmed &amp; Dispatch Alerted!</h3>
+                <p style="color:#444; margin-bottom:1rem;">A confirmation email will be sent. Our team will finalize capacity and follow up.</p>
+                <div class="summary-box" id="summaryDetails"></div>
+                <button class="btn btn-primary" id="newQuoteBtn" style="margin-top:1rem;">
+                    <i class="fas fa-redo-alt"></i> Request Another Quote
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Staff Panel ── -->
+        <div class="staff-panel" id="staffPanel">
+            <div class="panel-header">
+                <h4><i class="fas fa-bolt" style="color:#f97316;"></i> Dispatch Feed <span class="badge" id="leadCount">0</span></h4>
+                <div class="panel-actions">
+                    <button class="btn-sm btn-refresh" id="refreshLeads"><i class="fas fa-sync-alt"></i></button>
+                    <button class="btn-sm btn-clear" id="clearLeads"><i class="fas fa-trash"></i> Clear</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="leads-table" id="leadsTable">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Contact</th>
+                            <th>Lane</th>
+                            <th>Equipment</th>
+                            <th>Rate</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th style="width:30px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsBody">
+                        <tr><td colspan="8" style="text-align:center; color:#94a3b8; padding:1rem 0;">No quote requests yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── State ─────────────────────────────────────────────
+            let currentQuote = null;
+            let leads = JSON.parse(localStorage.getItem('stout_leads') || '[]');
+            let followUpTimer = null;
+
+            // ─── DOM refs ──────────────────────────────────────────
+            const originInput = document.getElementById('origin');
+            const destInput = document.getElementById('destination');
+            const equipmentSelect = document.getElementById('equipment');
+            const weightInput = document.getElementById('weight');
+            const pickupDateInput = document.getElementById('pickupDate');
+            const tarpCheck = document.getElementById('tarp');
+            const liftgateCheck = document.getElementById('liftgate');
+            const hazmatCheck = document.getElementById('hazmat');
+            const getQuoteBtn = document.getElementById('getQuoteBtn');
+            const quotePanel = document.getElementById('quotePanel');
+            const totalRateEl = document.getElementById('totalRate');
+            const rateRangeEl = document.getElementById('rateRange');
+            const rateBreakdownEl = document.getElementById('rateBreakdown');
+            const bookNowBtn = document.getElementById('bookNowBtn');
+            const nameInput = document.getElementById('name');
+            const companyInput = document.getElementById('company');
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            const successMessage = document.getElementById('successMessage');
+            const summaryDetails = document.getElementById('summaryDetails');
+            const newQuoteBtn = document.getElementById('newQuoteBtn');
+
+            const leadsBody = document.getElementById('leadsBody');
+            const leadCount = document.getElementById('leadCount');
+            const clearLeadsBtn = document.getElementById('clearLeads');
+            const refreshLeadsBtn = document.getElementById('refreshLeads');
+
+            // ─── Helpers ────────────────────────────────────────────
+
+            function showToast(message) {
+                const existing = document.querySelector('.custom-toast');
+                if (existing) existing.remove();
+                const toast = document.createElement('div');
+                toast.className = 'custom-toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 4000);
+            }
+
+            function renderLeadsTable() {
+                const tbody = leadsBody;
+                if (leads.length === 0) {
+                    tbody.innerHTML =
+                        '<tr><td colspan="8" style="text-align:center; color:#94a3b8; padding:1rem 0;">No quote requests yet</td></tr>';
+                } else {
+                    let html = '';
+                    const reversed = [...leads].reverse();
+                    reversed.forEach((lead, idx) => {
+                        const isNew = idx === 0 ? 'new-row' : '';
+                        const lane = lead.quote ? `${lead.quote.origin || '?'} → ${lead.quote.dest || '?'}` : '—';
+                        const equip = lead.quote ? lead.quote.equipment : '—';
+                        const rate = lead.quote ? `$${lead.quote.low.toLocaleString()} – $${lead.quote.high.toLocaleString()}` :
+                            '—';
+                        const status = lead.status === 'dispatched' ?
+                            `<span class="status-dispatched">Dispatched</span>` :
+                            `<span class="status-quote">Quote Only</span>`;
+                        const contact = lead.contact ? lead.contact.name : '—';
+                        const company = lead.contact ? lead.contact.company : '—';
+                        const time = lead.timestamp ? new Date(lead.timestamp).toLocaleTimeString([], { hour: '2-digit',
+                                minute: '2-digit' }) :
+                            '—';
+                        html += `
+                            <tr class="${isNew}">
+                                <td><strong>${company}</strong></td>
+                                <td>${contact}</td>
+                                <td style="font-size:0.75rem;">${lane}</td>
+                                <td>${equip}</td>
+                                <td>${rate}</td>
+                                <td>${status}</td>
+                                <td style="font-size:0.7rem;">${time}</td>
+                                <td><span style="font-size:0.6rem; background:#10b98120; color:#10b981; padding:0.1rem 0.5rem; border-radius:20px;">NEW</span></td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                }
+                leadCount.textContent = leads.length;
+            }
+
+            // ─── Form validation ──────────────────────────────────
+
+            function validateForm() {
+                const origin = originInput.value.trim();
+                const dest = destInput.value.trim();
+                const weight = parseFloat(weightInput.value);
+                getQuoteBtn.disabled = !(origin && dest && weight > 0);
+            }
+
+            originInput.addEventListener('input', validateForm);
+            destInput.addEventListener('input', validateForm);
+            weightInput.addEventListener('input', validateForm);
+            validateForm();
+
+            // ─── Date picker ──────────────────────────────────────
+
+            const today = new Date().toISOString().split('T')[0];
+            pickupDateInput.min = today;
+            pickupDateInput.value = today;
+
+            // ─── Distance & Rate Engine ───────────────────────────
+
+            function extractNumeric(zipStr) {
+                const nums = zipStr.match(/\d+/g);
+                if (!nums) return 0;
+                return parseInt(nums.join('')) || 0;
+            }
+
+            function estimateMiles(origin, dest) {
+                const oNum = extractNumeric(origin);
+                const dNum = extractNumeric(dest);
+                let diff = Math.abs(oNum - dNum) / 100;
+                let miles = Math.min(3000, Math.max(80, diff));
+                miles = Math.round(miles + ((oNum % 1000) + (dNum % 1000)) / 200);
+                return miles;
+            }
+
+            function transitDays(miles) {
+                return Math.ceil(miles / 500);
+            }
+
+            function calculateRate() {
+                const origin = originInput.value.trim();
+                const dest = destInput.value.trim();
+                const equipment = equipmentSelect.value;
+                const weight = parseFloat(weightInput.value) || 0;
+                const pickup = pickupDateInput.value;
+                const tarp = tarpCheck.checked;
+                const liftgate = liftgateCheck.checked;
+                const hazmat = hazmatCheck.checked;
+
+                const miles = estimateMiles(origin, dest);
+                const days = transitDays(miles);
+
+                const baseRates = { dryvan: 1.85, reefer: 2.25, flatbed: 2.10 };
+                const ratePerMile = baseRates[equipment] || 1.85;
+                let linehaul = miles * ratePerMile;
+
+                let weightFactor = 1.0;
+                if (weight > 40000) weightFactor = 1.12;
+                else if (weight > 20000) weightFactor = 1.06;
+
+                let accessorial = 0;
+                if (tarp) accessorial += 150;
+                if (liftgate) accessorial += 200;
+                if (hazmat) accessorial += 300;
+
+                const fuelSurcharge = Math.round(linehaul * 0.15);
+
+                const month = new Date().getMonth();
+                let demandFactor = 1.0;
+                if (month >= 5 && month <= 8) demandFactor = 1.10;
+                if (month === 10 || month === 11) demandFactor = 1.08;
+                linehaul = Math.round(linehaul * demandFactor);
+
+                const subtotal = Math.round(linehaul * weightFactor) + accessorial + fuelSurcharge;
+                const low = Math.round(subtotal * 0.92);
+                const high = Math.round(subtotal * 1.10);
+
+                return {
+                    origin,
+                    dest,
+                    miles,
+                    transitDays: days,
+                    linehaul,
+                    weightFactor,
+                    accessorial,
+                    fuelSurcharge,
+                    subtotal,
+                    low,
+                    high,
+                    equipment,
+                    weight,
+                    pickup,
+                    tarp,
+                    liftgate,
+                    hazmat
+                };
+            }
+
+            // ─── Display quote ─────────────────────────────────────
+
+            function displayQuote(q) {
+                const equipLabel = q.equipment.replace('dryvan', 'Dry Van').replace('reefer', 'Reefer').replace('flatbed',
+                    'Flatbed');
+                totalRateEl.textContent = `$${q.low.toLocaleString()} – $${q.high.toLocaleString()}`;
+                rateRangeEl.textContent = `Estimated spot rate · Transit: ${q.transitDays} day(s) · ${q.miles} miles`;
+                let breakdownHtml = `
+                    <tr><td class="rate-label">Linehaul (${equipLabel})</td><td class="rate-value">$${q.linehaul.toLocaleString()}</td></tr>
+                    <tr><td class="rate-label">Weight adjustment (${Math.round((q.weightFactor-1)*100)}%)</td><td class="rate-value">${q.weightFactor > 1 ? 'applied' : 'none'}</td></tr>
+                    <tr><td class="rate-label">Fuel surcharge</td><td class="rate-value">$${q.fuelSurcharge.toLocaleString()}</td></tr>
+                `;
+                if (q.accessorial > 0) {
+                    breakdownHtml +=
+                        `<tr><td class="rate-label">Accessorials (tarp/liftgate/hazmat)</td><td class="rate-value">$${q.accessorial.toLocaleString()}</td></tr>`;
+                }
+                breakdownHtml += `
+                    <tr class="rate-total">
+                        <td class="rate-label">Total Spot Rate</td>
+                        <td class="rate-value">$${q.low.toLocaleString()} – $${q.high.toLocaleString()}</td>
+                    </tr>
+                `;
+                rateBreakdownEl.innerHTML = breakdownHtml;
+                quotePanel.classList.add('show');
+                successMessage.style.display = 'none';
+
+                // Reset contact fields
+                nameInput.value = '';
+                companyInput.value = '';
+                emailInput.value = '';
+                phoneInput.value = '';
+                bookNowBtn.disabled = true;
+
+                // Store partial lead (quote only)
+                const partialLead = {
+                    quote: q,
+                    contact: null,
+                    status: 'quote_only',
+                    timestamp: new Date().toISOString()
+                };
+                leads.push(partialLead);
+                localStorage.setItem('stout_leads', JSON.stringify(leads));
+                renderLeadsTable();
+
+                // Dispatch alert simulation
+                console.log('🚛 URGENT: Freight quote calculated, dispatch alerted.', q);
+                showToast('🚨 Dispatch alert triggered – team standing by!');
+
+                // Clear any previous follow-up timer
+                if (followUpTimer) clearTimeout(followUpTimer);
+
+                // Simulate automated follow-up if not booked within 60 seconds
+                followUpTimer = setTimeout(() => {
+                    // Check if the last lead (this one) is still quote_only
+                    const lastLead = leads[leads.length - 1];
+                    if (lastLead && lastLead.status === 'quote_only' && lastLead.quote === q) {
+                        // Simulate follow-up email
+                        const email = lastLead.contact ? lastLead.contact.email : 'the shipper';
+                        showToast(`📧 Follow-up email sent to ${email} – "We're still here to help with your freight!"`);
+                        // Also log
+                        console.log(`📧 Follow-up email triggered for quote #${leads.length}`);
+                    }
+                }, 60000); // 60 seconds
+            }
+
+            // ─── Get Quote ─────────────────────────────────────────
+
+            getQuoteBtn.addEventListener('click', function() {
+                if (getQuoteBtn.disabled) return;
+                const q = calculateRate();
+                currentQuote = q;
+                displayQuote(q);
+            });
+
+            // ─── Contact validation for booking ────────────────────
+
+            function checkContact() {
+                const valid = nameInput.value.trim() && companyInput.value.trim() &&
+                    emailInput.value.trim() && phoneInput.value.trim();
+                bookNowBtn.disabled = !valid;
+            }
+            [nameInput, companyInput, emailInput, phoneInput].forEach(el => el.addEventListener('input', checkContact));
+
+            // ─── Book & Confirm ────────────────────────────────────
+
+            bookNowBtn.addEventListener('click', function() {
+                if (!currentQuote || bookNowBtn.disabled) return;
+
+                const contact = {
+                    name: nameInput.value.trim(),
+                    company: companyInput.value.trim(),
+                    email: emailInput.value.trim(),
+                    phone: phoneInput.value.trim()
+                };
+
+                // Update the last lead (which should be the current quote) with contact info and change status
+                if (leads.length > 0 && leads[leads.length - 1].status === 'quote_only' &&
+                    leads[leads.length - 1].quote === currentQuote) {
+                    leads[leads.length - 1].contact = contact;
+                    leads[leads.length - 1].status = 'dispatched';
+                } else {
+                    // If not found, create a new lead
+                    leads.push({
+                        quote: currentQuote,
+                        contact: contact,
+                        status: 'dispatched',
+                        timestamp: new Date().toISOString()
+                    });
+                }
+                localStorage.setItem('stout_leads', JSON.stringify(leads));
+                renderLeadsTable();
+
+                // Cancel follow-up timer since booking is confirmed
+                if (followUpTimer) {
+                    clearTimeout(followUpTimer);
+                    followUpTimer = null;
+                }
+
+                // Show success
+                quotePanel.classList.remove('show');
+                successMessage.style.display = 'block';
+                summaryDetails.innerHTML = `
+                    <div class="summary-row"><strong>Rate:</strong> <span>$${currentQuote.low.toLocaleString()} – $${currentQuote.high.toLocaleString()}</span></div>
+                    <div class="summary-row"><strong>Lane:</strong> <span>${currentQuote.origin} → ${currentQuote.dest} (${currentQuote.miles} mi)</span></div>
+                    <div class="summary-row"><strong>Contact:</strong> <span>${contact.name} · ${contact.company}</span></div>
+                    <div class="summary-row"><strong>Email:</strong> <span>${contact.email}</span></div>
+                `;
+
+                showToast(`✅ Dispatch confirmed for ${contact.company}!`);
+                console.log('✅ DISPATCH CONFIRMED:', { quote: currentQuote, contact });
+            });
+
+            // ─── New Quote Reset ──────────────────────────────────
+
+            newQuoteBtn.addEventListener('click', function() {
+                // Reset form fields
+                originInput.value = '';
+                destInput.value = '';
+                weightInput.value = '';
+                equipmentSelect.value = 'dryvan';
+                tarpCheck.checked = false;
+                liftgateCheck.checked = false;
+                hazmatCheck.checked = false;
+                pickupDateInput.value = today;
+                nameInput.value = '';
+                companyInput.value = '';
+                emailInput.value = '';
+                phoneInput.value = '';
+                currentQuote = null;
+                quotePanel.classList.remove('show');
+                successMessage.style.display = 'none';
+                if (followUpTimer) {
+                    clearTimeout(followUpTimer);
+                    followUpTimer = null;
+                }
+                validateForm();
+            });
+
+            // ─── Staff panel controls ─────────────────────────────
+
+            clearLeadsBtn.addEventListener('click', function() {
+                if (leads.length === 0) {
+                    showToast('No leads to clear.');
+                    return;
+                }
+                if (confirm('⚠️ Delete ALL quote records?')) {
+                    leads = [];
+                    localStorage.setItem('stout_leads', JSON.stringify(leads));
+                    renderLeadsTable();
+                    showToast('🗑️ All leads cleared.');
+                    if (followUpTimer) {
+                        clearTimeout(followUpTimer);
+                        followUpTimer = null;
+                    }
+                }
+            });
+
+            refreshLeadsBtn.addEventListener('click', function() {
+                leads = JSON.parse(localStorage.getItem('stout_leads') || '[]');
+                renderLeadsTable();
+                showToast('🔄 Refreshed.');
+            });
+
+            // ─── Init ─────────────────────────────────────────────
+
+            renderLeadsTable();
+            validateForm();
+
+        })();
+    </script>
+</body>
+</html>
