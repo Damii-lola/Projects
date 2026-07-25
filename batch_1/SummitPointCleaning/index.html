@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Summit Point Cleaning · Instant Quote & Book</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f7fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .widget {
+            max-width: 820px;
+            width: 100%;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 30px 60px rgba(0, 20, 40, 0.08);
+            overflow: hidden;
+            border: 1px solid #dcebf3;
+        }
+
+        /* ── Header ── */
+        .widget-header {
+            background: linear-gradient(135deg, #1e4a6b 0%, #1b3a54 100%);
+            color: white;
+            padding: 1.8rem 2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 4px solid #f4c542;
+        }
+
+        .logo-icon {
+            font-size: 2.8rem;
+            color: #f4c542;
+        }
+
+        .brand h2 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            margin: 0;
+            color: white;
+        }
+
+        .brand h2 span {
+            color: #f4c542;
+        }
+
+        .brand p {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #b0d4f1;
+            margin-top: 0.2rem;
+        }
+
+        /* ── Progress ── */
+        .progress-wrap {
+            padding: 1.5rem 2rem 0.5rem;
+            position: relative;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #dfeaf1;
+            color: #4a6a7f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .step.active .step-circle {
+            background: #1e4a6b;
+            color: white;
+            border-color: #f4c542;
+            box-shadow: 0 0 0 4px rgba(30, 74, 107, 0.15);
+        }
+
+        .step.completed .step-circle {
+            background: #1e4a6b;
+            color: white;
+            border-color: #1e4a6b;
+        }
+
+        .step-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+            color: #6b8ba4;
+            letter-spacing: 0.5px;
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #1e4a6b;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 17px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #dfeaf1;
+            z-index: 1;
+            margin: 0 48px;
+            border-radius: 3px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #1e4a6b;
+            transition: width 0.4s ease;
+            border-radius: 3px;
+        }
+
+        /* ── Body ── */
+        .widget-body {
+            padding: 2rem 2rem 1.5rem;
+        }
+
+        .panel {
+            display: none;
+            animation: fadeSlide 0.35s ease;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a2e3f;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        h3 i {
+            color: #f4c542;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            flex: 1 1 160px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #365e7d;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        select,
+        input[type="number"],
+        input[type="date"],
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 2px solid #cfe1ed;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #f9fcff;
+            transition: 0.2s;
+            color: #1a2e3f;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: #1e4a6b;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(30, 74, 107, 0.12);
+        }
+
+        .addon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.6rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .addon-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.8rem;
+            border: 2px solid #cfe1ed;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.2s;
+            background: white;
+            color: #365e7d;
+            font-size: 0.85rem;
+        }
+
+        .addon-chip i {
+            color: #7f9fb5;
+        }
+
+        .addon-chip:hover {
+            border-color: #1e4a6b;
+        }
+
+        .addon-chip.selected {
+            background: #e6f0f9;
+            border-color: #1e4a6b;
+            color: #1e4a6b;
+            box-shadow: 0 0 0 2px rgba(30, 74, 107, 0.15);
+        }
+
+        .addon-chip.selected i {
+            color: #1e4a6b;
+        }
+
+        .addon-chip .price-tag {
+            font-size: 0.65rem;
+            opacity: 0.7;
+            margin-left: auto;
+        }
+
+        .frequency-options {
+            display: flex;
+            gap: 0.8rem;
+            margin: 1.2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .freq-btn {
+            flex: 1 1 90px;
+            padding: 0.6rem 0.8rem;
+            border: 2px solid #cfe1ed;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #365e7d;
+        }
+
+        .freq-btn:hover {
+            border-color: #1e4a6b;
+        }
+
+        .freq-btn.selected {
+            background: #1e4a6b;
+            color: white;
+            border-color: #1e4a6b;
+        }
+
+        .freq-btn .discount {
+            display: block;
+            font-weight: 400;
+            font-size: 0.65rem;
+            opacity: 0.8;
+        }
+
+        /* ── Price Card ── */
+        .price-card {
+            background: #f0f7fb;
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin: 1.2rem 0;
+            border: 2px solid #cfe1ed;
+        }
+
+        .price-amount {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1e4a6b;
+        }
+
+        .price-amount .period {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #4a6a7f;
+        }
+
+        .price-sub {
+            font-size: 0.9rem;
+            color: #4a6a7f;
+            margin-top: 0.2rem;
+        }
+
+        .price-breakdown {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            border-bottom: 1px dashed #cfe1ed;
+        }
+
+        .price-row:last-child {
+            border-bottom: none;
+        }
+
+        .price-label {
+            color: #365e7d;
+        }
+
+        .price-value {
+            font-weight: 600;
+        }
+
+        .price-total .price-label {
+            font-weight: 700;
+            color: #1a2e3f;
+        }
+
+        .price-total .price-value {
+            font-size: 1.1rem;
+            color: #1e4a6b;
+        }
+
+        .duration-badge {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            background: rgba(30, 74, 107, 0.1);
+            color: #1e4a6b;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.8rem;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            padding: 0.85rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #cfe1ed;
+            color: #365e7d;
+        }
+
+        .btn-outline:hover {
+            border-color: #1e4a6b;
+            color: #1e4a6b;
+        }
+
+        .btn-primary {
+            background: #1e4a6b;
+            color: white;
+            box-shadow: 0 4px 12px rgba(30, 74, 107, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #153950;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30, 74, 107, 0.35);
+        }
+
+        .btn-primary:disabled {
+            background: #cbd5e0;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-gold {
+            background: #f4c542;
+            color: #1e4a6b;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(244, 197, 66, 0.4);
+        }
+
+        .btn-gold:hover:not(:disabled) {
+            background: #e0b13a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(244, 197, 66, 0.5);
+        }
+
+        .btn-gold:disabled {
+            background: #cbd5e0;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* ── Calendar ── */
+        .time-slots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 0.6rem;
+        }
+
+        .time-slot {
+            padding: 0.5rem 1.2rem;
+            border: 2px solid #cfe1ed;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: white;
+            transition: 0.15s;
+        }
+
+        .time-slot.unavailable {
+            background: #f4f7fa;
+            color: #a0bacc;
+            text-decoration: line-through;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .time-slot:not(.unavailable):hover {
+            border-color: #1e4a6b;
+        }
+
+        .time-slot.selected {
+            background: #1e4a6b;
+            color: white;
+            border-color: #1e4a6b;
+        }
+
+        /* ── Deposit Card ── */
+        .deposit-card {
+            background: #fff7e6;
+            border: 2px solid #f4c542;
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.2rem 0;
+        }
+
+        .deposit-card .deposit-icon {
+            font-size: 2rem;
+            color: #f4c542;
+        }
+
+        .deposit-card .deposit-text strong {
+            color: #1e4a6b;
+            font-size: 1.1rem;
+        }
+
+        .deposit-card .deposit-text p {
+            font-size: 0.85rem;
+            color: #4a6a7f;
+        }
+
+        /* ── Success ── */
+        .success-panel {
+            text-align: center;
+            padding: 1.5rem 0;
+        }
+
+        .success-panel .check-icon {
+            font-size: 3.5rem;
+            color: #2d6a4f;
+            margin-bottom: 1rem;
+        }
+
+        .summary-box {
+            background: #f9fcff;
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: left;
+            margin: 1.5rem 0;
+            border: 1px solid #cfe1ed;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed #cfe1ed;
+            padding-bottom: 0.4rem;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        /* ── Staff Panel ── */
+        .staff-panel {
+            border-top: 1px solid #cfe1ed;
+            padding: 1.5rem 2rem 2rem;
+            background: #f8fcff;
+        }
+
+        .staff-panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .staff-panel h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #6b8ba4;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .staff-panel h4 .badge {
+            background: #f4c542;
+            color: #1e4a6b;
+            font-size: 0.65rem;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-actions .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .panel-actions .btn-clear {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .panel-actions .btn-clear:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .panel-actions .btn-refresh {
+            background: #dfeaf1;
+            color: #365e7d;
+        }
+
+        .panel-actions .btn-refresh:hover {
+            background: #cfe1ed;
+        }
+
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .leads-table th {
+            text-align: left;
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            color: #6b8ba4;
+            font-weight: 600;
+            border-bottom: 2px solid #cfe1ed;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+        }
+
+        .leads-table td {
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            border-bottom: 1px solid #edf3f8;
+            color: #1a2e3f;
+        }
+
+        .leads-table .new-row {
+            animation: flashRow 0.6s ease;
+        }
+
+        @keyframes flashRow {
+            0% {
+                background: rgba(244, 197, 66, 0.12);
+            }
+            100% {
+                background: transparent;
+            }
+        }
+
+        .status-quote {
+            color: #f4c542;
+            font-weight: 600;
+        }
+        .status-booked {
+            color: #2d6a4f;
+            font-weight: 600;
+        }
+
+        /* ── Toast ── */
+        .custom-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .widget-header {
+                padding: 1.2rem 1.2rem;
+                flex-wrap: wrap;
+            }
+            .widget-body {
+                padding: 1.2rem;
+            }
+            .staff-panel {
+                padding: 1rem;
+            }
+            .progress-wrap {
+                padding: 1.2rem 1rem 0.5rem;
+            }
+            .progress-line {
+                margin: 0 20px;
+            }
+            .step-label {
+                font-size: 0.55rem;
+            }
+            .frequency-options {
+                flex-direction: column;
+            }
+            .freq-btn {
+                flex: 1 1 auto;
+            }
+            .addon-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+            }
+            .leads-table {
+                font-size: 0.7rem;
+            }
+            .price-amount {
+                font-size: 1.8rem;
+            }
+            .deposit-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="widget">
+        <!-- ── Header ── -->
+        <div class="widget-header">
+            <i class="fas fa-mountain logo-icon"></i>
+            <div class="brand">
+                <h2>Summit<span>.</span> Point Cleaning</h2>
+                <p>Instant Price · Lock in Your Slot</p>
+            </div>
+        </div>
+
+        <!-- ── Progress ── -->
+        <div class="progress-wrap">
+            <div class="progress-line">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-steps" id="stepIndicator">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Service</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Price</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Schedule</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Confirm</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Body ── -->
+        <div class="widget-body">
+            <!-- Step 1: Service Details -->
+            <div class="panel active" data-panel="1">
+                <h3><i class="fas fa-spray-can-sparkles"></i> What do you need cleaned?</h3>
+                <div class="form-row">
+                    <div class="form-group" style="flex:2;">
+                        <label>Cleaning Type</label>
+                        <select id="cleanType">
+                            <option value="standard">Standard Cleaning</option>
+                            <option value="deep">Deep Clean</option>
+                            <option value="post-construction">Post‑Construction</option>
+                            <option value="office">Office Cleaning</option>
+                            <option value="move-inout">Move In/Out</option>
+                            <option value="windows">Window Cleaning</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Square Footage</label>
+                        <input type="number" id="sqft" placeholder="1500" min="200" step="100" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Rooms</label>
+                        <input type="number" id="rooms" placeholder="5" min="1" value="1" />
+                    </div>
+                    <div class="form-group">
+                        <label>Bathrooms</label>
+                        <input type="number" id="bathrooms" placeholder="2" min="0" value="0" />
+                    </div>
+                    <div class="form-group">
+                        <label>Floors</label>
+                        <input type="number" id="floors" placeholder="1" min="1" value="1" />
+                    </div>
+                </div>
+                <label style="font-weight:600; font-size:0.75rem; color:#365e7d; margin-bottom:0.3rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">Add‑ons <span style="font-weight:400; text-transform:none; color:#7f9fb5;">(select all that apply)</span></label>
+                <div class="addon-grid" id="addonGrid">
+                    <div class="addon-chip" data-addon="oven" data-price="35"><i class="fas fa-oven"></i> Oven <span class="price-tag">+$35</span></div>
+                    <div class="addon-chip" data-addon="fridge" data-price="30"><i class="fas fa-refrigerator"></i> Fridge <span class="price-tag">+$30</span></div>
+                    <div class="addon-chip" data-addon="carpet" data-price="50"><i class="fas fa-water"></i> Carpet <span class="price-tag">+$50</span></div>
+                    <div class="addon-chip" data-addon="windows" data-price="45"><i class="fas fa-window-maximize"></i> Windows <span class="price-tag">+$45</span></div>
+                    <div class="addon-chip" data-addon="cabinets" data-price="40"><i class="fas fa-cabinet"></i> Cabinets <span class="price-tag">+$40</span></div>
+                    <div class="addon-chip" data-addon="blinds" data-price="25"><i class="fas fa-venetian-blinds"></i> Blinds <span class="price-tag">+$25</span></div>
+                    <div class="addon-chip" data-addon="ceiling-fans" data-price="20"><i class="fas fa-fan"></i> Ceiling Fans <span class="price-tag">+$20</span></div>
+                </div>
+                <div style="display:flex; justify-content:flex-end;">
+                    <button class="btn btn-primary" id="calculateBtn" disabled>
+                        <i class="fas fa-calculator"></i> Calculate Price
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Price & Frequency -->
+            <div class="panel" data-panel="2">
+                <h3><i class="fas fa-tags"></i> Your Estimate</h3>
+                <div class="price-card" id="priceCard"></div>
+                <label style="font-weight:600; font-size:0.75rem; color:#365e7d; display:block; text-transform:uppercase; letter-spacing:0.3px;">Frequency <span style="font-weight:400; text-transform:none; color:#7f9fb5;">(save with recurring)</span></label>
+                <div class="frequency-options" id="freqOptions">
+                    <div class="freq-btn selected" data-freq="one-time">One‑time</div>
+                    <div class="freq-btn" data-freq="weekly">Weekly <span class="discount">-15%</span></div>
+                    <div class="freq-btn" data-freq="biweekly">Bi‑weekly <span class="discount">-10%</span></div>
+                    < class="freq-btn" data-freq="monthly">Monthly <span class="discount">-5%</span></div>
+                </div>
+                <p style="font-size:0.8rem; color:#4a6a7f; margin-top:0.5rem;">
+                    <i class="fas fa-shield-alt"></i> All recurring plans include priority scheduling and flexible rescheduling.
+                </p>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToService"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-primary" id="goToSchedule">
+                        <i class="fas fa-calendar-alt"></i> Schedule Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Date & Time -->
+            <div class="panel" data-panel="3">
+                <h3><i class="fas fa-calendar-check"></i> Pick your arrival window</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="bookDate" min="" />
+                    </div>
+                </div>
+                <label>Available start times</label>
+                <div class="time-slots" id="timeSlotsContainer"></div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToPrice"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-primary" id="proceedToDeposit" disabled>
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Contact & Deposit -->
+            <div class="panel" data-panel="4">
+                <h3><i class="fas fa-lock"></i> Secure your booking with a $50 deposit</h3>
+                <div class="deposit-card">
+                    <i class="fas fa-credit-card deposit-icon"></i>
+                    <div class="deposit-text">
+                        <strong>$50 deposit</strong>
+                        <p>Fully refundable up to 24 hours before service. Applied to your final bill.</p>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="fullName" placeholder="Alex Johnson" />
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" placeholder="alex@summit.com" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="tel" id="phone" placeholder="(555) 123-4567" />
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" id="address" placeholder="123 Main St, City, State" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Special Instructions</label>
+                    <input type="text" id="instructions" placeholder="Gate code, parking instructions..." />
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToSchedule"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-gold" id="confirmDepositBtn" disabled>
+                        <i class="fas fa-shield-haltered"></i> Pay $50 &amp; Confirm
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 5: Success -->
+            <div class="panel success-panel" data-panel="5" id="successPanel">
+                <div class="check-icon"><i class="fas fa-check-circle"></i></div>
+                <h3>Booking Confirmed &amp; Team Alerted!</h3>
+                <p style="color:#365e7d; margin-bottom:0.5rem;">We've reserved your slot and will send a confirmation email.</p>
+                <div class="summary-box" id="summaryBox"></div>
+                <button class="btn btn-primary" id="newBookingBtn" style="margin-top:1.2rem;">
+                    <i class="fas fa-redo-alt"></i> Book Another
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Staff Panel ── -->
+        <div class="staff-panel" id="staffPanel">
+            <div class="panel-header">
+                <h4><i class="fas fa-bolt" style="color:#f4c542;"></i> Office Feed <span class="badge" id="leadCount">0</span></h4>
+                <div class="panel-actions">
+                    <button class="btn-sm btn-refresh" id="refreshLeads"><i class="fas fa-sync-alt"></i></button>
+                    <button class="btn-sm btn-clear" id="clearLeads"><i class="fas fa-trash"></i> Clear</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="leads-table" id="leadsTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Service</th>
+                            <th>Sq Ft</th>
+                            <th>Freq</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th style="width:30px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsBody">
+                        <tr><td colspan="8" style="text-align:center; color:#94a3b8; padding:1rem 0;">No activity yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── State ─────────────────────────────────────────────
+            let currentStep = 1;
+            let serviceData = {};
+            let quoteData = null;
+            let selectedFreq = 'one-time';
+            let selectedDate = null;
+            let selectedTime = null;
+            let leads = JSON.parse(localStorage.getItem('summit_leads') || '[]');
+
+            // ─── DOM refs ──────────────────────────────────────────
+            const cleanType = document.getElementById('cleanType');
+            const sqftInput = document.getElementById('sqft');
+            const roomsInput = document.getElementById('rooms');
+            const bathroomsInput = document.getElementById('bathrooms');
+            const floorsInput = document.getElementById('floors');
+            const addonChips = document.querySelectorAll('.addon-chip');
+
+            const calculateBtn = document.getElementById('calculateBtn');
+            const priceCard = document.getElementById('priceCard');
+            const freqBtns = document.querySelectorAll('.freq-btn');
+            const goToScheduleBtn = document.getElementById('goToSchedule');
+            const backToServiceBtn = document.getElementById('backToService');
+            const backToPriceBtn = document.getElementById('backToPrice');
+
+            const bookDateInput = document.getElementById('bookDate');
+            const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+            const proceedToDepositBtn = document.getElementById('proceedToDeposit');
+            const backToScheduleBtn = document.getElementById('backToSchedule');
+
+            const fullName = document.getElementById('fullName');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+            const address = document.getElementById('address');
+            const instructions = document.getElementById('instructions');
+            const confirmDepositBtn = document.getElementById('confirmDepositBtn');
+            const newBookingBtn = document.getElementById('newBookingBtn');
+            const summaryBox = document.getElementById('summaryBox');
+
+            const leadsBody = document.getElementById('leadsBody');
+            const leadCount = document.getElementById('leadCount');
+            const clearLeadsBtn = document.getElementById('clearLeads');
+            const refreshLeadsBtn = document.getElementById('refreshLeads');
+
+            // ─── Helpers ────────────────────────────────────────────
+
+            function showStep(step) {
+                currentStep = step;
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                const target = document.querySelector(`.panel[data-panel="${step}"]`);
+                if (target) target.classList.add('active');
+
+                document.querySelectorAll('.step').forEach(s => {
+                    const num = parseInt(s.dataset.step);
+                    s.classList.remove('active', 'completed');
+                    if (num === step) s.classList.add('active');
+                    else if (num < step) s.classList.add('completed');
+                });
+                const percent = Math.min(((step - 1) / 3) * 100, 100);
+                document.getElementById('progressFill').style.width = percent + '%';
+
+                if (step === 3) {
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    bookDateInput.min = tomorrow.toISOString().split('T')[0];
+                    if (!bookDateInput.value) bookDateInput.value = tomorrow.toISOString().split('T')[0];
+                    renderTimeSlots();
+                }
+                if (step === 4) validateContact();
+            }
+
+            function renderLeadsTable() {
+                const tbody = leadsBody;
+                if (leads.length === 0) {
+                    tbody.innerHTML =
+                        '<tr><td colspan="8" style="text-align:center; color:#94a3b8; padding:1rem 0;">No activity yet</td></tr>';
+                } else {
+                    let html = '';
+                    const reversed = [...leads].reverse();
+                    reversed.forEach((lead, idx) => {
+                        const isNew = idx === 0 ? 'new-row' : '';
+                        const name = lead.contact?.name || '—';
+                        const service = lead.service?.type || '—';
+                        const sqft = lead.service?.sqft || '—';
+                        const freq = lead.frequency || '—';
+                        const price = lead.quote ? `$${Math.round(lead.quote.finalPrice)}` : '—';
+                        const status = lead.status === 'booked' ?
+                            `<span class="status-booked">✅ Booked</span>` :
+                            `<span class="status-quote">📋 Quote</span>`;
+                        const time = lead.timestamp ? new Date(lead.timestamp).toLocaleTimeString([], { hour: '2-digit',
+                                minute: '2-digit' }) :
+                            '—';
+                        html += `
+                            <tr class="${isNew}">
+                                <td><strong>${name}</strong></td>
+                                <td>${service}</td>
+                                <td>${sqft}</td>
+                                <td>${freq}</td>
+                                <td>${price}</td>
+                                <td>${status}</td>
+                                <td style="font-size:0.7rem;">${time}</td>
+                                <td><span style="font-size:0.6rem; background:#10b98120; color:#10b981; padding:0.1rem 0.5rem; border-radius:20px;">NEW</span></td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                }
+                leadCount.textContent = leads.length;
+            }
+
+            function showToast(message) {
+                const existing = document.querySelector('.custom-toast');
+                if (existing) existing.remove();
+                const toast = document.createElement('div');
+                toast.className = 'custom-toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+
+            // ─── Step 1 validation ─────────────────────────────────
+
+            function validateServiceForm() {
+                const sqft = parseFloat(sqftInput.value);
+                calculateBtn.disabled = !(sqft && sqft >= 200);
+            }
+
+            sqftInput.addEventListener('input', validateServiceForm);
+            validateServiceForm();
+
+            // ─── Add‑on selection ──────────────────────────────────
+
+            addonChips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+            });
+
+            // ─── Pricing Engine ─────────────────────────────────────
+
+            function calculatePrice() {
+                const type = cleanType.value;
+                const sqft = parseFloat(sqftInput.value) || 0;
+                const rooms = parseInt(roomsInput.value) || 1;
+                const bathrooms = parseInt(bathroomsInput.value) || 0;
+                const floors = parseInt(floorsInput.value) || 1;
+
+                const addons = [];
+                addonChips.forEach(c => {
+                    if (c.classList.contains('selected')) {
+                        addons.push({ name: c.dataset.addon, price: parseInt(c.dataset.price) });
+                    }
+                });
+
+                // Base rates per sq ft
+                const baseRates = {
+                    standard: 0.12,
+                    deep: 0.18,
+                    'post-construction': 0.22,
+                    office: 0.10,
+                    'move-inout': 0.15,
+                    windows: 0.08
+                };
+                const rate = baseRates[type] || 0.12;
+                let base = sqft * rate;
+
+                // Room surcharges (rooms beyond 2)
+                if (rooms > 2) base += (rooms - 2) * 18;
+
+                // Bathroom surcharges
+                if (bathrooms > 0) base += bathrooms * 15;
+
+                // Floor factor
+                const floorFactor = 1 + (floors - 1) * 0.03;
+                base *= floorFactor;
+
+                // Add‑on costs
+                let addonCost = 0;
+                addons.forEach(a => addonCost += a.price);
+
+                // Duration estimate (hours)
+                const baseHours = sqft / 400 + rooms * 0.3 + bathrooms * 0.4 + floors * 0.2;
+                const duration = Math.round(baseHours * 2) / 2;
+                const crew = duration > 4 ? 2 : 1;
+
+                const oneTimeTotal = Math.round(base + addonCost);
+
+                return {
+                    type,
+                    sqft,
+                    rooms,
+                    bathrooms,
+                    floors,
+                    addons,
+                    base: Math.round(base),
+                    addonCost,
+                    oneTimeTotal,
+                    duration,
+                    crew,
+                    rate
+                };
+            }
+
+            // ─── Display Quote ─────────────────────────────────────
+
+            function displayQuote(q, freq) {
+                const discountMap = { 'one-time': 0, weekly: 0.15, biweekly: 0.10, monthly: 0.05 };
+                const discount = discountMap[freq] || 0;
+                const finalPrice = Math.round(q.oneTimeTotal * (1 - discount));
+                const saved = q.oneTimeTotal - finalPrice;
+
+                const freqLabels = {
+                    'one-time': 'One‑time',
+                    weekly: 'Weekly (15% off)',
+                    biweekly: 'Bi‑weekly (10% off)',
+                    monthly: 'Monthly (5% off)'
+                };
+
+                const typeLabels = {
+                    standard: 'Standard',
+                    deep: 'Deep Clean',
+                    'post-construction': 'Post‑Construction',
+                    office: 'Office',
+                    'move-inout': 'Move In/Out',
+                    windows: 'Window Cleaning'
+                };
+
+                let addonList = q.addons.length ? q.addons.map(a => a.name).join(', ') : 'None';
+
+                priceCard.innerHTML = `
+                    <div class="price-amount">$${finalPrice} <span class="period">per visit</span></div>
+                    <div class="price-sub">${typeLabels[q.type]} · ${q.sqft} sq ft · ${q.rooms} rooms · ${q.bathrooms} bathrooms</div>
+                    <div class="price-breakdown">
+                        <div class="price-row">
+                            <span class="price-label">Base cleaning (${q.rate.toFixed(2)}/sqft)</span>
+                            <span class="price-value">$${q.base}</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="price-label">Add‑ons</span>
+                            <span class="price-value">+$${q.addonCost}</span>
+                        </div>
+                        ${discount > 0 ? `
+                        <div class="price-row" style="color:#2d6a4f;">
+                            <span class="price-label">Recurring discount (${Math.round(discount*100)}%)</span>
+                            <span class="price-value">-$${saved}</span>
+                        </div>` : ''}
+                        <div class="price-row price-total" style="border-top:2px solid #cfe1ed;">
+                            <span class="price-label">Total per visit</span>
+                            <span class="price-value">$${finalPrice}</span>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-top:0.8rem;">
+                        <span class="duration-badge"><i class="fas fa-clock"></i> ~${q.duration} hrs</span>
+                        <span class="duration-badge"><i class="fas fa-users"></i> ${q.crew} crew member${q.crew > 1 ? 's' : ''}</span>
+                        ${freq !== 'one-time' ? `<span class="duration-badge" style="background:rgba(45,106,79,0.15); color:#2d6a4f;"><i class="fas fa-calendar-check"></i> ${freqLabels[freq]}</span>` : ''}
+                    </div>
+                `;
+
+                quoteData = { ...q, finalPrice, discount, saved };
+            }
+
+            // ─── Step 1 → 2 ──────────────────────────────────────
+
+            calculateBtn.addEventListener('click', function() {
+                if (calculateBtn.disabled) return;
+                const q = calculatePrice();
+                serviceData = {
+                    type: q.type,
+                    sqft: q.sqft,
+                    rooms: q.rooms,
+                    bathrooms: q.bathrooms,
+                    floors: q.floors,
+                    addons: q.addons
+                };
+                // Store initial quote as lead (quote requested)
+                const lead = {
+                    service: serviceData,
+                    quote: q,
+                    frequency: 'one-time',
+                    contact: null,
+                    status: 'quote_requested',
+                    timestamp: new Date().toISOString()
+                };
+                leads.push(lead);
+                localStorage.setItem('summit_leads', JSON.stringify(leads));
+                renderLeadsTable();
+
+                // Reset frequency selection
+                freqBtns.forEach(b => b.classList.remove('selected'));
+                document.querySelector('.freq-btn[data-freq="one-time"]').classList.add('selected');
+                selectedFreq = 'one-time';
+
+                displayQuote(q, 'one-time');
+                showStep(2);
+
+                // Office notification
+                console.log('📋 Quote requested:', q);
+                showToast('📋 New quote request received by office');
+            });
+
+            // ─── Frequency selection ──────────────────────────────
+
+            freqBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    freqBtns.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedFreq = this.dataset.freq;
+                    if (quoteData) {
+                        displayQuote(quoteData, selectedFreq);
+                    }
+                });
+            });
+
+            backToServiceBtn.addEventListener('click', () => showStep(1));
+            goToScheduleBtn.addEventListener('click', () => showStep(3));
+
+            // ─── Step 3: Time slots ──────────────────────────────
+
+            function renderTimeSlots() {
+                const date = bookDateInput.value;
+                if (!date) {
+                    timeSlotsContainer.innerHTML = '<p style="color:#94a3b8;">Select a date first</p>';
+                    proceedToDepositBtn.disabled = true;
+                    return;
+                }
+                const slots = ['8:00 AM', '9:30 AM', '11:00 AM', '12:30 PM', '2:00 PM', '3:30 PM', '5:00 PM'];
+                const hash = date.split('-').reduce((a, v) => a + parseInt(v || 0), 0);
+                const bookedCount = hash % 3;
+                const booked = [];
+                for (let i = 0; i < bookedCount; i++) {
+                    booked.push(slots[(hash + i * 2) % slots.length]);
+                }
+
+                timeSlotsContainer.innerHTML = '';
+                slots.forEach(slot => {
+                    const div = document.createElement('div');
+                    div.className = 'time-slot';
+                    if (booked.includes(slot)) {
+                        div.classList.add('unavailable');
+                        div.textContent = slot + ' (booked)';
+                    } else {
+                        div.textContent = slot;
+                        div.addEventListener('click', function() {
+                            document.querySelectorAll('.time-slot:not(.unavailable)').forEach(s => s.classList
+                                .remove('selected'));
+                            this.classList.add('selected');
+                            selectedTime = slot;
+                            proceedToDepositBtn.disabled = false;
+                        });
+                    }
+                    timeSlotsContainer.appendChild(div);
+                });
+                selectedTime = null;
+                proceedToDepositBtn.disabled = true;
+            }
+
+            bookDateInput.addEventListener('change', () => {
+                selectedDate = bookDateInput.value;
+                renderTimeSlots();
+            });
+
+            backToPriceBtn.addEventListener('click', () => showStep(2));
+            proceedToDepositBtn.addEventListener('click', () => {
+                if (selectedTime) showStep(4);
+            });
+
+            // ─── Step 4: Contact validation ──────────────────────
+
+            function validateContact() {
+                const valid = fullName.value.trim() && email.value.trim() && phone.value.trim();
+                confirmDepositBtn.disabled = !valid;
+            }
+
+            [fullName, email, phone].forEach(el => el.addEventListener('input', validateContact));
+
+            backToScheduleBtn.addEventListener('click', () => showStep(3));
+
+            // ─── Confirm Deposit & Booking ─────────────────────────
+
+            confirmDepositBtn.addEventListener('click', function() {
+                if (confirmDepositBtn.disabled || !quoteData) return;
+
+                const contact = {
+                    name: fullName.value.trim(),
+                    email: email.value.trim(),
+                    phone: phone.value.trim(),
+                    address: address.value.trim(),
+                    instructions: instructions.value.trim()
+                };
+
+                const booking = {
+                    service: serviceData,
+                    quote: quoteData,
+                    frequency: selectedFreq,
+                    schedule: {
+                        date: bookDateInput.value,
+                        time: selectedTime
+                    },
+                    contact: contact,
+                    deposit: 50,
+                    status: 'booked',
+                    timestamp: new Date().toISOString()
+                };
+
+                // Update the last lead (quote_requested) to booked, or add new
+                if (leads.length > 0 && leads[leads.length - 1].status === 'quote_requested') {
+                    leads[leads.length - 1] = booking;
+                } else {
+                    leads.push(booking);
+                }
+                localStorage.setItem('summit_leads', JSON.stringify(leads));
+                renderLeadsTable();
+
+                // Show confirmation
+                summaryBox.innerHTML = `
+                    <div class="summary-row"><strong>Service:</strong> <span>${serviceData.type} · ${serviceData.sqft} sq ft</span></div>
+                    <div class="summary-row"><strong>Price:</strong> <span>$${quoteData.finalPrice} per visit</span></div>
+                    <div class="summary-row"><strong>Schedule:</strong> <span>${booking.schedule.date} at ${booking.schedule.time}</span></div>
+                    <div class="summary-row"><strong>Deposit:</strong> <span>$50 paid</span></div>
+                    <div class="summary-row"><strong>Contact:</strong> <span>${contact.name} (${contact.email})</span></div>
+                `;
+
+                showStep(5);
+                showToast(`✅ Booking confirmed for ${contact.name} – deposit received!`);
+                console.log('✅ Booking confirmed & deposit taken:', booking);
+
+                // Office notification
+                console.log('🔔 OFFICE NOTIFICATION: New booking from', contact.name);
+            });
+
+            // ─── New Booking ──────────────────────────────────────
+
+            newBookingBtn.addEventListener('click', function() {
+                // Reset all fields
+                cleanType.value = 'standard';
+                sqftInput.value = '';
+                roomsInput.value = '1';
+                bathroomsInput.value = '0';
+                floorsInput.value = '1';
+                addonChips.forEach(c => c.classList.remove('selected'));
+                bookDateInput.value = '';
+                timeSlotsContainer.innerHTML = '';
+                fullName.value = '';
+                email.value = '';
+                phone.value = '';
+                address.value = '';
+                instructions.value = '';
+                freqBtns.forEach(b => b.classList.remove('selected'));
+                document.querySelector('.freq-btn[data-freq="one-time"]').classList.add('selected');
+                selectedFreq = 'one-time';
+                quoteData = null;
+                serviceData = {};
+                selectedDate = null;
+                selectedTime = null;
+                validateServiceForm();
+                showStep(1);
+            });
+
+            // ─── Staff panel controls ─────────────────────────────
+
+            clearLeadsBtn.addEventListener('click', function() {
+                if (leads.length === 0) {
+                    showToast('No leads to clear.');
+                    return;
+                }
+                if (confirm('⚠️ Delete ALL office records?')) {
+                    leads = [];
+                    localStorage.setItem('summit_leads', JSON.stringify(leads));
+                    renderLeadsTable();
+                    showToast('🗑️ All records cleared.');
+                }
+            });
+
+            refreshLeadsBtn.addEventListener('click', function() {
+                leads = JSON.parse(localStorage.getItem('summit_leads') || '[]');
+                renderLeadsTable();
+                showToast('🔄 Refreshed.');
+            });
+
+            // ─── Init ─────────────────────────────────────────────
+
+            renderLeadsTable();
+            validateServiceForm();
+            showStep(1);
+
+        })();
+    </script>
+</body>
+</html>
