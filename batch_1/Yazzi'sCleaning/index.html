@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yazzi's Cleaning · Instant Quote & Book</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fef6f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .widget {
+            max-width: 820px;
+            width: 100%;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            border: 1px solid #fdd8c0;
+        }
+
+        /* ── Header ── */
+        .widget-header {
+            background: linear-gradient(135deg, #f97316, #f59e0b);
+            color: white;
+            padding: 1.8rem 2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 4px solid #fff3e0;
+        }
+
+        .logo-icon {
+            font-size: 2.8rem;
+            color: white;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .brand h2 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            margin: 0;
+            color: white;
+        }
+
+        .brand h2 span {
+            color: #fff3e0;
+        }
+
+        .brand p {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #ffe0cc;
+            margin-top: 0.2rem;
+        }
+
+        /* ── Progress ── */
+        .progress-wrap {
+            padding: 1.5rem 2rem 0.8rem;
+            position: relative;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #f5e1d3;
+            color: #8b5a3c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .step.active .step-circle {
+            background: #f97316;
+            color: white;
+            border-color: #fff3e0;
+            box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
+        }
+
+        .step.completed .step-circle {
+            background: #f97316;
+            color: white;
+            border-color: #f97316;
+        }
+
+        .step-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+            color: #8b5a3c;
+            letter-spacing: 0.5px;
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #f97316;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 17px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #f5e1d3;
+            z-index: 1;
+            margin: 0 48px;
+            border-radius: 3px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #f97316;
+            transition: width 0.4s ease;
+            border-radius: 3px;
+        }
+
+        /* ── Body ── */
+        .widget-body {
+            padding: 2rem 2rem 1.5rem;
+        }
+
+        .panel {
+            display: none;
+            animation: fadeSlide 0.35s ease;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2d1a0f;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        h3 i {
+            color: #f97316;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            flex: 1 1 160px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #5c3b28;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        select,
+        input[type="number"],
+        input[type="date"],
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 2px solid #f0d3be;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #fffbf8;
+            transition: 0.2s;
+            color: #2d1a0f;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: #f97316;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
+        }
+
+        .addon-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .addon-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 2px solid #f0d3be;
+            border-radius: 30px;
+            cursor: pointer;
+            background: white;
+            font-weight: 500;
+            transition: 0.2s;
+            color: #5c3b28;
+            font-size: 0.85rem;
+        }
+
+        .addon-chip i {
+            color: #8b5a3c;
+        }
+
+        .addon-chip:hover {
+            border-color: #f97316;
+        }
+
+        .addon-chip.selected {
+            background: #fff3e6;
+            border-color: #f97316;
+            color: #f97316;
+            box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.15);
+        }
+
+        .addon-chip.selected i {
+            color: #f97316;
+        }
+
+        .condition-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .condition-btn {
+            flex: 1 1 80px;
+            padding: 0.5rem 0.8rem;
+            border: 2px solid #f0d3be;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #5c3b28;
+        }
+
+        .condition-btn:hover {
+            border-color: #f97316;
+        }
+
+        .condition-btn.selected {
+            background: #f97316;
+            color: white;
+            border-color: #f97316;
+        }
+
+        .urgency-options {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .urgency-btn {
+            flex: 1 1 120px;
+            padding: 0.5rem 0.8rem;
+            border: 2px solid #f0d3be;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #5c3b28;
+        }
+
+        .urgency-btn:hover {
+            border-color: #f97316;
+        }
+
+        .urgency-btn.selected {
+            background: #f97316;
+            color: white;
+            border-color: #f97316;
+        }
+
+        .urgency-btn .sub {
+            display: block;
+            font-weight: 400;
+            font-size: 0.65rem;
+            opacity: 0.8;
+        }
+
+        /* ── Quote Card ── */
+        .quote-card {
+            background: #fff8f2;
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin: 1.2rem 0;
+            border: 2px solid #fdd8c0;
+        }
+
+        .price-number {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #2d1a0f;
+        }
+
+        .price-number .currency {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #5c3b28;
+        }
+
+        .price-sub {
+            font-size: 0.9rem;
+            color: #5c3b28;
+            margin-top: 0.2rem;
+        }
+
+        .breakdown-table {
+            width: 100%;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            border-collapse: collapse;
+        }
+
+        .breakdown-table tr {
+            border-bottom: 1px dashed #f0d3be;
+        }
+
+        .breakdown-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-table td {
+            padding: 0.4rem 0.2rem;
+        }
+
+        .breakdown-label {
+            color: #5c3b28;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .breakdown-total td {
+            border-top: 2px solid #f97316;
+            padding-top: 0.8rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .breakdown-total .breakdown-value {
+            color: #f97316;
+            font-size: 1.2rem;
+        }
+
+        .duration-badge {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            background: rgba(249, 115, 22, 0.1);
+            color: #f97316;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.6rem;
+        }
+
+        /* ── Calendar ── */
+        .time-slots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 0.6rem;
+        }
+
+        .time-slot {
+            padding: 0.5rem 1.2rem;
+            border: 2px solid #f0d3be;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: white;
+            transition: 0.15s;
+        }
+
+        .time-slot.unavailable {
+            background: #fef6f0;
+            color: #c0a28b;
+            text-decoration: line-through;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .time-slot:not(.unavailable):hover {
+            border-color: #f97316;
+        }
+
+        .time-slot.selected {
+            background: #f97316;
+            color: white;
+            border-color: #f97316;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            padding: 0.85rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #f0d3be;
+            color: #5c3b28;
+        }
+
+        .btn-outline:hover {
+            border-color: #f97316;
+            color: #f97316;
+        }
+
+        .btn-primary {
+            background: #f97316;
+            color: white;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #ea580c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.35);
+        }
+
+        .btn-primary:disabled {
+            background: #d4c4b7;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+            color: #8b5a3c;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* ── Success ── */
+        .success-panel {
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .success-panel .check-icon {
+            font-size: 3.5rem;
+            color: #f97316;
+            margin-bottom: 1rem;
+        }
+
+        .summary-box {
+            background: #fef9f5;
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: left;
+            margin: 1.5rem 0;
+            border: 1px solid #fdd8c0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed #fdd8c0;
+            padding-bottom: 0.4rem;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        /* ── Staff Panel ── */
+        .staff-panel {
+            border-top: 1px solid #fdd8c0;
+            padding: 1.5rem 2rem 2rem;
+            background: #fefaf7;
+        }
+
+        .staff-panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .staff-panel h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #8b5a3c;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .staff-panel h4 .badge {
+            background: #f97316;
+            color: white;
+            font-size: 0.65rem;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-actions .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .panel-actions .btn-clear {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .panel-actions .btn-clear:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .panel-actions .btn-refresh {
+            background: #f5e1d3;
+            color: #5c3b28;
+        }
+
+        .panel-actions .btn-refresh:hover {
+            background: #f0d3be;
+        }
+
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .leads-table th {
+            text-align: left;
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            color: #8b5a3c;
+            font-weight: 600;
+            border-bottom: 2px solid #fdd8c0;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+        }
+
+        .leads-table td {
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            border-bottom: 1px solid #f5e1d3;
+            color: #2d1a0f;
+        }
+
+        .leads-table .new-row {
+            animation: flashRow 0.6s ease;
+        }
+
+        @keyframes flashRow {
+            0% {
+                background: rgba(249, 115, 22, 0.12);
+            }
+            100% {
+                background: transparent;
+            }
+        }
+
+        .status-quote {
+            color: #f97316;
+            font-weight: 600;
+        }
+        .status-booked {
+            color: #2d6a4f;
+            font-weight: 600;
+        }
+
+        /* ── Toast ── */
+        .custom-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d1a0f;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .widget-header {
+                padding: 1.2rem 1.2rem;
+                flex-wrap: wrap;
+            }
+            .widget-body {
+                padding: 1.2rem;
+            }
+            .staff-panel {
+                padding: 1rem;
+            }
+            .progress-wrap {
+                padding: 1.2rem 1rem 0.5rem;
+            }
+            .progress-line {
+                margin: 0 20px;
+            }
+            .step-label {
+                font-size: 0.55rem;
+            }
+            .addon-grid {
+                flex-direction: column;
+            }
+            .condition-selector {
+                flex-direction: column;
+            }
+            .urgency-options {
+                flex-direction: column;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+            }
+            .leads-table {
+                font-size: 0.7rem;
+            }
+            .price-number {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="widget">
+        <!-- ── Header ── -->
+        <div class="widget-header">
+            <i class="fas fa-star logo-icon"></i>
+            <div class="brand">
+                <h2>Yazzi's<span>.</span> Cleaning</h2>
+                <p>Turnover &amp; Deep Clean · Instant Quote</p>
+            </div>
+        </div>
+
+        <!-- ── Progress ── -->
+        <div class="progress-wrap">
+            <div class="progress-line">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-steps" id="stepIndicator">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Property</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Quote</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Schedule</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Body ── -->
+        <div class="widget-body">
+            <!-- Step 1: Property Condition Intake -->
+            <div class="panel active" data-panel="1">
+                <h3><i class="fas fa-home"></i> Tell us about the property</h3>
+                <div class="form-row">
+                    <div class="form-group" style="flex:2;">
+                        <label>Property Type</label>
+                        <select id="propertyType">
+                            <option value="turnover">Short‑Term Rental Turnover</option>
+                            <option value="moveout">Move‑Out Deep Clean</option>
+                            <option value="post-renovation">Post‑Renovation Cleanup</option>
+                            <option value="deep">Standard Residential Deep Clean</option>
+                            <option value="vacation-flip">Vacation Home Flip</option>
+                            <option value="apartment-turnover">Apartment Turnover</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Sq Ft *</label>
+                        <input type="number" id="sqft" placeholder="1200" min="200" step="50" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Bedrooms</label>
+                        <input type="number" id="bedrooms" placeholder="2" min="0" value="0" />
+                    </div>
+                    <div class="form-group">
+                        <label>Bathrooms</label>
+                        <input type="number" id="bathrooms" placeholder="1" min="0" value="0" />
+                    </div>
+                </div>
+                <label style="font-weight:600; font-size:0.75rem; color:#5c3b28; margin-bottom:0.3rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">Extra Add‑ons <span style="font-weight:400; text-transform:none; color:#8b5a3c;">(select all)</span></label>
+                <div class="addon-grid" id="addonGrid">
+                    <div class="addon-chip" data-addon="oven"><i class="fas fa-oven"></i> Inside Oven</div>
+                    <div class="addon-chip" data-addon="fridge"><i class="fas fa-refrigerator"></i> Inside Fridge</div>
+                    <div class="addon-chip" data-addon="linen"><i class="fas fa-bed"></i> Linen Change</div>
+                    <div class="addon-chip" data-addon="windows"><i class="fas fa-window-maximize"></i> Interior Windows</div>
+                </div>
+                <label style="font-weight:600; font-size:0.75rem; color:#5c3b28; margin-bottom:0.3rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">Property Condition <span style="font-weight:400; text-transform:none; color:#8b5a3c;">(affects labor time)</span></label>
+                <div class="condition-selector" id="conditionGroup">
+                    <div class="condition-btn selected" data-condition="light">Light</div>
+                    <div class="condition-btn" data-condition="medium">Medium</div>
+                    <div class="condition-btn" data-condition="heavy">Heavy</div>
+                </div>
+                <label style="font-weight:600; font-size:0.75rem; color:#5c3b28; margin-bottom:0.3rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">How soon?</label>
+                <div class="urgency-options" id="urgencyGroup">
+                    <div class="urgency-btn selected" data-urgency="standard">Standard <span class="sub">2-3 days</span></div>
+                    <div class="urgency-btn" data-urgency="same-day">Same‑Day <span class="sub">+50%</span></div>
+                </div>
+                <div style="display:flex; justify-content:flex-end;">
+                    <button class="btn btn-primary" id="getQuoteBtn" disabled>
+                        <i class="fas fa-calculator"></i> Get My Price
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Quote Display & Book Trigger -->
+            <div class="panel" data-panel="2">
+                <h3><i class="fas fa-tag"></i> Your Turnover Price</h3>
+                <div class="quote-card" id="quoteCard"></div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToProperty"><i class="fas fa-arrow-left"></i> Adjust</button>
+                    <button class="btn btn-primary" id="scheduleNowBtn">
+                        <i class="fas fa-calendar-check"></i> Reserve My Slot
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Calendar & Contact -->
+            <div class="panel" data-panel="3">
+                <h3><i class="fas fa-calendar-alt"></i> Pick a day &amp; time</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Preferred Date</label>
+                        <input type="date" id="cleanDate" min="" />
+                    </div>
+                </div>
+                <label>Available arrival windows</label>
+                <div class="time-slots" id="timeSlotsContainer"></div>
+                <div style="margin-top:1.5rem;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="fullName" placeholder="Avery Brooks" />
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="email" placeholder="avery@example.com" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone *</label>
+                            <input type="tel" id="phone" placeholder="(555) 123-4567" />
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input type="text" id="address" placeholder="123 Turnover Ln, City" />
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToQuote"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-primary" id="confirmBookingBtn" disabled>
+                        <i class="fas fa-check-circle"></i> Confirm &amp; Book
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Success -->
+            <div class="panel success-panel" data-panel="4" id="successPanel">
+                <div class="check-icon"><i class="fas fa-check-circle"></i></div>
+                <h3>Slot Secured!</h3>
+                <p style="color:#5c3b28; margin-bottom:0.5rem;">You're all set. A confirmation email with details is on its way.</p>
+                <div class="summary-box" id="summaryBox"></div>
+                <button class="btn btn-primary" id="newQuoteBtn" style="margin-top:1.2rem;">
+                    <i class="fas fa-redo-alt"></i> Book Another Clean
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Staff Panel ── -->
+        <div class="staff-panel" id="staffPanel">
+            <div class="panel-header">
+                <h4><i class="fas fa-bolt" style="color:#f97316;"></i> Booking Feed <span class="badge" id="leadCount">0</span></h4>
+                <div class="panel-actions">
+                    <button class="btn-sm btn-refresh" id="refreshLeads"><i class="fas fa-sync-alt"></i></button>
+                    <button class="btn-sm btn-clear" id="clearLeads"><i class="fas fa-trash"></i> Clear</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="leads-table" id="leadsTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Sq Ft</th>
+                            <th>Urgency</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th style="width:30px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsBody">
+                        <tr><td colspan="8" style="text-align:center; color:#94a3b8; padding:1rem 0;">No activity yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── State ─────────────────────────────────────────────
+            let currentStep = 1;
+            let propertyData = {};
+            let quoteData = null;
+            let selectedUrgency = 'standard';
+            let selectedCondition = 'light';
+            let selectedDate = null;
+            let selectedTime = null;
+            let leads = JSON.parse(localStorage.getItem('yazzis_leads') || '[]');
+
+            // ─── DOM refs ──────────────────────────────────────────
+            const propertyType = document.getElementById('propertyType');
+            const sqftInput = document.getElementById('sqft');
+            const bedroomsInput = document.getElementById('bedrooms');
+            const bathroomsInput = document.getElementById('bathrooms');
+            const addonChips = document.querySelectorAll('.addon-chip');
+            const conditionBtns = document.querySelectorAll('.condition-btn');
+            const urgencyBtns = document.querySelectorAll('.urgency-btn');
+
+            const getQuoteBtn = document.getElementById('getQuoteBtn');
+            const quoteCard = document.getElementById('quoteCard');
+            const backToPropertyBtn = document.getElementById('backToProperty');
+            const scheduleNowBtn = document.getElementById('scheduleNowBtn');
+            const backToQuoteBtn = document.getElementById('backToQuote');
+            const cleanDateInput = document.getElementById('cleanDate');
+            const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+            const confirmBookingBtn = document.getElementById('confirmBookingBtn');
+            const newQuoteBtn = document.getElementById('newQuoteBtn');
+            const summaryBox = document.getElementById('summaryBox');
+
+            const fullName = document.getElementById('fullName');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+            const address = document.getElementById('address');
+
+            const leadsBody = document.getElementById('leadsBody');
+            const leadCount = document.getElementById('leadCount');
+            const clearLeadsBtn = document.getElementById('clearLeads');
+            const refreshLeadsBtn = document.getElementById('refreshLeads');
+
+            // ─── Helpers ────────────────────────────────────────────
+
+            function showStep(step) {
+                currentStep = step;
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                const target = document.querySelector(`.panel[data-panel="${step}"]`);
+                if (target) target.classList.add('active');
+
+                document.querySelectorAll('.step').forEach(s => {
+                    const num = parseInt(s.dataset.step);
+                    s.classList.remove('active', 'completed');
+                    if (num === step) s.classList.add('active');
+                    else if (num < step) s.classList.add('completed');
+                });
+                const percent = Math.min(((step - 1) / 2) * 100, 100);
+                document.getElementById('progressFill').style.width = percent + '%';
+
+                if (step === 3) {
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    cleanDateInput.min = tomorrow.toISOString().split('T')[0];
+                    if (!cleanDateInput.value) cleanDateInput.value = tomorrow.toISOString().split('T')[0];
+                    renderTimeSlots();
+                    validateBookingForm();
+                }
+            }
+
+            function renderLeadsTable() {
+                const tbody = leadsBody;
+                if (leads.length === 0) {
+                    tbody.innerHTML =
+                        '<tr><td colspan="8" style="text-align:center; color:#94a3b8; padding:1rem 0;">No activity yet</td></tr>';
+                } else {
+                    let html = '';
+                    const reversed = [...leads].reverse();
+                    reversed.forEach((lead, idx) => {
+                        const isNew = idx === 0 ? 'new-row' : '';
+                        const name = lead.contact?.name || '—';
+                        const type = lead.property?.type || '—';
+                        const sqft = lead.property?.sqft || '—';
+                        const urgency = lead.property?.urgency || '—';
+                        const price = lead.quote?.total ? `$${lead.quote.total}` : '—';
+                        const status = lead.status === 'booked' ?
+                            `<span class="status-booked">✅ Booked</span>` :
+                            `<span class="status-quote">📋 Quote</span>`;
+                        const time = lead.timestamp ? new Date(lead.timestamp).toLocaleTimeString([], { hour: '2-digit',
+                                minute: '2-digit' }) :
+                            '—';
+                        html += `
+                            <tr class="${isNew}">
+                                <td><strong>${name}</strong></td>
+                                <td>${type}</td>
+                                <td>${sqft}</td>
+                                <td>${urgency}</td>
+                                <td>${price}</td>
+                                <td>${status}</td>
+                                <td style="font-size:0.7rem;">${time}</td>
+                                <td><span style="font-size:0.6rem; background:#10b98120; color:#10b981; padding:0.1rem 0.5rem; border-radius:20px;">NEW</span></td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                }
+                leadCount.textContent = leads.length;
+            }
+
+            function showToast(message) {
+                const existing = document.querySelector('.custom-toast');
+                if (existing) existing.remove();
+                const toast = document.createElement('div');
+                toast.className = 'custom-toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+
+            // ─── Step 1 validation ─────────────────────────────────
+
+            function validateStep1() {
+                const sqft = parseFloat(sqftInput.value);
+                getQuoteBtn.disabled = !(sqft && sqft >= 200);
+            }
+
+            sqftInput.addEventListener('input', validateStep1);
+            validateStep1();
+
+            // ─── Condition selection ──────────────────────────────
+
+            conditionBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    conditionBtns.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedCondition = this.dataset.condition;
+                });
+            });
+
+            // ─── Urgency selection ─────────────────────────────────
+
+            urgencyBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    urgencyBtns.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedUrgency = this.dataset.urgency;
+                });
+            });
+
+            // ─── Add‑on selection ──────────────────────────────────
+
+            addonChips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+            });
+
+            // ─── Pricing Engine ─────────────────────────────────────
+
+            function calculateQuote() {
+                const type = propertyType.value;
+                const sqft = parseFloat(sqftInput.value) || 0;
+                const bedrooms = parseInt(bedroomsInput.value) || 0;
+                const bathrooms = parseInt(bathroomsInput.value) || 0;
+                const addons = [];
+                addonChips.forEach(c => {
+                    if (c.classList.contains('selected')) addons.push(c.dataset.addon);
+                });
+                const condition = selectedCondition;
+                const urgency = selectedUrgency;
+
+                // ── Base rate per sq ft ──
+                const baseRates = {
+                    turnover: 0.16,
+                    moveout: 0.22,
+                    'post-renovation': 0.20,
+                    deep: 0.14,
+                    'vacation-flip': 0.18,
+                    'apartment-turnover': 0.15
+                };
+                const baseRate = baseRates[type] || 0.16;
+                let base = sqft * baseRate;
+
+                // ── Room charges ──
+                const roomCharge = bedrooms * 30 + bathrooms * 20;
+
+                // ── Add‑on costs ──
+                const addonPrices = { oven: 25, fridge: 30, linen: 20, windows: 40 };
+                let addonCost = 0;
+                addons.forEach(a => { addonCost += addonPrices[a] || 0; });
+
+                // ── Condition factor ──
+                const conditionMult = { light: 1.0, medium: 1.15, heavy: 1.30 };
+                const condMul = conditionMult[condition] || 1.0;
+
+                // ── Urgency multiplier ──
+                const urgencyMult = urgency === 'same-day' ? 1.50 : 1.0;
+
+                // ── Subtotal ──
+                let subtotal = (base + roomCharge + addonCost) * condMul;
+                const total = Math.round(subtotal * urgencyMult);
+
+                // ── Labor hours estimate ──
+                const baseHours = sqft / 400 + bedrooms * 0.6 + bathrooms * 0.8;
+                const laborHours = Math.ceil(baseHours * condMul * (urgency === 'same-day' ? 1.2 : 1.0));
+
+                return {
+                    type,
+                    sqft,
+                    bedrooms,
+                    bathrooms,
+                    addons,
+                    condition,
+                    urgency,
+                    base: Math.round(base),
+                    roomCharge,
+                    addonCost,
+                    condMul,
+                    urgencyMult,
+                    subtotal: Math.round(subtotal),
+                    total,
+                    laborHours
+                };
+            }
+
+            // ─── Display Quote ─────────────────────────────────────
+
+            function displayQuote(q) {
+                const typeLabels = {
+                    turnover: 'Short‑Term Turnover',
+                    moveout: 'Move‑Out Deep Clean',
+                    'post-renovation': 'Post‑Renovation',
+                    deep: 'Standard Deep Clean',
+                    'vacation-flip': 'Vacation Home Flip',
+                    'apartment-turnover': 'Apartment Turnover'
+                };
+                const conditionLabels = { light: 'Light', medium: 'Medium', heavy: 'Heavy' };
+                const urgencyLabel = q.urgency === 'same-day' ? 'Same‑Day' : 'Standard';
+                const addonList = q.addons.length ? q.addons.join(', ') : 'None';
+
+                quoteCard.innerHTML = `
+                    <div class="price-number">$${q.total} <span class="currency">total</span></div>
+                    <div class="price-sub">${typeLabels[q.type]} · ${q.sqft} sq ft · ${q.bedrooms}BR/${q.bathrooms}BA · ${conditionLabels[q.condition]}</div>
+                    <table class="breakdown-table">
+                        <tr>
+                            <td class="breakdown-label">Base cleaning (${q.sqft} sqft)</td>
+                            <td class="breakdown-value">$${q.base.toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td class="breakdown-label">Room charges (${q.bedrooms}BR/${q.bathrooms}BA)</td>
+                            <td class="breakdown-value">+$${q.roomCharge.toLocaleString()}</td>
+                        </tr>
+                        ${q.addonCost > 0 ? `
+                        <tr>
+                            <td class="breakdown-label">Add‑ons (${q.addons.length})</td>
+                            <td class="breakdown-value">+$${q.addonCost.toLocaleString()}</td>
+                        </tr>` : ''}
+                        ${q.condMul > 1 ? `
+                        <tr>
+                            <td class="breakdown-label">Condition factor (${conditionLabels[q.condition]})</td>
+                            <td class="breakdown-value">${Math.round((q.condMul-1)*100)}%</td>
+                        </tr>` : ''}
+                        ${q.urgencyMult > 1 ? `
+                        <tr>
+                            <td class="breakdown-label">Same‑Day urgency</td>
+                            <td class="breakdown-value">+50%</td>
+                        </tr>` : ''}
+                        <tr class="breakdown-total">
+                            <td>Total Estimate</td>
+                            <td class="breakdown-value">$${q.total.toLocaleString()}</td>
+                        </tr>
+                    </table>
+                    <div style="display:flex; gap:0.8rem; flex-wrap:wrap; margin-top:0.6rem;">
+                        <span class="duration-badge"><i class="fas fa-clock"></i> ~${q.laborHours} hrs</span>
+                        <span class="duration-badge"><i class="fas fa-arrows-spin"></i> ${Math.round(q.sqft / q.laborHours)} sqft/hr</span>
+                        <span class="duration-badge" style="background:rgba(249,115,22,0.08);">Add‑ons: ${addonList}</span>
+                    </div>
+                `;
+                quoteData = q;
+            }
+
+            // ─── Step 1 → 2 ──────────────────────────────────────
+
+            getQuoteBtn.addEventListener('click', function() {
+                if (getQuoteBtn.disabled) return;
+                const q = calculateQuote();
+                propertyData = {
+                    type: q.type,
+                    sqft: q.sqft,
+                    bedrooms: q.bedrooms,
+                    bathrooms: q.bathrooms,
+                    addons: q.addons,
+                    condition: q.condition,
+                    urgency: q.urgency
+                };
+                displayQuote(q);
+
+                // Store partial lead
+                const lead = {
+                    property: propertyData,
+                    quote: q,
+                    contact: null,
+                    status: 'quote_generated',
+                    timestamp: new Date().toISOString()
+                };
+                leads.push(lead);
+                localStorage.setItem('yazzis_leads', JSON.stringify(leads));
+                renderLeadsTable();
+
+                showStep(2);
+                showToast('✨ Quote ready! Office notified.');
+                console.log('✨ Quote generated:', q);
+            });
+
+            backToPropertyBtn.addEventListener('click', () => showStep(1));
+
+            // ─── Step 2 → 3 ──────────────────────────────────────
+
+            scheduleNowBtn.addEventListener('click', function() {
+                if (!quoteData) return;
+                showStep(3);
+            });
+
+            // ─── Step 3: Time slots ──────────────────────────────
+
+            function renderTimeSlots() {
+                const date = cleanDateInput.value;
+                if (!date) {
+                    timeSlotsContainer.innerHTML = '<p style="color:#94a3b8;">Select a date first</p>';
+                    validateBookingForm();
+                    return;
+                }
+                const slots = ['8:00 AM', '9:30 AM', '11:00 AM', '12:30 PM', '2:00 PM', '3:30 PM', '5:00 PM'];
+                const hash = date.split('-').reduce((a, v) => a + parseInt(v || 0), 0);
+                const bookedCount = hash % 3;
+                const booked = [];
+                for (let i = 0; i < bookedCount; i++) {
+                    booked.push(slots[(hash + i * 2) % slots.length]);
+                }
+
+                timeSlotsContainer.innerHTML = '';
+                slots.forEach(slot => {
+                    const div = document.createElement('div');
+                    div.className = 'time-slot';
+                    if (booked.includes(slot)) {
+                        div.classList.add('unavailable');
+                        div.textContent = slot + ' (taken)';
+                    } else {
+                        div.textContent = slot;
+                        div.addEventListener('click', function() {
+                            document.querySelectorAll('.time-slot:not(.unavailable)').forEach(s => s.classList
+                                .remove('selected'));
+                            this.classList.add('selected');
+                            selectedTime = slot;
+                            validateBookingForm();
+                        });
+                    }
+                    timeSlotsContainer.appendChild(div);
+                });
+                selectedTime = null;
+                validateBookingForm();
+            }
+
+            cleanDateInput.addEventListener('change', () => {
+                selectedDate = cleanDateInput.value;
+                renderTimeSlots();
+            });
+
+            backToQuoteBtn.addEventListener('click', () => showStep(2));
+
+            // ─── Step 3: Contact validation ──────────────────────
+
+            function validateBookingForm() {
+                const valid = fullName.value.trim() && email.value.trim() && phone.value.trim() && selectedTime;
+                confirmBookingBtn.disabled = !valid;
+            }
+
+            [fullName, email, phone].forEach(el => el.addEventListener('input', validateBookingForm));
+
+            // ─── Confirm Booking ──────────────────────────────────
+
+            confirmBookingBtn.addEventListener('click', function() {
+                if (confirmBookingBtn.disabled || !quoteData) return;
+
+                const contact = {
+                    name: fullName.value.trim(),
+                    email: email.value.trim(),
+                    phone: phone.value.trim(),
+                    address: address.value.trim()
+                };
+
+                const booking = {
+                    property: propertyData,
+                    quote: quoteData,
+                    contact: contact,
+                    schedule: {
+                        date: cleanDateInput.value,
+                        time: selectedTime
+                    },
+                    status: 'booked',
+                    timestamp: new Date().toISOString()
+                };
+
+                // Update the last lead (quote) to booked, or add new
+                if (leads.length > 0 && leads[leads.length - 1].status === 'quote_generated') {
+                    leads[leads.length - 1] = booking;
+                } else {
+                    leads.push(booking);
+                }
+                localStorage.setItem('yazzis_leads', JSON.stringify(leads));
+                renderLeadsTable();
+
+                // Show confirmation
+                summaryBox.innerHTML = `
+                    <div class="summary-row"><strong>Property:</strong> <span>${propertyData.type} · ${propertyData.sqft} sqft</span></div>
+                    <div class="summary-row"><strong>Price:</strong> <span>$${quoteData.total}</span></div>
+                    <div class="summary-row"><strong>When:</strong> <span>${booking.schedule.date} at ${booking.schedule.time}</span></div>
+                    <div class="summary-row"><strong>Contact:</strong> <span>${contact.name} (${contact.email})</span></div>
+                `;
+
+                showStep(4);
+                showToast(`✅ Slot booked for ${contact.name}!`);
+                console.log('✅ Booking confirmed:', booking);
+            });
+
+            // ─── New Quote ─────────────────────────────────────────
+
+            newQuoteBtn.addEventListener('click', function() {
+                // Reset all fields
+                propertyType.value = 'turnover';
+                sqftInput.value = '';
+                bedroomsInput.value = '0';
+                bathroomsInput.value = '0';
+                addonChips.forEach(c => c.classList.remove('selected'));
+                conditionBtns.forEach(b => b.classList.remove('selected'));
+                document.querySelector('.condition-btn[data-condition="light"]').classList.add('selected');
+                selectedCondition = 'light';
+                urgencyBtns.forEach(b => b.classList.remove('selected'));
+                document.querySelector('.urgency-btn[data-urgency="standard"]').classList.add('selected');
+                selectedUrgency = 'standard';
+                cleanDateInput.value = '';
+                timeSlotsContainer.innerHTML = '';
+                fullName.value = '';
+                email.value = '';
+                phone.value = '';
+                address.value = '';
+                quoteData = null;
+                propertyData = {};
+                selectedDate = null;
+                selectedTime = null;
+                getQuoteBtn.disabled = true;
+                confirmBookingBtn.disabled = true;
+                showStep(1);
+            });
+
+            // ─── Staff panel controls ─────────────────────────────
+
+            clearLeadsBtn.addEventListener('click', function() {
+                if (leads.length === 0) {
+                    showToast('No leads to clear.');
+                    return;
+                }
+                if (confirm('⚠️ Delete ALL records?')) {
+                    leads = [];
+                    localStorage.setItem('yazzis_leads', JSON.stringify(leads));
+                    renderLeadsTable();
+                    showToast('🗑️ All records cleared.');
+                }
+            });
+
+            refreshLeadsBtn.addEventListener('click', function() {
+                leads = JSON.parse(localStorage.getItem('yazzis_leads') || '[]');
+                renderLeadsTable();
+                showToast('🔄 Refreshed.');
+            });
+
+            // ─── Init ─────────────────────────────────────────────
+
+            renderLeadsTable();
+            validateStep1();
+            showStep(1);
+
+        })();
+    </script>
+</body>
+</html>
