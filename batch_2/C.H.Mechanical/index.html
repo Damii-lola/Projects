@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C.H. Mechanical · Design‑Build RFP Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #eef2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .widget {
+            max-width: 880px;
+            width: 100%;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid #dce3ea;
+        }
+
+        /* ── Header ── */
+        .widget-header {
+            background: #0b3d5c;
+            color: white;
+            padding: 1.8rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 4px solid #f39c12;
+        }
+
+        .logo-icon {
+            font-size: 2.6rem;
+            color: #f39c12;
+        }
+
+        .brand h2 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            margin: 0;
+            color: white;
+        }
+
+        .brand h2 span {
+            color: #f39c12;
+        }
+
+        .brand p {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #b0c7d6;
+            margin-top: 0.2rem;
+        }
+
+        /* ── Progress ── */
+        .progress-wrap {
+            padding: 1.5rem 2rem 0.8rem;
+            position: relative;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #dce3ea;
+            color: #4a6379;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .step.active .step-circle {
+            background: #0b3d5c;
+            color: white;
+            border-color: #f39c12;
+            box-shadow: 0 0 0 4px rgba(11, 61, 92, 0.15);
+        }
+
+        .step.completed .step-circle {
+            background: #0b3d5c;
+            color: white;
+            border-color: #0b3d5c;
+        }
+
+        .step-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+            color: #7f8c9a;
+            letter-spacing: 0.5px;
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #0b3d5c;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 17px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #dce3ea;
+            z-index: 1;
+            margin: 0 48px;
+            border-radius: 3px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #0b3d5c;
+            transition: width 0.4s ease;
+            border-radius: 3px;
+        }
+
+        /* ── Body ── */
+        .widget-body {
+            padding: 2rem 2rem 1.5rem;
+        }
+
+        .panel {
+            display: none;
+            animation: fadeSlide 0.35s ease;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a2c3f;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        h3 i {
+            color: #f39c12;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            flex: 1 1 160px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #2d445b;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        select,
+        input[type="number"],
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 2px solid #cfdbe8;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #f9fbfd;
+            transition: 0.2s;
+            color: #1a2c3f;
+        }
+
+        select:focus,
+        input:focus,
+        textarea:focus {
+            border-color: #f39c12;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.12);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .file-drop-zone {
+            border: 2px dashed #cfdbe8;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            background: #f9fbfd;
+            margin-bottom: 1rem;
+        }
+
+        .file-drop-zone:hover {
+            border-color: #f39c12;
+            background: #fef9e7;
+        }
+
+        .file-drop-zone i {
+            font-size: 2.2rem;
+            color: #0b3d5c;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-drop-zone p {
+            font-weight: 600;
+            color: #0b3d5c;
+        }
+
+        .file-drop-zone small {
+            color: #4a6379;
+        }
+
+        .file-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 0.8rem 0.3rem 0.5rem;
+            background: #eef2f5;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            border: 1px solid #cfdbe8;
+        }
+
+        .file-item .remove-file {
+            color: #e53e3e;
+            cursor: pointer;
+            font-weight: 700;
+            margin-left: 0.3rem;
+        }
+
+        .file-item .remove-file:hover {
+            color: #c62828;
+        }
+
+        .file-item i {
+            color: #f39c12;
+        }
+
+        .input-file-hidden {
+            display: none;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.6rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .checkbox-grid label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 500;
+            color: #2d445b;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .checkbox-grid input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #f39c12;
+            cursor: pointer;
+        }
+
+        .budget-range {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .budget-range input {
+            flex: 1;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            padding: 0.85rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #cfdbe8;
+            color: #0b3d5c;
+        }
+
+        .btn-outline:hover {
+            border-color: #f39c12;
+            color: #f39c12;
+        }
+
+        .btn-primary {
+            background: #0b3d5c;
+            color: white;
+            box-shadow: 0 4px 12px rgba(11, 61, 92, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #0a3248;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(11, 61, 92, 0.35);
+        }
+
+        .btn-primary:disabled {
+            background: #cfdbe8;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: #0b3d5c;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.35);
+        }
+
+        .btn-warning:hover:not(:disabled) {
+            background: #d8850b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(243, 156, 18, 0.4);
+        }
+
+        .btn-warning:disabled {
+            background: #cfdbe8;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* ── Summary Card ── */
+        .summary-card {
+            background: #f4f8fb;
+            border-radius: 14px;
+            padding: 1.2rem 1.5rem;
+            margin: 1.2rem 0;
+            border: 1px solid #cfdbe8;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed #cfdbe8;
+            padding-bottom: 0.4rem;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-row .label {
+            color: #4a6379;
+        }
+        .summary-row .value {
+            font-weight: 600;
+            color: #1a2c3f;
+        }
+
+        .complexity-badge {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: #fef9e7;
+            color: #d8850b;
+            border: 1px solid #f39c12;
+        }
+
+        .complexity-badge.high {
+            background: #fee2e2;
+            color: #991b1b;
+            border-color: #e53e3e;
+        }
+        .complexity-badge.medium {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #f59e0b;
+        }
+        .complexity-badge.low {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #10b981;
+        }
+
+        /* ── Confirmation ── */
+        .confirmation-panel {
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .confirmation-panel .check-icon {
+            font-size: 3.5rem;
+            color: #2f855a;
+            margin-bottom: 1rem;
+        }
+
+        .dispatch-progress {
+            display: flex;
+            justify-content: space-between;
+            margin: 1.2rem 0;
+            padding: 0.5rem 0;
+        }
+
+        .dispatch-progress .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            font-size: 0.7rem;
+            color: #7f8c9a;
+            font-weight: 600;
+            gap: 0.3rem;
+        }
+
+        .dispatch-progress .progress-step .step-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #dce3ea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a6379;
+            transition: 0.3s;
+        }
+
+        .dispatch-progress .progress-step.active .step-icon {
+            background: #f39c12;
+            color: white;
+            box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.15);
+        }
+
+        .dispatch-progress .progress-step.completed .step-icon {
+            background: #0b3d5c;
+            color: white;
+        }
+
+        .dispatch-progress .progress-step.active .step-label {
+            color: #f39c12;
+        }
+        .dispatch-progress .progress-step.completed .step-label {
+            color: #0b3d5c;
+        }
+
+        .estimator-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.8rem;
+            padding: 0.8rem 1rem;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #cfdbe8;
+        }
+
+        .estimator-info i {
+            font-size: 2rem;
+            color: #0b3d5c;
+        }
+
+        .estimator-info .est-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #1a2c3f;
+        }
+
+        .estimator-info .est-status {
+            font-size: 0.8rem;
+            color: #f39c12;
+            font-weight: 600;
+        }
+
+        /* ── Staff Panel ── */
+        .staff-panel {
+            border-top: 1px solid #dce3ea;
+            padding: 1.5rem 2rem 2rem;
+            background: #f8fafc;
+        }
+
+        .staff-panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .staff-panel h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #4a6379;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .staff-panel h4 .badge {
+            background: #f39c12;
+            color: #0b3d5c;
+            font-size: 0.65rem;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-actions .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .panel-actions .btn-clear {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .panel-actions .btn-clear:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .panel-actions .btn-refresh {
+            background: #dce3ea;
+            color: #2d445b;
+        }
+
+        .panel-actions .btn-refresh:hover {
+            background: #cfdbe8;
+        }
+
+        .rfps-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .rfps-table th {
+            text-align: left;
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            color: #4a6379;
+            font-weight: 600;
+            border-bottom: 2px solid #dce3ea;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+        }
+
+        .rfps-table td {
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            border-bottom: 1px solid #edf2f7;
+            color: #1a2c3f;
+        }
+
+        .rfps-table .new-row {
+            animation: flashRow 0.6s ease;
+        }
+
+        @keyframes flashRow {
+            0% {
+                background: rgba(243, 156, 18, 0.12);
+            }
+            100% {
+                background: transparent;
+            }
+        }
+
+        .status-received {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        .status-assigned {
+            color: #f39c12;
+            font-weight: 600;
+        }
+        .status-review {
+            color: #8b5cf6;
+            font-weight: 600;
+        }
+        .status-drafting {
+            color: #ec4899;
+            font-weight: 600;
+        }
+        .status-ready {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        /* ── Toast ── */
+        .custom-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0b3d5c;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .widget-header {
+                padding: 1.2rem 1.2rem;
+                flex-wrap: wrap;
+            }
+            .widget-body {
+                padding: 1.2rem;
+            }
+            .staff-panel {
+                padding: 1rem;
+            }
+            .progress-wrap {
+                padding: 1.2rem 1rem 0.5rem;
+            }
+            .progress-line {
+                margin: 0 20px;
+            }
+            .step-label {
+                font-size: 0.55rem;
+            }
+            .checkbox-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+            }
+            .rfps-table {
+                font-size: 0.7rem;
+            }
+            .dispatch-progress {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: center;
+            }
+            .dispatch-progress .progress-step {
+                flex-direction: row;
+                gap: 0.5rem;
+                width: 100%;
+            }
+            .dispatch-progress .progress-step .step-label {
+                font-size: 0.7rem;
+            }
+            .estimator-info {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="widget">
+        <!-- ── Header ── -->
+        <div class="widget-header">
+            <i class="fas fa-cogs logo-icon"></i>
+            <div class="brand">
+                <h2>C.H.<span>.</span> Mechanical LLC</h2>
+                <p>Commercial Design‑Build · RFP &amp; Proposal Hub</p>
+            </div>
+        </div>
+
+        <!-- ── Progress ── -->
+        <div class="progress-wrap">
+            <div class="progress-line">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-steps" id="stepIndicator">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Scope</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Submit</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Dispatched</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Body ── -->
+        <div class="widget-body">
+            <!-- Step 1: Project Scope & Upload -->
+            <div class="panel active" data-panel="1">
+                <h3><i class="fas fa-file-upload"></i> Project Scope &amp; Plans</h3>
+
+                <!-- File Upload -->
+                <div class="file-drop-zone" id="fileDropZone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drop files here or click to upload</p>
+                    <small>PDF, DWG, ZIP, DOCX, XLSX up to 25MB each</small>
+                    <div class="file-list" id="fileList"></div>
+                    <input type="file" id="fileInput" class="input-file-hidden" multiple accept=".pdf,.dwg,.zip,.docx,.xlsx" />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Building Sq Ft *</label>
+                        <input type="number" id="sqft" placeholder="25000" min="100" step="100" />
+                    </div>
+                    <div class="form-group">
+                        <label>Number of Floors</label>
+                        <input type="number" id="floors" placeholder="5" min="1" value="1" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Occupancy Classification</label>
+                        <select id="occupancy">
+                            <option value="">-- Select --</option>
+                            <option>Assembly</option>
+                            <option>Business</option>
+                            <option>Educational</option>
+                            <option>Healthcare</option>
+                            <option>Mercantile</option>
+                            <option>Residential</option>
+                            <option>Industrial</option>
+                            <option>Storage</option>
+                            <option>Utility</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Project Type</label>
+                        <select id="projectType">
+                            <option value="new-construction">New Construction</option>
+                            <option value="retrofit">Retrofit / Upgrade</option>
+                            <option value="ti">Tenant Improvement</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Estimated Budget Range</label>
+                        <div class="budget-range">
+                            <input type="number" id="budgetMin" placeholder="Min $" min="0" step="10000" />
+                            <span>–</span>
+                            <input type="number" id="budgetMax" placeholder="Max $" min="0" step="10000" />
+                        </div>
+                    </div>
+                </div>
+
+                <label style="font-weight:600; font-size:0.75rem; color:#2d445b; margin-bottom:0.3rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">Mechanical Systems Required</label>
+                <div class="checkbox-grid" id="systemsGrid">
+                    <label><input type="checkbox" value="hvac" /> HVAC</label>
+                    <label><input type="checkbox" value="plumbing" /> Plumbing</label>
+                    <label><input type="checkbox" value="fire-protection" /> Fire Protection</label>
+                    <label><input type="checkbox" value="controls" /> Building Controls</label>
+                    <label><input type="checkbox" value="special-systems" /> Special Systems</label>
+                </div>
+
+                <label style="font-weight:600; font-size:0.75rem; color:#2d445b; margin-bottom:0.3rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">Specialized Piping Requirements</label>
+                <div class="checkbox-grid" id="pipingGrid">
+                    <label><input type="checkbox" value="medical-gas" /> Medical Gas</label>
+                    <label><input type="checkbox" value="process-piping" /> Process Piping</label>
+                    <label><input type="checkbox" value="refrigeration" /> Refrigeration</label>
+                    <label><input type="checkbox" value="hydronic" /> Hydronic</label>
+                    <label><input type="checkbox" value="steam" /> Steam</label>
+                    <label><input type="checkbox" value="fuel-oil" /> Fuel Oil</label>
+                    <label><input type="checkbox" value="chilled-water" /> Chilled Water</label>
+                    <label><input type="checkbox" value="hot-water" /> Hot Water</label>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex:2;">
+                        <label>Special Requirements</label>
+                        <input type="text" id="specialRequirements" placeholder="e.g., LEED certification, phasing, existing systems integration..." />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Estimated Start Date</label>
+                        <input type="date" id="startDate" min="" />
+                    </div>
+                    <div class="form-group">
+                        <label>Target Completion</label>
+                        <input type="date" id="completionDate" min="" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Project Description / Scope Notes</label>
+                    <textarea id="notes" placeholder="Brief description of mechanical scope, timeline, and any other relevant details..."></textarea>
+                </div>
+
+                <div style="text-align:right;">
+                    <button class="btn btn-primary" id="toSubmitBtn" disabled>
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Contact & Summary -->
+            <div class="panel" data-panel="2">
+                <h3><i class="fas fa-user-check"></i> Contact &amp; Summary</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Contact Name *</label>
+                        <input type="text" id="contactName" placeholder="John Smith" />
+                    </div>
+                    <div class="form-group">
+                        <label>Company *</label>
+                        <input type="text" id="company" placeholder="ABC Construction" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" placeholder="john@abc.com" />
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="tel" id="phone" placeholder="(555) 123-4567" />
+                    </div>
+                </div>
+                <div class="summary-card" id="summaryCard"></div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToScope"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-warning" id="submitRfpBtn" disabled>
+                        <i class="fas fa-paper-plane"></i> Send to Estimator
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Dispatch Confirmation -->
+            <div class="panel confirmation-panel" data-panel="3" id="successPanel">
+                <div class="check-icon"><i class="fas fa-check-circle"></i></div>
+                <h3>RFP Dispatched to Senior Estimator</h3>
+                <p style="color:#2d445b;">Your project details and uploaded files have been sent. Our team will deliver a comprehensive proposal within the estimated timeframe.</p>
+
+                <div class="dispatch-progress" id="dispatchProgress">
+                    <div class="progress-step completed" data-pstep="1">
+                        <span class="step-icon"><i class="fas fa-check"></i></span>
+                        <span class="step-label">Received</span>
+                    </div>
+                    <div class="progress-step active" data-pstep="2">
+                        <span class="step-icon"><i class="fas fa-user-hard-hat"></i></span>
+                        <span class="step-label">Estimator Assigned</span>
+                    </div>
+                    <div class="progress-step" data-pstep="3">
+                        <span class="step-icon"><i class="fas fa-search"></i></span>
+                        <span class="step-label">In Review</span>
+                    </div>
+                    <div class="progress-step" data-pstep="4">
+                        <span class="step-icon"><i class="fas fa-pen"></i></span>
+                        <span class="step-label">Drafting</span>
+                    </div>
+                    <div class="progress-step" data-pstep="5">
+                        <span class="step-icon"><i class="fas fa-flag-checkered"></i></span>
+                        <span class="step-label">Ready</span>
+                    </div>
+                </div>
+
+                <div class="summary-card" id="dispatchSummary"></div>
+
+                <button class="btn btn-primary" id="newRfpBtn" style="margin-top:1.2rem;">
+                    <i class="fas fa-redo-alt"></i> Submit Another RFP
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Staff Panel ── -->
+        <div class="staff-panel" id="staffPanel">
+            <div class="panel-header">
+                <h4><i class="fas fa-bolt" style="color:#f39c12;"></i> RFP Feed <span class="badge" id="rfpCount">0</span></h4>
+                <div class="panel-actions">
+                    <button class="btn-sm btn-refresh" id="refreshRfps"><i class="fas fa-sync-alt"></i></button>
+                    <button class="btn-sm btn-clear" id="clearRfps"><i class="fas fa-trash"></i> Clear</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="rfps-table" id="rfpsTable">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Contact</th>
+                            <th>Sq Ft</th>
+                            <th>Complexity</th>
+                            <th>Estimator</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th style="width:30px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="rfpsBody">
+                        <tr><td colspan="8" style="text-align:center; color:#94a3b8; padding:1rem 0;">No RFPs yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── Data ──────────────────────────────────────────────
+
+            const ESTIMATORS = [
+                { name: 'Robert Chen', id: 'EST-104', specialty: 'HVAC & Controls', availability: 'Available' },
+                { name: 'Maria Santos', id: 'EST-207', specialty: 'Plumbing & Piping', availability: 'Available' },
+                { name: 'James Wright', id: 'EST-315', specialty: 'Fire Protection & Special Systems',
+                availability: 'Available' },
+                { name: 'Lisa Park', id: 'EST-501', specialty: 'Complex Systems', availability: 'Available' },
+                { name: 'David Kim', id: 'EST-422', specialty: 'Industrial & Process', availability: 'Available' }
+            ];
+
+            const STATUSES = [
+                { label: 'Received', class: 'status-received' },
+                { label: 'Assigned', class: 'status-assigned' },
+                { label: 'In Review', class: 'status-review' },
+                { label: 'Drafting', class: 'status-drafting' },
+                { label: 'Ready for Review', class: 'status-ready' }
+            ];
+
+            // ─── State ─────────────────────────────────────────────
+
+            let currentStep = 1;
+            let uploadedFiles = [];
+            let rfps = JSON.parse(localStorage.getItem('ch_mechanical_rfps') || '[]');
+            let dispatchInterval = null;
+
+            // ─── DOM refs ──────────────────────────────────────────
+
+            const fileDropZone = document.getElementById('fileDropZone');
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+            const sqftInput = document.getElementById('sqft');
+            const floorsInput = document.getElementById('floors');
+            const occupancySelect = document.getElementById('occupancy');
+            const projectTypeSelect = document.getElementById('projectType');
+            const budgetMin = document.getElementById('budgetMin');
+            const budgetMax = document.getElementById('budgetMax');
+            const systemsCheckboxes = document.querySelectorAll('#systemsGrid input[type="checkbox"]');
+            const pipingCheckboxes = document.querySelectorAll('#pipingGrid input[type="checkbox"]');
+            const specialReq = document.getElementById('specialRequirements');
+            const startDate = document.getElementById('startDate');
+            const completionDate = document.getElementById('completionDate');
+            const notes = document.getElementById('notes');
+
+            const toSubmitBtn = document.getElementById('toSubmitBtn');
+            const backToScopeBtn = document.getElementById('backToScope');
+            const submitRfpBtn = document.getElementById('submitRfpBtn');
+            const newRfpBtn = document.getElementById('newRfpBtn');
+
+            const contactName = document.getElementById('contactName');
+            const company = document.getElementById('company');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+            const summaryCard = document.getElementById('summaryCard');
+            const dispatchSummary = document.getElementById('dispatchSummary');
+
+            const rfpsBody = document.getElementById('rfpsBody');
+            const rfpCount = document.getElementById('rfpCount');
+            const clearRfps = document.getElementById('clearRfps');
+            const refreshRfps = document.getElementById('refreshRfps');
+
+            // ─── Helpers ────────────────────────────────────────────
+
+            function showStep(step) {
+                currentStep = step;
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                const target = document.querySelector(`.panel[data-panel="${step}"]`);
+                if (target) target.classList.add('active');
+
+                document.querySelectorAll('.step').forEach(s => {
+                    const num = parseInt(s.dataset.step);
+                    s.classList.remove('active', 'completed');
+                    if (num === step) s.classList.add('active');
+                    else if (num < step) s.classList.add('completed');
+                });
+                const percent = Math.min(((step - 1) / 2) * 100, 100);
+                document.getElementById('progressFill').style.width = percent + '%';
+
+                if (step === 2) {
+                    updateSummary();
+                    validateContact();
+                }
+                if (step === 3) {
+                    // progress simulation already running
+                }
+            }
+
+            function renderRfpsTable() {
+                const tbody = rfpsBody;
+                if (rfps.length === 0) {
+                    tbody.innerHTML =
+                        '<tr><td colspan="8" style="text-align:center; color:#94a3b8; padding:1rem 0;">No RFPs yet</td></tr>';
+                } else {
+                    let html = '';
+                    const reversed = [...rfps].reverse();
+                    reversed.forEach((r, idx) => {
+                        const isNew = idx === 0 ? 'new-row' : '';
+                        const statusClass = r.status ? r.status.class : 'status-received';
+                        const statusLabel = r.status ? r.status.label : 'Received';
+                        const complexity = r.complexity || 'Medium';
+                        const compClass = complexity === 'High' ? 'high' : complexity === 'Low' ? 'low' : 'medium';
+                        const estimator = r.estimator?.name || '—';
+                        const time = r.timestamp ? new Date(r.timestamp).toLocaleTimeString([], { hour: '2-digit',
+                                minute: '2-digit' }) :
+                            '—';
+                        const companyName = r.contact?.company || '—';
+                        const contact = r.contact?.name || '—';
+                        const sqft = r.sqft || '—';
+                        html += `
+                            <tr class="${isNew}">
+                                <td><strong>${companyName}</strong></td>
+                                <td>${contact}</td>
+                                <td>${sqft}</td>
+                                <td><span class="complexity-badge ${compClass}">${complexity}</span></td>
+                                <td>${estimator}</td>
+                                <td><span class="${statusClass}">● ${statusLabel}</span></td>
+                                <td style="font-size:0.7rem;">${time}</td>
+                                <td><span style="font-size:0.6rem; background:#10b98120; color:#10b981; padding:0.1rem 0.5rem; border-radius:20px;">NEW</span></td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                }
+                rfpCount.textContent = rfps.length;
+            }
+
+            function showToast(message) {
+                const existing = document.querySelector('.custom-toast');
+                if (existing) existing.remove();
+                const toast = document.createElement('div');
+                toast.className = 'custom-toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+
+            function getSelectedSystems() {
+                return Array.from(systemsCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+            }
+
+            function getSelectedPiping() {
+                return Array.from(pipingCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+            }
+
+            function calculateComplexity() {
+                const sqft = parseInt(sqftInput.value) || 0;
+                const floors = parseInt(floorsInput.value) || 1;
+                const systems = getSelectedSystems().length;
+                const piping = getSelectedPiping().length;
+                const budgetMinVal = parseInt(budgetMin.value) || 0;
+                const budgetMaxVal = parseInt(budgetMax.value) || 0;
+                const hasSpecial = specialReq.value.trim() !== '';
+
+                let score = 0;
+                if (sqft > 100000) score += 3;
+                else if (sqft > 50000) score += 2;
+                else if (sqft > 20000) score += 1;
+
+                if (floors > 5) score += 2;
+                else if (floors > 2) score += 1;
+
+                if (systems > 3) score += 2;
+                else if (systems > 1) score += 1;
+
+                if (piping > 3) score += 2;
+                else if (piping > 1) score += 1;
+
+                if (budgetMaxVal > 5000000) score += 2;
+                else if (budgetMaxVal > 2000000) score += 1;
+
+                if (hasSpecial) score += 1;
+
+                if (score >= 8) return { label: 'High', class: 'high' };
+                if (score >= 4) return { label: 'Medium', class: 'medium' };
+                return { label: 'Low', class: 'low' };
+            }
+
+            function getTurnaround(complexity) {
+                const map = { High: 10, Medium: 6, Low: 3 };
+                return map[complexity] || 5;
+            }
+
+            function getEstimator(complexity) {
+                // Simulate assignment based on complexity and availability
+                const available = ESTIMATORS.filter(e => e.availability === 'Available');
+                if (available.length === 0) return ESTIMATORS[0];
+                // Deterministic selection based on complexity
+                const idx = complexity === 'High' ? 0 : complexity === 'Medium' ? 2 : 4;
+                return available[idx % available.length];
+            }
+
+            // ─── File upload handling ─────────────────────────────
+
+            fileDropZone.addEventListener('click', () => fileInput.click());
+            fileDropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileDropZone.style.borderColor = '#f39c12';
+                fileDropZone.style.background = '#fef9e7';
+            });
+            fileDropZone.addEventListener('dragleave', () => {
+                fileDropZone.style.borderColor = '#cfdbe8';
+                fileDropZone.style.background = '#f9fbfd';
+            });
+            fileDropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileDropZone.style.borderColor = '#cfdbe8';
+                fileDropZone.style.background = '#f9fbfd';
+                if (e.dataTransfer.files.length) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length) {
+                    handleFiles(fileInput.files);
+                }
+                fileInput.value = '';
+            });
+
+            function handleFiles(files) {
+                for (let f of files) {
+                    const size = (f.size / 1024 / 1024).toFixed(2);
+                    if (size > 25) {
+                        showToast(`File ${f.name} exceeds 25MB limit.`);
+                        continue;
+                    }
+                    uploadedFiles.push({ name: f.name, size: size, type: f.type || 'unknown' });
+                }
+                renderFileList();
+                validateScope();
+            }
+
+            function removeFile(index) {
+                uploadedFiles.splice(index, 1);
+                renderFileList();
+                validateScope();
+            }
+
+            function renderFileList() {
+                if (uploadedFiles.length === 0) {
+                    fileList.innerHTML = '';
+                    return;
+                }
+                fileList.innerHTML = uploadedFiles.map((f, idx) => `
+                    <div class="file-item">
+                        <i class="fas fa-file"></i>
+                        <span>${f.name}</span>
+                        <span style="color:#4a6379; font-size:0.7rem;">(${f.size} MB)</span>
+                        <span class="remove-file" onclick="window.removeFile(${idx})">&times;</span>
+                    </div>
+                `).join('');
+            }
+
+            // Make removeFile globally accessible for the onclick
+            window.removeFile = removeFile;
+
+            // ─── Scope validation ─────────────────────────────────
+
+            function validateScope() {
+                const sqft = parseInt(sqftInput.value);
+                const hasFiles = uploadedFiles.length > 0;
+                toSubmitBtn.disabled = !(sqft && sqft >= 100 && hasFiles);
+            }
+
+            sqftInput.addEventListener('input', validateScope);
+            fileDropZone.addEventListener('click', validateScope); // just to re-check
+
+            // ─── Step 1 → 2 ──────────────────────────────────────
+
+            toSubmitBtn.addEventListener('click', function() {
+                if (toSubmitBtn.disabled) return;
+                showStep(2);
+            });
+
+            backToScopeBtn.addEventListener('click', () => showStep(1));
+
+            // ─── Summary ───────────────────────────────────────────
+
+            function updateSummary() {
+                const sqft = parseInt(sqftInput.value) || 0;
+                const floors = parseInt(floorsInput.value) || 1;
+                const occupancy = occupancySelect.value || 'Not specified';
+                const projectType = projectTypeSelect.options[projectTypeSelect.selectedIndex]?.text || '—';
+                const systems = getSelectedSystems().join(', ') || 'None';
+                const piping = getSelectedPiping().join(', ') || 'None';
+                const special = specialReq.value.trim() || 'None';
+                const complexity = calculateComplexity();
+                const turnaround = getTurnaround(complexity.label);
+
+                summaryCard.innerHTML = `
+                    <div class="summary-row"><span class="label">Square Footage</span><span class="value">${sqft.toLocaleString()}</span></div>
+                    <div class="summary-row"><span class="label">Floors</span><span class="value">${floors}</span></div>
+                    <div class="summary-row"><span class="label">Occupancy</span><span class="value">${occupancy}</span></div>
+                    <div class="summary-row"><span class="label">Project Type</span><span class="value">${projectType}</span></div>
+                    <div class="summary-row"><span class="label">Systems</span><span class="value">${systems}</span></div>
+                    <div class="summary-row"><span class="label">Piping</span><span class="value">${piping}</span></div>
+                    <div class="summary-row"><span class="label">Special Requirements</span><span class="value">${special}</span></div>
+                    <div class="summary-row"><span class="label">Complexity</span><span class="value"><span class="complexity-badge ${complexity.class}">${complexity.label}</span></span></div>
+                    <div class="summary-row"><span class="label">Files Uploaded</span><span class="value">${uploadedFiles.length}</span></div>
+                `;
+            }
+
+            // ─── Contact validation ──────────────────────────────
+
+            function validateContact() {
+                const valid = contactName.value.trim() && company.value.trim() &&
+                    email.value.trim() && phone.value.trim();
+                submitRfpBtn.disabled = !valid;
+            }
+
+            [contactName, company, email, phone].forEach(el => el.addEventListener('input', validateContact));
+
+            // ─── Submit RFP ──────────────────────────────────────
+
+            submitRfpBtn.addEventListener('click', function() {
+                if (submitRfpBtn.disabled) return;
+
+                const sqft = parseInt(sqftInput.value) || 0;
+                const complexity = calculateComplexity();
+                const turnaround = getTurnaround(complexity.label);
+                const estimator = getEstimator(complexity.label);
+
+                const rfpData = {
+                    sqft: sqft,
+                    floors: parseInt(floorsInput.value) || 1,
+                    occupancy: occupancySelect.value,
+                    projectType: projectTypeSelect.value,
+                    budgetMin: parseInt(budgetMin.value) || 0,
+                    budgetMax: parseInt(budgetMax.value) || 0,
+                    systems: getSelectedSystems(),
+                    piping: getSelectedPiping(),
+                    specialRequirements: specialReq.value.trim(),
+                    startDate: startDate.value,
+                    completionDate: completionDate.value,
+                    notes: notes.value.trim(),
+                    files: uploadedFiles.map(f => f.name),
+                    complexity: complexity.label,
+                    estimator: estimator,
+                    status: { label: 'Assigned', class: 'status-assigned' },
+                    contact: {
+                        name: contactName.value.trim(),
+                        company: company.value.trim(),
+                        email: email.value.trim(),
+                        phone: phone.value.trim()
+                    },
+                    timestamp: new Date().toISOString(),
+                    turnaroundDays: turnaround
+                };
+
+                // Store lead
+                rfps.push(rfpData);
+                localStorage.setItem('ch_mechanical_rfps', JSON.stringify(rfps));
+                renderRfpsTable();
+
+                // ── Show dispatch summary ──
+                dispatchSummary.innerHTML = `
+                    <div class="summary-row"><span class="label">Project</span><span class="value">${rfpData.sqft.toLocaleString()} sq ft · ${rfpData.occupancy || '—'}</span></div>
+                    <div class="summary-row"><span class="label">Complexity</span><span class="value"><span class="complexity-badge ${complexity.class}">${complexity.label}</span></span></div>
+                    <div class="estimator-info" style="margin-top:0.8rem;">
+                        <i class="fas fa-user-hard-hat"></i>
+                        <div>
+                            <div class="est-name">${estimator.name} (${estimator.id})</div>
+                            <div style="font-size:0.85rem; color:#2d445b;">Specialty: ${estimator.specialty}</div>
+                            <div class="est-status">📋 Proposal expected within ${turnaround} business days</div>
+                        </div>
+                    </div>
+                    <div class="summary-row" style="margin-top:0.8rem;"><span class="label">Files</span><span class="value">${rfpData.files.length} uploaded</span></div>
+                `;
+
+                // Dispatch progress simulation
+                const progressSteps = document.querySelectorAll('.dispatch-progress .progress-step');
+                progressSteps.forEach((s, i) => {
+                    s.classList.remove('active', 'completed');
+                    if (i === 0) s.classList.add('completed');
+                    if (i === 1) s.classList.add('active');
+                });
+
+                // Simulate progress through statuses
+                if (dispatchInterval) clearInterval(dispatchInterval);
+                let stepIndex = 2;
+                const statusLabels = ['Received', 'Assigned', 'In Review', 'Drafting', 'Ready for Review'];
+                dispatchInterval = setInterval(() => {
+                    if (stepIndex < progressSteps.length) {
+                        const prev = progressSteps[stepIndex - 1];
+                        const curr = progressSteps[stepIndex];
+                        if (prev) {
+                            prev.classList.remove('active');
+                            prev.classList.add('completed');
+                        }
+                        if (curr) {
+                            curr.classList.add('active');
+                            // Update estimator status text
+                            const estStatus = document.querySelector('.est-status');
+                            if (estStatus && stepIndex < statusLabels.length) {
+                                estStatus.textContent = '📋 ' + statusLabels[stepIndex] + (stepIndex === 2 ?
+                                    ' · In review' : stepIndex === 3 ? ' · Drafting proposal' : stepIndex === 4 ?
+                                    ' · Ready for review' : '');
+                            }
+                        }
+                        stepIndex++;
+                    } else {
+                        clearInterval(dispatchInterval);
+                        dispatchInterval = null;
+                        const estStatus = document.querySelector('.est-status');
+                        if (estStatus) estStatus.textContent = '✅ Proposal ready for client review';
+                    }
+                }, 2500);
+
+                showStep(3);
+                showToast('📐 RFP dispatched to estimator ' + estimator.name);
+                console.log('📐 RFP submitted:', rfpData);
+
+                // Reset contact validation for next time
+                // We'll let the newRfpBtn handle reset
+            });
+
+            // ─── New RFP ──────────────────────────────────────────
+
+            newRfpBtn.addEventListener('click', function() {
+                if (dispatchInterval) {
+                    clearInterval(dispatchInterval);
+                    dispatchInterval = null;
+                }
+                // Reset all fields
+                sqftInput.value = '';
+                floorsInput.value = '1';
+                occupancySelect.value = '';
+                projectTypeSelect.value = 'new-construction';
+                budgetMin.value = '';
+                budgetMax.value = '';
+                systemsCheckboxes.forEach(cb => cb.checked = false);
+                pipingCheckboxes.forEach(cb => cb.checked = false);
+                specialReq.value = '';
+                startDate.value = '';
+                completionDate.value = '';
+                notes.value = '';
+                uploadedFiles = [];
+                renderFileList();
+                contactName.value = '';
+                company.value = '';
+                email.value = '';
+                phone.value = '';
+                toSubmitBtn.disabled = true;
+                submitRfpBtn.disabled = true;
+                // Reset progress display
+                document.querySelectorAll('.dispatch-progress .progress-step').forEach((s, i) => {
+                    s.classList.remove('active', 'completed');
+                    if (i === 0) s.classList.add('active');
+                });
+                showStep(1);
+            });
+
+            // ─── Staff panel controls ─────────────────────────────
+
+            clearRfps.addEventListener('click', function() {
+                if (rfps.length === 0) {
+                    showToast('No RFPs to clear.');
+                    return;
+                }
+                if (confirm('⚠️ Delete ALL RFP records?')) {
+                    rfps = [];
+                    localStorage.setItem('ch_mechanical_rfps', JSON.stringify(rfps));
+                    renderRfpsTable();
+                    showToast('🗑️ All RFPs cleared.');
+                }
+            });
+
+            refreshRfps.addEventListener('click', function() {
+                rfps = JSON.parse(localStorage.getItem('ch_mechanical_rfps') || '[]');
+                renderRfpsTable();
+                showToast('🔄 Refreshed.');
+            });
+
+            // ─── Init ─────────────────────────────────────────────
+
+            renderRfpsTable();
+            validateScope();
+            showStep(1);
+
+            // Set min dates for start and completion (today + 1 day)
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowStr = tomorrow.toISOString().split('T')[0];
+            startDate.min = tomorrowStr;
+            completionDate.min = tomorrowStr;
+
+        })();
+    </script>
+</body>
+</html>
