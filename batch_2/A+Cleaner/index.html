@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A+ Cleaner's · Commercial Janitorial Estimator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f5fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .widget {
+            max-width: 860px;
+            width: 100%;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 30px 60px rgba(0, 20, 40, 0.08);
+            overflow: hidden;
+            border: 1px solid #dce8f2;
+        }
+
+        /* ── Header ── */
+        .widget-header {
+            background: #1a3b5c;
+            color: white;
+            padding: 1.8rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 4px solid #f5a623;
+        }
+
+        .plus-logo {
+            font-size: 2.4rem;
+            font-weight: 800;
+            background: #f5a623;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a3b5c;
+            line-height: 1;
+        }
+
+        .brand h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            margin: 0;
+            color: white;
+        }
+
+        .brand h2 span {
+            color: #f5a623;
+        }
+
+        .brand p {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #b8d0e6;
+            margin-top: 0.2rem;
+        }
+
+        /* ── Progress ── */
+        .progress-wrap {
+            padding: 1.5rem 2rem 0.8rem;
+            position: relative;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #dce8f2;
+            color: #456b8c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .step.active .step-circle {
+            background: #1a3b5c;
+            color: white;
+            border-color: #f5a623;
+            box-shadow: 0 0 0 4px rgba(26, 59, 92, 0.15);
+        }
+
+        .step.completed .step-circle {
+            background: #1a3b5c;
+            color: white;
+            border-color: #1a3b5c;
+        }
+
+        .step-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+            color: #728ea8;
+            letter-spacing: 0.5px;
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #1a3b5c;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 17px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #dce8f2;
+            z-index: 1;
+            margin: 0 48px;
+            border-radius: 3px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #1a3b5c;
+            transition: width 0.4s ease;
+            border-radius: 3px;
+        }
+
+        /* ── Body ── */
+        .widget-body {
+            padding: 2rem 2rem 1.5rem;
+        }
+
+        .panel {
+            display: none;
+            animation: fadeSlide 0.35s ease;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a2c3f;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        h3 i {
+            color: #f5a623;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            flex: 1 1 150px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #33475b;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        select,
+        input[type="number"],
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 2px solid #d0dfee;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #f9fbfd;
+            transition: 0.2s;
+            color: #1a2c3f;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: #1a3b5c;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 59, 92, 0.12);
+        }
+
+        .flooring-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.6rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .flooring-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.8rem;
+            border: 2px solid #d0dfee;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            background: white;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #33475b;
+        }
+
+        .flooring-chip i {
+            color: #7f9eb5;
+            font-size: 1rem;
+        }
+
+        .flooring-chip:hover {
+            border-color: #1a3b5c;
+            background: #f4f8fc;
+        }
+
+        .flooring-chip.selected {
+            border-color: #1a3b5c;
+            background: #e8eff6;
+            box-shadow: 0 0 0 2px rgba(26, 59, 92, 0.12);
+        }
+
+        .addon-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .addon-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 1rem;
+            border: 2px solid #d0dfee;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+            background: white;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #33475b;
+        }
+
+        .addon-chip i {
+            color: #7f9eb5;
+        }
+
+        .addon-chip:hover {
+            border-color: #1a3b5c;
+        }
+
+        .addon-chip.selected {
+            border-color: #1a3b5c;
+            background: #e8eff6;
+            color: #1a3b5c;
+            box-shadow: 0 0 0 2px rgba(26, 59, 92, 0.12);
+        }
+
+        .addon-chip .price-tag {
+            font-size: 0.65rem;
+            opacity: 0.7;
+            margin-left: auto;
+        }
+
+        .frequency-options {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .freq-btn {
+            flex: 1 1 80px;
+            padding: 0.5rem 0.8rem;
+            border: 2px solid #d0dfee;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #33475b;
+        }
+
+        .freq-btn:hover {
+            border-color: #1a3b5c;
+        }
+
+        .freq-btn.selected {
+            background: #1a3b5c;
+            color: white;
+            border-color: #1a3b5c;
+        }
+
+        .freq-btn .sub {
+            display: block;
+            font-weight: 400;
+            font-size: 0.6rem;
+            opacity: 0.8;
+        }
+
+        .service-levels {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .service-btn {
+            flex: 1 1 100px;
+            padding: 0.5rem 0.8rem;
+            border: 2px solid #d0dfee;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #33475b;
+        }
+
+        .service-btn:hover {
+            border-color: #1a3b5c;
+        }
+
+        .service-btn.selected {
+            background: #1a3b5c;
+            color: white;
+            border-color: #1a3b5c;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            padding: 0.85rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #d0dfee;
+            color: #33475b;
+        }
+
+        .btn-outline:hover {
+            border-color: #1a3b5c;
+            color: #1a3b5c;
+        }
+
+        .btn-primary {
+            background: #1a3b5c;
+            color: white;
+            box-shadow: 0 4px 12px rgba(26, 59, 92, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #122b42;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(26, 59, 92, 0.35);
+        }
+
+        .btn-primary:disabled {
+            background: #ccdbe9;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+            color: #6b8299;
+        }
+
+        .btn-gold {
+            background: #f5a623;
+            color: #1a3b5c;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(245, 166, 35, 0.35);
+        }
+
+        .btn-gold:hover:not(:disabled) {
+            background: #e5941a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 166, 35, 0.4);
+        }
+
+        .btn-gold:disabled {
+            background: #ccdbe9;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* ── Quote Card ── */
+        .quote-card {
+            background: #f3f8fd;
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin: 1.2rem 0;
+            border: 2px solid #d0dfee;
+        }
+
+        .price-range {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a3b5c;
+        }
+
+        .price-range .currency {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #4a627a;
+        }
+
+        .quote-sub {
+            font-size: 0.9rem;
+            color: #4a627a;
+            margin-top: 0.2rem;
+        }
+
+        .breakdown-table {
+            width: 100%;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            border-collapse: collapse;
+        }
+
+        .breakdown-table tr {
+            border-bottom: 1px dashed #ccdbe9;
+        }
+
+        .breakdown-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-table td {
+            padding: 0.4rem 0.2rem;
+        }
+
+        .breakdown-label {
+            color: #4a627a;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .breakdown-total td {
+            border-top: 2px solid #f5a623;
+            padding-top: 0.8rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .breakdown-total .breakdown-value {
+            color: #1a3b5c;
+            font-size: 1.2rem;
+        }
+
+        .estimate-badge {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: rgba(245, 166, 35, 0.15);
+            color: #1a3b5c;
+            margin-top: 0.6rem;
+        }
+
+        /* ── Success ── */
+        .success-panel {
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .success-panel .check-icon {
+            font-size: 3.5rem;
+            color: #f5a623;
+            margin-bottom: 1rem;
+        }
+
+        .summary-box {
+            background: #f9fbfd;
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: left;
+            margin: 1.5rem 0;
+            border: 1px solid #d0dfee;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed #d0dfee;
+            padding-bottom: 0.4rem;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        /* ── Staff Panel ── */
+        .staff-panel {
+            border-top: 1px solid #dce8f2;
+            padding: 1.5rem 2rem 2rem;
+            background: #f9fbfd;
+        }
+
+        .staff-panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .staff-panel h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #728ea8;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .staff-panel h4 .badge {
+            background: #f5a623;
+            color: #1a3b5c;
+            font-size: 0.65rem;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-actions .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .panel-actions .btn-clear {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .panel-actions .btn-clear:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .panel-actions .btn-refresh {
+            background: #dce8f2;
+            color: #33475b;
+        }
+
+        .panel-actions .btn-refresh:hover {
+            background: #ccdbe9;
+        }
+
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .leads-table th {
+            text-align: left;
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            color: #728ea8;
+            font-weight: 600;
+            border-bottom: 2px solid #dce8f2;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+        }
+
+        .leads-table td {
+            padding: 0.4rem 0.4rem 0.4rem 0;
+            border-bottom: 1px solid #edf3f8;
+            color: #1a2c3f;
+        }
+
+        .leads-table .new-row {
+            animation: flashRow 0.6s ease;
+        }
+
+        @keyframes flashRow {
+            0% {
+                background: rgba(245, 166, 35, 0.12);
+            }
+            100% {
+                background: transparent;
+            }
+        }
+
+        .status-estimate {
+            color: #f5a623;
+            font-weight: 600;
+        }
+        .status-lead {
+            color: #1a3b5c;
+            font-weight: 600;
+        }
+
+        /* ── Toast ── */
+        .custom-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a3b5c;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .widget-header {
+                padding: 1.2rem 1.2rem;
+                flex-wrap: wrap;
+            }
+            .widget-body {
+                padding: 1.2rem;
+            }
+            .staff-panel {
+                padding: 1rem;
+            }
+            .progress-wrap {
+                padding: 1.2rem 1rem 0.5rem;
+            }
+            .progress-line {
+                margin: 0 20px;
+            }
+            .step-label {
+                font-size: 0.55rem;
+            }
+            .flooring-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .frequency-options {
+                flex-direction: column;
+            }
+            .service-levels {
+                flex-direction: column;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+            }
+            .leads-table {
+                font-size: 0.7rem;
+            }
+            .price-range {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="widget">
+        <!-- ── Header ── -->
+        <div class="widget-header">
+            <div class="plus-logo">A+</div>
+            <div class="brand">
+                <h2>Cleaner's <span>LLC</span></h2>
+                <p>Commercial Janitorial · Instant Rate Estimator</p>
+            </div>
+        </div>
+
+        <!-- ── Progress ── -->
+        <div class="progress-wrap">
+            <div class="progress-line">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-steps" id="stepIndicator">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Facility</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Estimate</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Receive</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Body ── -->
+        <div class="widget-body">
+            <!-- Step 1: Facility Details -->
+            <div class="panel active" data-panel="1">
+                <h3><i class="fas fa-building"></i> Facility Details</h3>
+                <div class="form-row">
+                    <div class="form-group" style="flex:2;">
+                        <label>Facility Type</label>
+                        <select id="facilityType">
+                            <option value="office">Office</option>
+                            <option value="medical">Medical</option>
+                            <option value="industrial">Industrial / Warehouse</option>
+                            <option value="retail">Retail</option>
+                            <option value="education">Education / School</option>
+                            <option value="hospitality">Hospitality</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Sq Ft *</label>
+                        <input type="number" id="sqft" placeholder="5000" min="200" step="100" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Rooms / Offices</label>
+                        <input type="number" id="rooms" placeholder="10" min="0" value="0" />
+                    </div>
+                    <div class="form-group">
+                        <label>Restrooms</label>
+                        <input type="number" id="restrooms" placeholder="2" min="0" value="0" />
+                    </div>
+                    <div class="form-group">
+                        <label>Floors / Levels</label>
+                        <input type="number" id="floors" placeholder="1" min="1" value="1" />
+                    </div>
+                    <div class="form-group">
+                        <label>Windows</label>
+                        <input type="number" id="windows" placeholder="0" min="0" value="0" />
+                    </div>
+                </div>
+                <label style="font-weight:600; font-size:0.75rem; color:#33475b; margin-bottom:0.3rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">Flooring Types <span style="font-weight:400; text-transform:none; color:#728ea8;">(select all)</span></label>
+                <div class="flooring-grid" id="flooringGrid">
+                    <div class="flooring-chip" data-floor="carpet"><i class="fas fa-th"></i> Carpet</div>
+                    <div class="flooring-chip" data-floor="tile"><i class="fas fa-border-all"></i> Tile</div>
+                    <div class="flooring-chip" data-floor="hardwood"><i class="fas fa-tree"></i> Hardwood</div>
+                    <div class="flooring-chip" data-floor="concrete"><i class="fas fa-cube"></i> Concrete</div>
+                    <div class="flooring-chip" data-floor="vinyl"><i class="fas fa-grip-lines"></i> Vinyl</div>
+                    <div class="flooring-chip" data-floor="laminate"><i class="fas fa-square"></i> Laminate</div>
+                    <div class="flooring-chip" data-floor="marble"><i class="fas fa-gem"></i> Marble</div>
+                    <div class="flooring-chip" data-floor="rubber"><i class="fas fa-circle"></i> Rubber</div>
+                    <div class="flooring-chip" data-floor="epoxy"><i class="fas fa-bolt"></i> Epoxy</div>
+                </div>
+                <label style="font-weight:600; font-size:0.75rem; color:#33475b; margin-bottom:0.3rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">Service Level</label>
+                <div class="service-levels" id="serviceLevels">
+                    <div class="service-btn selected" data-level="standard">Standard</div>
+                    <div class="service-btn" data-level="premium">Premium</div>
+                    <div class="service-btn" data-level="executive">Executive</div>
+                </div>
+                <label style="font-weight:600; font-size:0.75rem; color:#33475b; margin-bottom:0.3rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">Cleaning Frequency</label>
+                <div class="frequency-options" id="freqOptions">
+                    <div class="freq-btn" data-freq="daily">Daily <span class="sub">5x/week</span></div>
+                    <div class="freq-btn selected" data-freq="3x">3x/Week <span class="sub">~13/mo</span></div>
+                    <div class="freq-btn" data-freq="weekly">Weekly <span class="sub">~4.3/mo</span></div>
+                    <div class="freq-btn" data-freq="biweekly">Bi‑weekly <span class="sub">~2.1/mo</span></div>
+                    <div class="freq-btn" data-freq="monthly">Monthly <span class="sub">1/mo</span></div>
+                </div>
+                <label style="font-weight:600; font-size:0.75rem; color:#33475b; margin-bottom:0.3rem; display:block; text-transform:uppercase; letter-spacing:0.3px;">Add‑on Services</label>
+                <div class="addon-grid" id="addonGrid">
+                    <div class="addon-chip" data-addon="windows" data-price="120"><i class="fas fa-window-maximize"></i> Window Cleaning <span class="price-tag">+$120/mo</span></div>
+                    <div class="addon-chip" data-addon="stripping" data-price="200"><i class="fas fa-broom"></i> Floor Stripping <span class="price-tag">+$200/mo</span></div>
+                    <div class="addon-chip" data-addon="carpet-clean" data-price="180"><i class="fas fa-water"></i> Carpet Cleaning <span class="price-tag">+$180/mo</span></div>
+                    <div class="addon-chip" data-addon="pressure-wash" data-price="150"><i class="fas fa-water"></i> Pressure Washing <span class="price-tag">+$150/mo</span></div>
+                    <div class="addon-chip" data-addon="restroom-deep" data-price="100"><i class="fas fa-toilet"></i> Restroom Deep Clean <span class="price-tag">+$100/mo</span></div>
+                    < class="addon-chip" data-addon="trash-removal" data-price="80"><i class="fas fa-trash"></i> Trash Removal <span class="price-tag">+$80/mo</span></div>
+                </div>
+                <div style="display:flex; justify-content:flex-end;">
+                    <button class="btn btn-primary" id="calculateBtn" disabled>
+                        <i class="fas fa-calculator"></i> Calculate Estimate
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Estimate -->
+            <div class="panel" data-panel="2">
+                <h3><i class="fas fa-file-invoice-dollar"></i> Your Rate Breakdown</h3>
+                <div class="quote-card" id="quoteCard"></div>
+                <p style="font-size:0.8rem; color:#4a627a;">*Based on industry‑standard commercial cleaning rate matrices. Final quote after walkthrough.</p>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToFacility"><i class="fas fa-arrow-left"></i> Modify</button>
+                    <button class="btn btn-gold" id="sendEstimateBtn">
+                        <i class="fas fa-envelope-open-text"></i> Get Full Quote
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Contact & Lead Capture -->
+            <div class="panel" data-panel="3">
+                <h3><i class="fas fa-user-check"></i> Where should we send the estimate?</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="fullName" placeholder="Morgan Lee" />
+                    </div>
+                    <div class="form-group">
+                        <label>Company *</label>
+                        <input type="text" id="company" placeholder="Acme Properties" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" placeholder="morgan@acme.com" />
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="tel" id="phone" placeholder="(555) 123-4567" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Additional Notes</label>
+                    <input type="text" id="notes" placeholder="Any special requirements..." />
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" id="backToEstimate"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-gold" id="submitLeadBtn" disabled>
+                        <i class="fas fa-paper-plane"></i> Send &amp; Add to CRM
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Success -->
+            <div class="panel success-panel" data-panel="4" id="successPanel">
+                <div class="check-icon"><i class="fas fa-check-circle"></i></div>
+                <h3>Estimate Delivered &amp; Lead Saved!</h3>
+                <p style="color:#33475b;">Check your inbox. Our team will follow up to finalize details.</p>
+                <div class="summary-box" id="summaryBox"></div>
+                <button class="btn btn-primary" id="newEstimateBtn" style="margin-top:1.2rem;">
+                    <i class="fas fa-redo-alt"></i> New Estimate
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Staff Panel ── -->
+        <div class="staff-panel" id="staffPanel">
+            <div class="panel-header">
+                <h4><i class="fas fa-bolt" style="color:#f5a623;"></i> Sales Feed <span class="badge" id="leadCount">0</span></h4>
+                <div class="panel-actions">
+                    <button class="btn-sm btn-refresh" id="refreshLeads"><i class="fas fa-sync-alt"></i></button>
+                    <button class="btn-sm btn-clear" id="clearLeads"><i class="fas fa-trash"></i> Clear</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="leads-table" id="leadsTable">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Contact</th>
+                            <th>Type</th>
+                            <th>Sq Ft</th>
+                            <th>Freq</th>
+                            <th>Estimate</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th style="width:30px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsBody">
+                        <tr><td colspan="9" style="text-align:center; color:#94a3b8; padding:1rem 0;">No estimates yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── State ─────────────────────────────────────────────
+            let currentStep = 1;
+            let facilityData = {};
+            let estimateData = null;
+            let selectedFrequency = '3x';
+            let selectedLevel = 'standard';
+            let leads = JSON.parse(localStorage.getItem('aplus_leads') || '[]');
+
+            // ─── DOM refs ──────────────────────────────────────────
+            const facilityType = document.getElementById('facilityType');
+            const sqftInput = document.getElementById('sqft');
+            const roomsInput = document.getElementById('rooms');
+            const restroomsInput = document.getElementById('restrooms');
+            const floorsInput = document.getElementById('floors');
+            const windowsInput = document.getElementById('windows');
+            const flooringChips = document.querySelectorAll('.flooring-chip');
+            const serviceBtns = document.querySelectorAll('.service-btn');
+            const freqBtns = document.querySelectorAll('.freq-btn');
+            const addonChips = document.querySelectorAll('.addon-chip');
+
+            const calculateBtn = document.getElementById('calculateBtn');
+            const quoteCard = document.getElementById('quoteCard');
+            const backToFacilityBtn = document.getElementById('backToFacility');
+            const sendEstimateBtn = document.getElementById('sendEstimateBtn');
+            const backToEstimateBtn = document.getElementById('backToEstimate');
+            const submitLeadBtn = document.getElementById('submitLeadBtn');
+            const newEstimateBtn = document.getElementById('newEstimateBtn');
+            const summaryBox = document.getElementById('summaryBox');
+
+            const fullName = document.getElementById('fullName');
+            const company = document.getElementById('company');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+            const notes = document.getElementById('notes');
+
+            const leadsBody = document.getElementById('leadsBody');
+            const leadCount = document.getElementById('leadCount');
+            const clearLeadsBtn = document.getElementById('clearLeads');
+            const refreshLeadsBtn = document.getElementById('refreshLeads');
+
+            // ─── Helpers ────────────────────────────────────────────
+
+            function showStep(step) {
+                currentStep = step;
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                const target = document.querySelector(`.panel[data-panel="${step}"]`);
+                if (target) target.classList.add('active');
+
+                document.querySelectorAll('.step').forEach(s => {
+                    const num = parseInt(s.dataset.step);
+                    s.classList.remove('active', 'completed');
+                    if (num === step) s.classList.add('active');
+                    else if (num < step) s.classList.add('completed');
+                });
+                const percent = Math.min(((step - 1) / 2) * 100, 100);
+                document.getElementById('progressFill').style.width = percent + '%';
+
+                if (step === 3) validateContact();
+            }
+
+            function renderLeadsTable() {
+                const tbody = leadsBody;
+                if (leads.length === 0) {
+                    tbody.innerHTML =
+                        '<tr><td colspan="9" style="text-align:center; color:#94a3b8; padding:1rem 0;">No estimates yet</td></tr>';
+                } else {
+                    let html = '';
+                    const reversed = [...leads].reverse();
+                    reversed.forEach((lead, idx) => {
+                        const isNew = idx === 0 ? 'new-row' : '';
+                        const estimate = lead.estimate ? `$${lead.estimate.low.toLocaleString()} – $${lead.estimate.high.toLocaleString()}` :
+                            '—';
+                        const type = lead.facility?.type || '—';
+                        const sqft = lead.facility?.sqft || '—';
+                        const freq = lead.facility?.frequency || '—';
+                        const contact = lead.contact ? lead.contact.name : '—';
+                        const company = lead.contact ? lead.contact.company : '—';
+                        const status = lead.status === 'lead_captured' ?
+                            `<span class="status-lead">✅ Lead</span>` :
+                            `<span class="status-estimate">📋 Estimate</span>`;
+                        const time = lead.timestamp ? new Date(lead.timestamp).toLocaleTimeString([], { hour: '2-digit',
+                                minute: '2-digit' }) :
+                            '—';
+                        html += `
+                            <tr class="${isNew}">
+                                <td><strong>${company}</strong></td>
+                                <td>${contact}</td>
+                                <td>${type}</td>
+                                <td>${sqft}</td>
+                                <td>${freq}</td>
+                                <td>${estimate}</td>
+                                <td>${status}</td>
+                                <td style="font-size:0.7rem;">${time}</td>
+                                <td><span style="font-size:0.6rem; background:#10b98120; color:#10b981; padding:0.1rem 0.5rem; border-radius:20px;">NEW</span></td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                }
+                leadCount.textContent = leads.length;
+            }
+
+            function showToast(message) {
+                const existing = document.querySelector('.custom-toast');
+                if (existing) existing.remove();
+                const toast = document.createElement('div');
+                toast.className = 'custom-toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3500);
+            }
+
+            // ─── Step 1 validation ─────────────────────────────────
+
+            function validateStep1() {
+                const sqft = parseFloat(sqftInput.value);
+                calculateBtn.disabled = !(sqft && sqft >= 200);
+            }
+
+            sqftInput.addEventListener('input', validateStep1);
+            validateStep1();
+
+            // ─── Flooring selection ───────────────────────────────
+
+            flooringChips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    // Re-calculate if already calculated?
+                    if (estimateData) {
+                        // We'll let the user click calculate again
+                    }
+                });
+            });
+
+            // ─── Service level ─────────────────────────────────────
+
+            serviceBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    serviceBtns.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedLevel = this.dataset.level;
+                });
+            });
+
+            // ─── Frequency selection ──────────────────────────────
+
+            freqBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    freqBtns.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedFrequency = this.dataset.freq;
+                });
+            });
+
+            // ─── Add‑on selection ──────────────────────────────────
+
+            addonChips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+            });
+
+            // ─── Pricing Engine ─────────────────────────────────────
+
+            function calculateEstimate() {
+                const type = facilityType.value;
+                const sqft = parseFloat(sqftInput.value) || 0;
+                const rooms = parseInt(roomsInput.value) || 0;
+                const restrooms = parseInt(restroomsInput.value) || 0;
+                const floors = parseInt(floorsInput.value) || 1;
+                const windows = parseInt(windowsInput.value) || 0;
+                const flooring = [];
+                flooringChips.forEach(c => {
+                    if (c.classList.contains('selected')) flooring.push(c.dataset.floor);
+                });
+                const addons = [];
+                addonChips.forEach(c => {
+                    if (c.classList.contains('selected')) addons.push({
+                        name: c.dataset.addon,
+                        price: parseInt(c.dataset.price)
+                    });
+                });
+                const freq = selectedFrequency;
+                const level = selectedLevel;
+
+                // ── Base rates per sq ft ──
+                const baseRates = {
+                    office: { standard: 0.08, premium: 0.11, executive: 0.14 },
+                    medical: { standard: 0.10, premium: 0.13, executive: 0.17 },
+                    industrial: { standard: 0.06, premium: 0.08, executive: 0.10 },
+                    retail: { standard: 0.09, premium: 0.12, executive: 0.15 },
+                    education: { standard: 0.07, premium: 0.10, executive: 0.13 },
+                    hospitality: { standard: 0.09, premium: 0.12, executive: 0.15 }
+                };
+                const rate = baseRates[type]?.[level] || 0.08;
+                let baseMonthly = sqft * rate;
+
+                // ── Room/restroom/window surcharges ──
+                const roomCharge = rooms * 15;
+                const restroomCharge = restrooms * 25;
+                const windowCharge = windows * 3;
+                const floorCharge = (floors - 1) * 10;
+
+                // ── Frequency multiplier (visits per month) ──
+                const freqMap = { daily: 22, '3x': 13, weekly: 4.3, biweekly: 2.15, monthly: 1 };
+                const visitsPerMonth = freqMap[freq] || 4.3;
+
+                // ── Flooring adjustment ──
+                const floorMult = {
+                    carpet: 1.10,
+                    tile: 1.05,
+                    hardwood: 1.03,
+                    concrete: 1.02,
+                    vinyl: 1.04,
+                    laminate: 1.03,
+                    marble: 1.12,
+                    rubber: 1.06,
+                    epoxy: 1.08
+                };
+                let floorFactor = 1.0;
+                if (flooring.length > 0) {
+                    let maxMult = 1.0;
+                    flooring.forEach(f => {
+                        const m = floorMult[f] || 1.0;
+                        if (m > maxMult) maxMult = m;
+                    });
+                    floorFactor = maxMult;
+                }
+
+                // ── Service level factor ──
+                const levelFactor = { standard: 1.0, premium: 1.15, executive: 1.30 };
+
+                // ── Add‑on costs ──
+                let addonMonthly = 0;
+                addons.forEach(a => { addonMonthly += a.price; });
+
+                // ── Calculate ──
+                let subtotal = (baseMonthly + roomCharge + restroomCharge + windowCharge + floorCharge) *
+                    floorFactor * levelFactor[level];
+                subtotal = Math.round(subtotal);
+
+                // Add-ons added after frequency (they are monthly flat)
+                const totalMonthly = subtotal + addonMonthly;
+
+                const low = Math.round(totalMonthly * 0.90);
+                const high = Math.round(totalMonthly * 1.12);
+
+                // ── Annual estimate ──
+                const annualLow = low * 12;
+                const annualHigh = high * 12;
+
+                return {
+                    type,
+                    sqft,
+                    rooms,
+                    restrooms,
+                    floors,
+                    windows,
+                    flooring,
+                    addons,
+                    freq,
+                    level,
+                    visitsPerMonth,
+                    baseMonthly: Math.round(baseMonthly),
+                    surcharges: Math.round(roomCharge + restroomCharge + windowCharge + floorCharge),
+                    floorFactor,
+                    levelFactor: levelFactor[level],
+                    addonMonthly,
+                    totalMonthly,
+                    low,
+                    high,
+                    annualLow,
+                    annualHigh
+                };
+            }
+
+            // ─── Display Quote ─────────────────────────────────────
+
+            function displayQuote(q) {
+                const typeLabels = {
+                    office: 'Office',
+                    medical: 'Medical',
+                    industrial: 'Industrial',
+                    retail: 'Retail',
+                    education: 'Education',
+                    hospitality: 'Hospitality'
+                };
+                const freqLabels = {
+                    daily: 'Daily (5x)',
+                    '3x': '3x/Week',
+                    weekly: 'Weekly',
+                    biweekly: 'Bi‑weekly',
+                    monthly: 'Monthly'
+                };
+                const levelLabels = { standard: 'Standard', premium: 'Premium', executive: 'Executive' };
+                const flooringList = q.flooring.length ? q.flooring.join(', ') : 'None';
+                const addonList = q.addons.length ? q.addons.map(a => a.name).join(', ') : 'None';
+
+                quoteCard.innerHTML = `
+                    <div class="price-range">$${q.low.toLocaleString()} <span class="currency">–</span> $${q.high.toLocaleString()}</div>
+                    <div class="quote-sub">${typeLabels[q.type]} · ${q.sqft.toLocaleString()} sq ft · ${freqLabels[q.freq]} · ${levelLabels[q.level]}</div>
+                    <table class="breakdown-table">
+                        <tr>
+                            <td class="breakdown-label">Base cleaning (${q.sqft} sqft)</td>
+                            <td class="breakdown-value">$${q.baseMonthly.toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td class="breakdown-label">Surcharges (rooms/restrooms/floors/windows)</td>
+                            <td class="breakdown-value">+$${q.surcharges.toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td class="breakdown-label">Flooring adjustment (${q.floorFactor.toFixed(2)}x)</td>
+                            <td class="breakdown-value">${Math.round((q.floorFactor-1)*100)}%</td>
+                        </tr>
+                        <tr>
+                            <td class="breakdown-label">Service level (${levelLabels[q.level]})</td>
+                            <td class="breakdown-value">${Math.round((q.levelFactor-1)*100)}%</td>
+                        </tr>
+                        ${q.addonMonthly > 0 ? `
+                        <tr>
+                            <td class="breakdown-label">Add‑on services</td>
+                            <td class="breakdown-value">+$${q.addonMonthly.toLocaleString()}</td>
+                        </tr>` : ''}
+                        <tr class="breakdown-total">
+                            <td>Monthly Estimate Range</td>
+                            <td class="breakdown-value">$${q.low.toLocaleString()} – $${q.high.toLocaleString()}</td>
+                        </tr>
+                    </table>
+                    <div style="display:flex; gap:0.8rem; flex-wrap:wrap; margin-top:0.6rem;">
+                        <span class="estimate-badge"><i class="fas fa-calendar"></i> ${q.visitsPerMonth.toFixed(1)} visits/mo</span>
+                        <span class="estimate-badge"><i class="fas fa-dollar-sign"></i> Annual: $${q.annualLow.toLocaleString()} – $${q.annualHigh.toLocaleString()}</span>
+                        <span class="estimate-badge" style="background:rgba(26,59,92,0.08);">Flooring: ${flooringList}</span>
+                        ${q.addons.length ? `<span class="estimate-badge" style="background:rgba(245,166,35,0.15);">Add‑ons: ${addonList}</span>` : ''}
+                    </div>
+                `;
+                estimateData = q;
+            }
+
+            // ─── Step 1 → 2 ──────────────────────────────────────
+
+            calculateBtn.addEventListener('click', function() {
+                if (calculateBtn.disabled) return;
+                const q = calculateEstimate();
+                facilityData = {
+                    type: q.type,
+                    sqft: q.sqft,
+                    rooms: q.rooms,
+                    restrooms: q.restrooms,
+                    floors: q.floors,
+                    windows: q.windows,
+                    flooring: q.flooring,
+                    addons: q.addons,
+                    frequency: q.freq,
+                    level: q.level
+                };
+                displayQuote(q);
+
+                // Store partial lead (estimate only)
+                const lead = {
+                    facility: facilityData,
+                    estimate: q,
+                    contact: null,
+                    status: 'estimate_generated',
+                    timestamp: new Date().toISOString()
+                };
+                leads.push(lead);
+                localStorage.setItem('aplus_leads', JSON.stringify(leads));
+                renderLeadsTable();
+
+                showStep(2);
+                showToast('📊 Estimate generated – sales team notified!');
+                console.log('📊 Estimate:', q);
+            });
+
+            backToFacilityBtn.addEventListener('click', () => showStep(1));
+
+            // ─── Step 2 → 3 ──────────────────────────────────────
+
+            sendEstimateBtn.addEventListener('click', function() {
+                if (!estimateData) return;
+                // Reset contact fields
+                fullName.value = '';
+                company.value = '';
+                email.value = '';
+                phone.value = '';
+                notes.value = '';
+                validateContact();
+                showStep(3);
+            });
+
+            // ─── Contact validation ──────────────────────────────
+
+            function validateContact() {
+                const valid = fullName.value.trim() && company.value.trim() &&
+                    email.value.trim() && phone.value.trim();
+                submitLeadBtn.disabled = !valid;
+            }
+
+            [fullName, company, email, phone].forEach(el => el.addEventListener('input', validateContact));
+
+            backToEstimateBtn.addEventListener('click', () => showStep(2));
+
+            // ─── Submit Lead ──────────────────────────────────────
+
+            submitLeadBtn.addEventListener('click', function() {
+                if (submitLeadBtn.disabled || !estimateData) return;
+
+                const contact = {
+                    name: fullName.value.trim(),
+                    company: company.value.trim(),
+                    email: email.value.trim(),
+                    phone: phone.value.trim(),
+                    notes: notes.value.trim()
+                };
+
+                // Update the last lead (estimate) to lead_captured
+                if (leads.length > 0 && leads[leads.length - 1].status === 'estimate_generated') {
+                    leads[leads.length - 1].contact = contact;
+                    leads[leads.length - 1].status = 'lead_captured';
+                } else {
+                    leads.push({
+                        facility: facilityData,
+                        estimate: estimateData,
+                        contact: contact,
+                        status: 'lead_captured',
+                        timestamp: new Date().toISOString()
+                    });
+                }
+                localStorage.setItem('aplus_leads', JSON.stringify(leads));
+                renderLeadsTable();
+
+                // Show success
+                summaryBox.innerHTML = `
+                    <div class="summary-row"><strong>Facility:</strong> <span>${facilityData.type} · ${facilityData.sqft.toLocaleString()} sq ft</span></div>
+                    <div class="summary-row"><strong>Estimate:</strong> <span>$${estimateData.low.toLocaleString()} – $${estimateData.high.toLocaleString()}/mo</span></div>
+                    <div class="summary-row"><strong>Frequency:</strong> <span>${estimateData.freq}</span></div>
+                    <div class="summary-row"><strong>Sent to:</strong> <span>${contact.name} (${contact.email})</span></div>
+                `;
+
+                showStep(4);
+                showToast(`📧 Estimate sent to ${contact.email}!`);
+                console.log('📧 Lead captured:', contact);
+            });
+
+            // ─── New Estimate ──────────────────────────────────────
+
+            newEstimateBtn.addEventListener('click', function() {
+                // Reset all fields
+                facilityType.value = 'office';
+                sqftInput.value = '';
+                roomsInput.value = '0';
+                restroomsInput.value = '0';
+                floorsInput.value = '1';
+                windowsInput.value = '0';
+                flooringChips.forEach(c => c.classList.remove('selected'));
+                serviceBtns.forEach(b => b.classList.remove('selected'));
+                document.querySelector('.service-btn[data-level="standard"]').classList.add('selected');
+                selectedLevel = 'standard';
+                freqBtns.forEach(b => b.classList.remove('selected'));
+                document.querySelector('.freq-btn[data-freq="3x"]').classList.add('selected');
+                selectedFrequency = '3x';
+                addonChips.forEach(c => c.classList.remove('selected'));
+                fullName.value = '';
+                company.value = '';
+                email.value = '';
+                phone.value = '';
+                notes.value = '';
+                estimateData = null;
+                facilityData = {};
+                calculateBtn.disabled = true;
+                submitLeadBtn.disabled = true;
+                showStep(1);
+            });
+
+            // ─── Staff panel controls ─────────────────────────────
+
+            clearLeadsBtn.addEventListener('click', function() {
+                if (leads.length === 0) {
+                    showToast('No leads to clear.');
+                    return;
+                }
+                if (confirm('⚠️ Delete ALL estimate records?')) {
+                    leads = [];
+                    localStorage.setItem('aplus_leads', JSON.stringify(leads));
+                    renderLeadsTable();
+                    showToast('🗑️ All records cleared.');
+                }
+            });
+
+            refreshLeadsBtn.addEventListener('click', function() {
+                leads = JSON.parse(localStorage.getItem('aplus_leads') || '[]');
+                renderLeadsTable();
+                showToast('🔄 Refreshed.');
+            });
+
+            // ─── Init ─────────────────────────────────────────────
+
+            renderLeadsTable();
+            validateStep1();
+            showStep(1);
+
+            // ─── Real‑time input updates ──────────────────────────
+
+            // Auto‑recalculate when key inputs change (with debounce)
+            let debounceTimer = null;
+
+            function autoRecalculate() {
+                if (debounceTimer) clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    if (currentStep === 1 && !calculateBtn.disabled) {
+                        // Only if we're on step 1 and have valid inputs
+                        const sqft = parseFloat(sqftInput.value);
+                        if (sqft && sqft >= 200) {
+                            const q = calculateEstimate();
+                            // Store quietly, but don't auto-advance
+                            facilityData = {
+                                type: q.type,
+                                sqft: q.sqft,
+                                rooms: q.rooms,
+                                restrooms: q.restrooms,
+                                floors: q.floors,
+                                windows: q.windows,
+                                flooring: q.flooring,
+                                addons: q.addons,
+                                frequency: q.freq,
+                                level: q.level
+                            };
+                            estimateData = q;
+                            // Update quote card if on step 2
+                            if (currentStep === 2) {
+                                displayQuote(q);
+                            }
+                        }
+                    }
+                }, 300);
+            }
+
+            // Add change listeners to all inputs
+            [sqftInput, roomsInput, restroomsInput, floorsInput, windowsInput].forEach(input => {
+                input.addEventListener('input', autoRecalculate);
+            });
+            facilityType.addEventListener('change', autoRecalculate);
+            // Flooring chips, service level, frequency, add-ons also trigger recalculation
+            flooringChips.forEach(c => c.addEventListener('click', autoRecalculate));
+            serviceBtns.forEach(b => b.addEventListener('click', autoRecalculate));
+            freqBtns.forEach(b => b.addEventListener('click', autoRecalculate));
+            addonChips.forEach(c => c.addEventListener('click', autoRecalculate));
+
+        })();
+    </script>
+</body>
+</html>
